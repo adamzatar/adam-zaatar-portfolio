@@ -55,22 +55,26 @@ export default function Blog() {
 
         {/* Posts */}
         <div className="mt-12 space-y-12">
-          {posts.map((post, index) => (
-            <motion.article
-              key={post.slug}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
-              className="pb-8 border-b border-border last:border-none group"
-            >
-              <h3 className="text-2xl font-semibold text-text transition-colors group-hover:text-primary">
-                <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-              </h3>
-              <p className="mt-2 text-muted">{post.description}</p>
-              <span className="mt-2 block text-sm text-muted">{post.date}</span>
-            </motion.article>
-          ))}
+          {posts.map((post, index) => {
+            const href = `/blog/${post.slug}` as const; // ✅ typed route
+
+            return (
+              <motion.article
+                key={post.slug}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                className="pb-8 border-b border-border last:border-none group"
+              >
+                <h3 className="text-2xl font-semibold text-text transition-colors group-hover:text-primary">
+                  <Link href={href}>{post.title}</Link>
+                </h3>
+                <p className="mt-2 text-muted">{post.description}</p>
+                <span className="mt-2 block text-sm text-muted">{post.date}</span>
+              </motion.article>
+            );
+          })}
         </div>
       </Container>
     </section>
