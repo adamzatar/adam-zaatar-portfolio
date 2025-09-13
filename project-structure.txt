@@ -1,0 +1,85 @@
+.
+├── app
+│   ├── contact
+│   │   └── page.tsx
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── not-found.tsx
+│   ├── page.tsx
+│   ├── projects
+│   │   └── page.tsx
+│   ├── research
+│   │   └── page.tsx
+│   └── resume
+│       └── page.tsx
+├── build-errors.log
+├── components
+│   ├── About.tsx
+│   ├── Blog.tsx
+│   ├── Contact.tsx
+│   ├── ContactForm.tsx
+│   ├── Experience.tsx
+│   ├── Footer.tsx
+│   ├── Hero.tsx
+│   ├── IOSApps.tsx
+│   ├── NavBar.tsx
+│   ├── ProjectCard.tsx
+│   ├── ProjectsGrid.tsx
+│   ├── Research.tsx
+│   ├── ResearchCard.tsx
+│   ├── Resume.tsx
+│   ├── ResumePreview.tsx
+│   ├── Skills.tsx
+│   ├── ui
+│   │   ├── Button.tsx
+│   │   ├── Card.tsx
+│   │   ├── Container.tsx
+│   │   ├── Section.tsx
+│   │   └── ThemeToggle.tsx
+│   └── Websites.tsx
+├── components.json
+├── errors_logs
+│   ├── build-errors.log
+│   ├── lint-errors.log
+│   └── ts-errors.log
+├── errors.tar.gz
+├── eslint.config.mjs
+├── lib
+│   ├── config.ts
+│   ├── projects.ts
+│   ├── research.ts
+│   └── utils.ts
+├── lint-errors.log
+├── next-env.d.ts
+├── next.config.ts
+├── out.css
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.mjs
+├── project-structure.txt
+├── public
+│   ├── docs
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── images
+│   │   ├── bowdoin-marketplace.png
+│   │   ├── cutaway.png
+│   │   ├── palprep.png
+│   │   └── profile.jpg
+│   ├── next.svg
+│   ├── research
+│   │   ├── Financial_Literacy.pdf
+│   │   └── Zaatar_ECON2557_Paper.pdf
+│   ├── resume
+│   │   └── AdamZaatar_CV_2025.pdf
+│   ├── vercel.svg
+│   └── window.svg
+├── README.md
+├── seed_totp.sql
+├── tailwind.config.ts
+├── ts-errors.log
+├── tsconfig.json
+└── tsconfig.tsbuildinfo
+
+15 directories, 68 files

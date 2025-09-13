@@ -1,0 +1,6 @@
+
+> adam-zaatar-portfolio@0.1.0 lint /Users/azaatar/Library/CloudStorage/OneDrive-BowdoinCollege/Desktop/Personal Website/adam-zaatar-portfolio
+> eslint
+
+sh: eslint: command not found
+ ELIFECYCLE  Command failed.

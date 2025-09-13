@@ -1,0 +1,6 @@
+
+> adam-zaatar-portfolio@0.1.0 build /Users/azaatar/Library/CloudStorage/OneDrive-BowdoinCollege/Desktop/Personal Website/adam-zaatar-portfolio
+> next build --turbopack
+
+sh: next: command not found
+ ELIFECYCLE  Command failed.
