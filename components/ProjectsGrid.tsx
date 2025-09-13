@@ -43,7 +43,7 @@ const apps = [
     title: "Investify",
     description:
       "Educational stock trading simulator delivering live S&P 500 data via Yahoo Finance API. Built with SwiftUI and Firebase, it powers classroom use at Bowdoin Economics, combining finance education with real-time data visualization.",
-    image: "/images/projects/certificate.jpg", // ✅ fixed
+    image: "/images/projects/certificate.jpg", // ✅ using your real file
     alt: "Investify stock trading simulator",
     technologies: ["Swift", "SwiftUI", "Firebase", "Yahoo Finance API"],
     codeLink: "https://github.com/adamzatar/investify",
@@ -76,7 +76,7 @@ const websites = [
     title: "Bowdoin Marketplace",
     description:
       "Production-grade campus marketplace platform built as a TypeScript monorepo. Features secure authentication (Okta + email), Prisma/PostgreSQL persistence, Redis-backed rate limiting, transactional emails via AWS SES, and full observability through OpenTelemetry. Designed for scale, security, and seamless peer-to-peer commerce.",
-    image: "/images/projects/bowdoinmarketplace.png",
+    image: "/public/bowdoinmarketplace.png",
     alt: "Bowdoin Marketplace platform",
     technologies: ["Next.js", "TypeScript", "Prisma", "Redis", "AWS SES"],
     codeLink: "https://github.com/adamzatar/bowdoin-marketplace",
