@@ -8,10 +8,11 @@ const apps = [
   {
     title: "Cutaway",
     description:
-      "A music-focused iOS application integrating seamless playback, curated playlists, and dynamic user interaction. Developed with SwiftUI and UIKit.",
-    technologies: ["Swift", "SwiftUI", "UIKit", "Xcode", "Firebase"],
+      "Cutaway is a creator tool for fast, multi-perspective storytelling. Pick a main video, record reaction shots, and Cutaway alternates them into a punchy timeline automatically. You get sensible defaults—cross-dissolves, caption-style lower-thirds, optional music, and bleeps—plus a live preview and export. The flow is intentionally simple: capture → review/retake → preview → export. Templates and a fuller editor are on the roadmap, but v1 focuses on speed, clarity, and a clean look. No paywalls; the core experience will stay free and lightweight.",
+    technologies: ["Swift", "SwiftUI", "AVFoundation", "Xcode"],
     link: "#", // Replace with App Store link when live
-    image: "https://via.placeholder.com/400x300.png?text=iOS+App+1",
+    image: "/images/cutaway.png",
+    alt: "Cutaway app preview screenshot",
   },
   {
     title: "Bowdoin Marketplace",
@@ -19,7 +20,8 @@ const apps = [
       "Campus marketplace app enabling peer-to-peer exchanges and listings. Built for speed, reliability, and a smooth user experience.",
     technologies: ["Swift", "SwiftUI", "CoreData", "REST APIs"],
     link: "#", // Replace with App Store link when live
-    image: "https://via.placeholder.com/400x300.png?text=iOS+App+2",
+    image: "/images/bowdoin-marketplace.png",
+    alt: "Bowdoin Marketplace app screenshot",
   },
   {
     title: "Upcoming Releases",
@@ -27,7 +29,8 @@ const apps = [
       "Several additional iOS applications are under active development, with a focus on finance, productivity, and education.",
     technologies: ["Swift", "SwiftUI", "AI APIs"],
     link: "#",
-    image: "https://via.placeholder.com/400x300.png?text=iOS+App+3",
+    image: "/images/upcoming.png",
+    alt: "Placeholder for upcoming iOS apps",
   },
 ];
 
