@@ -3,7 +3,7 @@ import Script from "next/script"; // ✅ Import Script for inline instrumentatio
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import NavBar from "@/components/NavBar";
-import AnimatedBackground from "@/components/AnimatedBackground";
+// import AnimatedBackground from "@/components/AnimatedBackground"; // 🚫 Disabled for performance test
 
 export const metadata: Metadata = {
   title: "Adam Zaatar Portfolio",
@@ -49,8 +49,8 @@ export default function RootLayout({
           "min-h-screen bg-bg text-text antialiased overflow-x-hidden relative"
         )}
       >
-        {/* Global animated background */}
-        <AnimatedBackground />
+        {/* Global animated background - Disabled for test */}
+        {/* <AnimatedBackground /> */}
 
         {/* Navigation bar */}
         <NavBar />
