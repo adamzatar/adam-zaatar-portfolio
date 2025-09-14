@@ -4,6 +4,7 @@ import ProjectCard from "./ProjectCard";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { motion, Variants } from "framer-motion";
+import { type ImageKey } from "@/lib/images"; // ✅ enforce keys from images.ts
 
 // ✅ Smooth cubic-bezier easing
 const customEase: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
@@ -17,14 +18,24 @@ const fadeUp = (i: number = 0): Variants => ({
   },
 });
 
-const apps = [
+// ----------------------------
+// Apps Data (typed)
+// ----------------------------
+const apps: {
+  title: string;
+  description: string;
+  technologies: string[];
+  codeLink: string;
+  image: ImageKey;
+  alt: string;
+}[] = [
   {
     title: "Vector",
     description:
       "Next-generation two-factor authentication system with a SwiftUI iOS client and Vapor backend. Secure token generation/validation, email OTP delivery, session handling with expiry + replay protection, and structured middleware. Backed by PostgreSQL with migrations and modular API.",
     technologies: ["Swift", "SwiftUI", "Vapor", "PostgreSQL", "AWS SES"],
-    link: "https://github.com/adamzatar/vector",
-    image: "/images/projects/vector.png",
+    codeLink: "https://github.com/adamzatar/vector",
+    image: "vector",
     alt: "Screenshot of Vector 2FA app with SwiftUI interface",
   },
   {
@@ -32,8 +43,8 @@ const apps = [
     description:
       "iOS app for synchronized multi-angle video recording and playback, built with SwiftUI and AVFoundation.",
     technologies: ["Swift", "SwiftUI", "AVFoundation"],
-    link: "https://github.com/adamzatar/cutaway",
-    image: "/images/projects/cutaway.png",
+    codeLink: "https://github.com/adamzatar/cutaway",
+    image: "cutaway",
     alt: "Cutaway app interface for multi-angle video editing",
   },
   {
@@ -41,8 +52,8 @@ const apps = [
     description:
       "A real-time Twitter clone with live feeds, direct messaging, and media sharing. Built with SwiftUI and Firebase for backend sync, authentication, and push notifications.",
     technologies: ["Swift", "SwiftUI", "Firebase"],
-    link: "#", // Replace with repo if available
-    image: "/images/projects/twitterclone.png",
+    codeLink: "#", // Replace with repo if available
+    image: "twitterClone",
     alt: "UI screenshot of a Twitter clone built with SwiftUI and Firebase",
   },
   {
@@ -50,8 +61,8 @@ const apps = [
     description:
       "An Instagram-style social app for sharing photos, real-time comments, and stories. Implements Firebase authentication, storage, and SwiftUI for a smooth and responsive UI.",
     technologies: ["Swift", "SwiftUI", "Firebase"],
-    link: "#", // Replace with repo if available
-    image: "/images/projects/instagramclone.png",
+    codeLink: "#", // Replace with repo if available
+    image: "instagramClone",
     alt: "UI screenshot of an Instagram clone app built with SwiftUI and Firebase",
   },
   {
@@ -59,12 +70,15 @@ const apps = [
     description:
       "Stock trading simulator delivering real-time S&P 500 data via Yahoo Finance API. Built with SwiftUI and Firebase, it powers classroom use at Bowdoin Economics for finance education and data visualization.",
     technologies: ["Swift", "SwiftUI", "Firebase", "Yahoo Finance API"],
-    link: "https://github.com/adamzatar/investify", // Replace with repo if available
-    image: "/images/projects/investify.png",
+    codeLink: "https://github.com/adamzatar/investify",
+    image: "certificate", // ✅ maps to certificate.jpg in IMAGES
     alt: "Screenshot of Investify stock trading simulator app",
   },
 ];
 
+// ----------------------------
+// Component
+// ----------------------------
 export default function Apps() {
   return (
     <section

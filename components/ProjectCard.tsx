@@ -1,8 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
+import AppImage from "@/components/AppImage";
+import { type ImageKey } from "@/lib/images";
 import {
   SiSwift,
   SiReact,
@@ -25,16 +26,23 @@ import {
 } from "react-icons/si";
 import { ReactElement } from "react";
 
-interface ProjectCardProps {
+// ----------------------------
+// Props
+// ----------------------------
+export interface ProjectCardProps {
   title: string;
   description: string;
-  image: string;
+  image: ImageKey | string; // ✅ can be centralized key OR raw string path
   alt: string;
   technologies: string[];
   demoLink?: string;
   codeLink?: string;
+  imageComponent?: React.ReactNode; // ✅ optional override for <AppImage />
 }
 
+// ----------------------------
+// Tech style map
+// ----------------------------
 const techStyles: Record<string, { color: string; icon?: ReactElement }> = {
   Swift: { color: "bg-orange-500 text-white", icon: <SiSwift /> },
   SwiftUI: { color: "bg-pink-500 text-white", icon: <SiSwift /> },
@@ -62,6 +70,9 @@ const techStyles: Record<string, { color: string; icon?: ReactElement }> = {
   Docker: { color: "bg-blue-700 text-white", icon: <SiDocker /> },
 };
 
+// ----------------------------
+// Component
+// ----------------------------
 export default function ProjectCard({
   title,
   description,
@@ -70,6 +81,7 @@ export default function ProjectCard({
   technologies,
   demoLink,
   codeLink,
+  imageComponent,
 }: ProjectCardProps) {
   return (
     <motion.div
@@ -84,12 +96,16 @@ export default function ProjectCard({
           transition={{ duration: 0.4 }}
           className="w-full h-full"
         >
-          <Image
-            src={image}
-            alt={alt}
-            fill
-            className="object-cover transition-transform duration-500"
-          />
+          {imageComponent ? (
+            imageComponent
+          ) : (
+            <AppImage
+              image={image as ImageKey}
+              alt={alt}
+              fill
+              className="object-cover transition-transform duration-500"
+            />
+          )}
         </motion.div>
       </div>
 

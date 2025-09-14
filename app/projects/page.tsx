@@ -1,10 +1,11 @@
 "use client";
 
-import Image from "next/image";
+import AppImage from "@/components/AppImage";
 import { Container } from "@/components/ui/Container";
-import { motion, Variants, Transition } from "framer-motion";
+import { motion, type Variants, type Transition } from "framer-motion";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import type { ImageKey } from "@/lib/images";
 
 const fadeUp = (i: number = 0): Variants => ({
   hidden: { opacity: 0, y: 40 },
@@ -15,13 +16,19 @@ const fadeUp = (i: number = 0): Variants => ({
   },
 });
 
-// Project data
-const projects = [
+// ✅ Project data now uses strongly typed image keys
+const projects: {
+  title: string;
+  description: string;
+  image: ImageKey;
+  github: string;
+  demo: string;
+}[] = [
   {
     title: "Vector (2FA App)",
     description:
       "A next-gen 2FA app built with SwiftUI + Vapor for security and seamless UX.",
-    image: "/images/projects/vector.png",
+    image: "vector",
     github: "https://github.com/adamzatar/vector",
     demo: "#",
   },
@@ -29,7 +36,7 @@ const projects = [
     title: "Cutaway",
     description:
       "Mobile-first tool for social music sharing and curated playlist experiences.",
-    image: "/images/projects/cutaway.png",
+    image: "cutaway",
     github: "https://github.com/adamzatar/cutaway",
     demo: "#",
   },
@@ -37,7 +44,7 @@ const projects = [
     title: "PalPrep",
     description:
       "Advocacy platform designed for community organizing, education, and outreach.",
-    image: "/images/projects/palprep.png",
+    image: "palprep",
     github: "https://github.com/adamzatar/palprep",
     demo: "#",
   },
@@ -45,7 +52,7 @@ const projects = [
     title: "Portfolio Site",
     description:
       "This very site – built with Next.js, Tailwind, and Framer Motion, fully animated and responsive.",
-    image: "/images/projects/portfolio.png",
+    image: "personalPortfolio",
     github: "https://github.com/adamzatar/adam-zaatar-portfolio",
     demo: "/",
   },
@@ -53,7 +60,7 @@ const projects = [
     title: "Investify",
     description:
       "iOS-first financial literacy app to help young investors learn fundamentals.",
-    image: "/images/projects/investify.png",
+    image: "certificate", // placeholder until you add investify.png
     github: "https://github.com/adamzatar/investify",
     demo: "#",
   },
@@ -69,7 +76,9 @@ export default function ProjectsPage() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="text-4xl sm:text-5xl font-extrabold text-center bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] bg-clip-text text-transparent drop-shadow-sm"
+          className="text-4xl sm:text-5xl font-extrabold text-center 
+                     bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
+                     bg-clip-text text-transparent drop-shadow-sm"
         >
           Projects
         </motion.h1>
@@ -95,7 +104,9 @@ export default function ProjectsPage() {
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-          className="mt-10 mb-14 h-[3px] w-44 mx-auto bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] rounded-full origin-center"
+          className="mt-10 mb-14 h-[3px] w-44 mx-auto 
+                     bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
+                     rounded-full origin-center"
         />
 
         {/* Featured Project */}
@@ -106,12 +117,13 @@ export default function ProjectsPage() {
           viewport={{ once: true }}
           className="mb-20"
         >
-          <Card className="p-8 sm:p-12 rounded-2xl shadow-card hover:shadow-card-hover backdrop-blur-sm bg-surface/90 border border-border/60 transition-all">
+          <Card className="p-8 sm:p-12 rounded-2xl shadow-card hover:shadow-card-hover 
+                           backdrop-blur-sm bg-surface/90 border border-border/60 transition-all">
             <h2 className="text-2xl sm:text-3xl font-bold text-center text-text mb-6">
               Featured: Bowdoin Marketplace
             </h2>
-            <Image
-              src="/images/projects/bowdoin-marketplace.png"
+            <AppImage
+              image="bowdoinMarketplace"
               alt="Bowdoin Marketplace"
               width={900}
               height={500}
@@ -152,10 +164,11 @@ export default function ProjectsPage() {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <Card className="overflow-hidden rounded-xl shadow-card hover:shadow-card-hover transition-all bg-surface/90 border border-border/60">
+              <Card className="overflow-hidden rounded-xl shadow-card hover:shadow-card-hover 
+                               transition-all bg-surface/90 border border-border/60">
                 <div className="relative w-full h-56">
-                  <Image
-                    src={project.image}
+                  <AppImage
+                    image={project.image}
                     alt={project.title}
                     fill
                     className="object-cover"
@@ -186,7 +199,9 @@ export default function ProjectsPage() {
       </Container>
 
       {/* Decorative Background Glow */}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 blur-3xl opacity-60" />
+      <div className="pointer-events-none absolute inset-0 -z-10 
+                      bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 
+                      blur-3xl opacity-60" />
     </section>
   );
 }

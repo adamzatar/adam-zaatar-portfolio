@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import AppImage from "@/components/AppImage";
 import Link from "next/link";
 import { motion, type Variants, type Transition } from "framer-motion";
 import { Container } from "@/components/ui/Container";
@@ -79,8 +79,8 @@ export default function HomeClient() {
               className="relative z-10 w-full h-full rounded-2xl bg-surface/90 
                          backdrop-blur-md border border-border/60 shadow-card-hover overflow-hidden p-2"
             >
-              <Image
-                src="/images/projects/profile.png"
+              <AppImage
+                image="profile"
                 alt="Portrait of Adam Zaatar"
                 width={280}
                 height={280}
@@ -111,25 +111,28 @@ export default function HomeClient() {
             className="max-w-3xl text-base sm:text-lg leading-relaxed text-muted"
           >
             From shipping{" "}
-            <span className="font-medium">full-stack apps</span> to {" "}
+            <span className="font-medium">full-stack apps</span> to{" "}
             <span className="font-medium">capital budgeting</span>, I thrive where{" "}
             <span className="text-[var(--secondary)]">code</span> meets{" "}
             <span className="text-[var(--accent)]">markets</span>.
           </motion.p>
 
           <div className="flex flex-wrap justify-center gap-3">
-            {["CS + Econ @ Bowdoin", "Research & econometrics", "iOS+Android & full-stack", "Fintech & AI"].map(
-              (tag) => (
-                <motion.span
-                  key={tag}
-                  whileHover={{ scale: 1.1 }}
-                  className="rounded-full bg-surface px-4 py-1.5 text-sm text-foreground/80 
-                             ring-1 ring-border shadow-sm hover:shadow-card transition"
-                >
-                  {tag}
-                </motion.span>
-              )
-            )}
+            {[
+              "CS + Econ @ Bowdoin",
+              "Research & econometrics",
+              "iOS+Android & full-stack",
+              "Fintech & AI",
+            ].map((tag) => (
+              <motion.span
+                key={tag}
+                whileHover={{ scale: 1.1 }}
+                className="rounded-full bg-surface px-4 py-1.5 text-sm text-foreground/80 
+                           ring-1 ring-border shadow-sm hover:shadow-card transition"
+              >
+                {tag}
+              </motion.span>
+            ))}
           </div>
         </section>
 
@@ -145,18 +148,31 @@ export default function HomeClient() {
           <div className="relative z-10 mx-auto max-w-3xl text-center">
             <h3 className="text-3xl sm:text-4xl font-extrabold">Let’s build something useful!</h3>
             <p className="mt-4 text-background/90">
-              Open to roles and collaborations in financial analysis, stock trading, software engineering, fintech, and AI-driven projects.
+              Open to roles and collaborations in financial analysis, stock trading,
+              software engineering, fintech, and AI-driven projects.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <Button asChild variant="primary">
-                <a href="/resume/AdamZaatar_CV_2025.pdf" target="_blank" rel="noreferrer">
+                <a
+                  href="/resume/AdamZaatar_CV_2025.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   📄 View Resume
                 </a>
               </Button>
-              <Button asChild variant="outline" className="hover:border-background/50 hover:bg-background/10">
+              <Button
+                asChild
+                variant="outline"
+                className="hover:border-background/50 hover:bg-background/10"
+              >
                 <Link href="/#projects">🚀 Projects</Link>
               </Button>
-              <Button asChild variant="ghost" className="hover:bg-background/10">
+              <Button
+                asChild
+                variant="ghost"
+                className="hover:bg-background/10"
+              >
                 <Link href="/#research">📚 Research</Link>
               </Button>
             </div>

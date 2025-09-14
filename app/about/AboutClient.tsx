@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import AppImage from "@/components/AppImage";
 import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -59,15 +59,15 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="flex justify-center mt-8" // ✅ pushes image lower
+            className="flex justify-center mt-8"
           >
             <div className="relative w-72 h-80 md:w-80 md:h-96 rounded-3xl overflow-hidden shadow-xl ring-4 ring-surface">
-              <Image
-                src="/images/projects/profilepic.png"
+              <AppImage
+                image="profile2"
                 alt="Portrait of Adam Zaatar"
                 fill
                 priority
-                className="object-cover object-top" // ✅ keeps hair visible
+                className="object-cover object-top"
               />
             </div>
           </motion.div>
