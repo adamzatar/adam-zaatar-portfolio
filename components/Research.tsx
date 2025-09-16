@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Container } from "@/components/ui/Container";
-import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { motion, Variants } from "framer-motion";
 import { FileText } from "lucide-react";
@@ -34,16 +33,22 @@ const research: ResearchItem[] = [
   },
 ];
 
-// Animation utility
+// ----------------------------
+// Motion Variants
+// ----------------------------
 const fadeUp = (i: number = 0): Variants => ({
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 40, scale: 0.97 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.65, ease: "easeOut", delay: i * 0.05 },
+    scale: 1,
+    transition: { duration: 0.65, ease: "easeOut", delay: i * 0.08 },
   },
 });
 
+// ----------------------------
+// Component
+// ----------------------------
 export default function Research() {
   const [selected, setSelected] = useState<ResearchItem | null>(null);
   const [loading, setLoading] = useState(false);
@@ -53,7 +58,7 @@ export default function Research() {
       id="research"
       className="relative py-28 bg-gradient-to-b from-surface/80 to-bg overflow-hidden"
     >
-      {/* Decorative background gradient */}
+      {/* Decorative background glow */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 blur-2xl opacity-40" />
 
       <Container>
@@ -65,7 +70,7 @@ export default function Research() {
           viewport={{ once: true }}
           className="text-4xl sm:text-5xl font-extrabold text-center 
                      bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
-                     bg-clip-text text-transparent drop-shadow-sm will-change-[transform,opacity]"
+                     bg-clip-text text-transparent drop-shadow-sm"
         >
           Research
         </motion.h2>
@@ -76,7 +81,7 @@ export default function Research() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mt-6 text-lg sm:text-xl text-muted text-center max-w-3xl mx-auto leading-relaxed will-change-[transform,opacity]"
+          className="mt-6 text-lg sm:text-xl text-muted text-center max-w-3xl mx-auto leading-relaxed"
         >
           A selection of academic research projects combining{" "}
           <span className="text-[var(--primary)] font-semibold">economics</span>,{" "}
@@ -90,11 +95,13 @@ export default function Research() {
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-          className="mt-10 mb-14 h-[3px] w-44 mx-auto bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] rounded-full origin-center will-change-[transform,opacity]"
+          className="mt-10 mb-14 h-[3px] w-44 mx-auto bg-gradient-to-r 
+                     from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
+                     rounded-full origin-center"
         />
 
         {/* Grid of Research Cards */}
-        <div className="mt-10 grid gap-8 sm:grid-cols-2">
+        <div className="mt-10 grid gap-10 sm:grid-cols-2">
           {research.map((item, index) => (
             <motion.div
               key={index}
@@ -102,18 +109,18 @@ export default function Research() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="will-change-[transform,opacity]"
+              whileHover={{ y: -12, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 220, damping: 18 }}
+              className="rounded-2xl shadow-lg hover:shadow-2xl 
+                         border border-border bg-surface/90 
+                         backdrop-blur-sm cursor-pointer transition-all duration-300 flex flex-col"
+              onClick={() => {
+                setSelected(item);
+                setLoading(true);
+              }}
             >
-              <Card
-                className="group p-6 sm:p-8 rounded-2xl backdrop-blur-sm bg-surface/80 
-                           border border-border/60 shadow-subtle 
-                           hover:shadow-card-hover transition-transform duration-500 
-                           hover:-translate-y-1.5 cursor-pointer"
-                onClick={() => {
-                  setSelected(item);
-                  setLoading(true);
-                }}
-              >
+              <div className="p-6 sm:p-8 flex flex-col flex-1">
                 <h3
                   className="text-xl sm:text-2xl font-bold mb-3 
                              bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] 
@@ -121,7 +128,7 @@ export default function Research() {
                 >
                   {item.title}
                 </h3>
-                <p className="text-muted text-base leading-relaxed mb-6 line-clamp-4">
+                <p className="text-muted text-base leading-relaxed flex-1 mb-6 line-clamp-4">
                   {item.description}
                 </p>
                 <div className="flex justify-end">
@@ -132,7 +139,7 @@ export default function Research() {
                     </a>
                   </Button>
                 </div>
-              </Card>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -143,9 +150,9 @@ export default function Research() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65 }}
-            className="mt-16 will-change-[transform,opacity]"
+            className="mt-16"
           >
-            <Card className="p-6 sm:p-10 rounded-2xl shadow-card backdrop-blur-md bg-surface/95 border border-border/60">
+            <div className="p-6 sm:p-10 rounded-2xl shadow-2xl bg-surface/95 border border-border backdrop-blur-md">
               <h3 className="text-2xl sm:text-3xl font-bold text-text mb-4">
                 {selected.title}
               </h3>
@@ -167,7 +174,7 @@ export default function Research() {
                 title={selected.title}
                 onLoad={() => setLoading(false)}
               />
-            </Card>
+            </div>
           </motion.div>
         )}
       </Container>

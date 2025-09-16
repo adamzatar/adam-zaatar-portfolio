@@ -9,15 +9,14 @@ export default function Resume() {
   return (
     <section
       id="resume"
-      className="relative py-24 bg-surface overflow-hidden"
+      className="relative py-28 bg-gradient-to-b from-surface/90 to-bg overflow-hidden"
       aria-labelledby="resume-heading"
     >
-      {/* Decorative blurred gradient orb (background accent) */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 overflow-hidden"
-      >
-        <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] bg-gradient-to-r from-[var(--primary)]/30 via-[var(--secondary)]/25 to-[var(--accent)]/20 rounded-full blur-[140px] animate-pulse-slow" />
+      {/* === Decorative blurred gradient orb (background accent) === */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] 
+                        bg-gradient-to-r from-[var(--primary)]/30 via-[var(--secondary)]/25 to-[var(--accent)]/20 
+                        rounded-full blur-[140px] animate-pulse-slow" />
       </div>
 
       <Container className="text-center">
@@ -28,10 +27,10 @@ export default function Resume() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="relative inline-block text-4xl sm:text-5xl font-extrabold tracking-tight text-text"
+          className="relative inline-block text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground"
         >
           Resume
-          {/* Gradient underline that animates in */}
+          {/* Gradient underline */}
           <motion.span
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
@@ -84,13 +83,17 @@ export default function Resume() {
           </Button>
         </motion.div>
 
-        {/* === Resume Preview Component === */}
+        {/* === Resume Preview Card === */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.95, ease: "easeOut", delay: 0.35 }}
-          className="mt-16"
+          whileHover={{ y: -10, scale: 1.02 }}
+          className="mt-16 mx-auto max-w-4xl 
+                     bg-surface/90 backdrop-blur-md border border-border/50 
+                     rounded-2xl shadow-lg hover:shadow-2xl 
+                     transition-all duration-500"
         >
           <ResumePreview />
         </motion.div>

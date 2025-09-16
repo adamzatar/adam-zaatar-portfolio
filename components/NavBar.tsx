@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import clsx from "clsx";
 import { Container } from "@/components/ui/Container";
-import { Button } from "@/components/ui/Button";
 import {
   motion,
   AnimatePresence,
@@ -97,8 +96,8 @@ export default function NavBar() {
         className={clsx(
           "fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b",
           scrolled
-            ? "bg-surface/90 border-border/40 shadow-lg backdrop-blur-2xl"
-            : "bg-transparent border-transparent backdrop-blur-sm"
+            ? "bg-surface/70 border-border/40 shadow-xl backdrop-blur-2xl rounded-b-xl"
+            : "bg-transparent border-transparent"
         )}
         role="navigation"
         aria-label="Main Navigation"
@@ -124,53 +123,47 @@ export default function NavBar() {
             {navLinks.map(({ href, label, external, download }) => {
               const isActive = activeSection === label;
               return (
-                <motion.li key={href.toString()} variants={linkVariants}>
+                <motion.li
+                  key={href.toString()}
+                  variants={linkVariants}
+                  whileHover={{ scale: 1.08 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
                   {external ? (
-                    <Button
-                      asChild
-                      variant="ghost"
-                      size="sm"
-                      className="relative font-medium group px-3 text-lg"
+                    <a
+                      href={href.toString()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      {...(download ? { download: true } : {})}
+                      className="relative font-medium text-lg px-2 py-1 group transition-colors"
                     >
-                      <a
-                        href={href.toString()}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        {...(download ? { download: true } : {})}
-                        aria-label={`Open ${label}`}
-                      >
-                        {label}
-                        {/* Gradient underline */}
-                        <span
-                          className={clsx(
-                            "absolute left-0 -bottom-1 h-[2px] w-0 rounded-full transition-all duration-500 ease-out",
-                            "bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]",
-                            (isActive || !external) &&
-                              "w-full shadow-[0_0_8px_var(--primary),0_0_16px_var(--secondary)]"
-                          )}
-                        />
-                      </a>
-                    </Button>
+                      {label}
+                      {/* Gradient underline */}
+                      <span
+                        className={clsx(
+                          "absolute left-0 -bottom-1 h-[2px] w-0 transition-all duration-500 ease-out",
+                          "bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]",
+                          "group-hover:w-full",
+                          isActive && "w-full shadow-[0_0_8px_var(--primary),0_0_16px_var(--secondary)]"
+                        )}
+                      />
+                    </a>
                   ) : (
-                    <Button
-                      asChild
-                      variant="ghost"
-                      size="sm"
-                      className="relative font-medium group px-3 text-lg"
+                    <Link
+                      href={href as Route}
+                      className="relative font-medium text-lg px-2 py-1 group transition-colors"
                     >
-                      <Link href={href as Route} aria-label={`Go to ${label} page`}>
-                        {label}
-                        {/* Gradient underline */}
-                        <span
-                          className={clsx(
-                            "absolute left-0 -bottom-1 h-[2px] w-0 rounded-full transition-all duration-500 ease-out",
-                            "bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]",
-                            isActive &&
-                              "w-full shadow-[0_0_8px_var(--primary),0_0_16px_var(--secondary)]"
-                          )}
-                        />
-                      </Link>
-                    </Button>
+                      {label}
+                      {/* Gradient underline */}
+                      <span
+                        className={clsx(
+                          "absolute left-0 -bottom-1 h-[2px] w-0 transition-all duration-500 ease-out",
+                          "bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]",
+                          "group-hover:w-full",
+                          isActive && "w-full shadow-[0_0_8px_var(--primary),0_0_16px_var(--secondary)]"
+                        )}
+                      />
+                    </Link>
                   )}
                 </motion.li>
               );
@@ -204,7 +197,8 @@ export default function NavBar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="md:hidden border-t border-border bg-surface/95 shadow-xl backdrop-blur-xl"
+              className="md:hidden border-t border-border 
+                         bg-surface/80 shadow-2xl backdrop-blur-2xl rounded-b-xl"
             >
               <Container className="flex flex-col space-y-4 py-6">
                 {navLinks.map(({ href, label, external, download }, index) => (
@@ -215,41 +209,32 @@ export default function NavBar() {
                     transition={{ duration: 0.3, delay: index * 0.06 }}
                   >
                     {external ? (
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="lg"
+                      <a
+                        href={href.toString()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        {...(download ? { download: true } : {})}
                         className={clsx(
-                          "w-full text-lg font-semibold tracking-wide hover:scale-105 transition-transform shadow-md",
+                          "w-full block text-lg font-semibold tracking-wide px-4 py-3 rounded-lg",
+                          "bg-surface/60 hover:bg-surface/90 transition-all shadow-md",
                           activeSection === label && "ring-2 ring-[var(--primary)]"
                         )}
                         onClick={() => setIsOpen(false)}
                       >
-                        <a
-                          href={href.toString()}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          {...(download ? { download: true } : {})}
-                          aria-label={`Open ${label}`}
-                        >
-                          {label}
-                        </a>
-                      </Button>
+                        {label}
+                      </a>
                     ) : (
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="lg"
+                      <Link
+                        href={href as Route}
                         className={clsx(
-                          "w-full text-lg font-semibold tracking-wide hover:scale-105 transition-transform shadow-md",
+                          "w-full block text-lg font-semibold tracking-wide px-4 py-3 rounded-lg",
+                          "bg-surface/60 hover:bg-surface/90 transition-all shadow-md",
                           activeSection === label && "ring-2 ring-[var(--primary)]"
                         )}
                         onClick={() => setIsOpen(false)}
                       >
-                        <Link href={href as Route} aria-label={`Go to ${label} page`}>
-                          {label}
-                        </Link>
-                      </Button>
+                        {label}
+                      </Link>
                     )}
                   </motion.div>
                 ))}

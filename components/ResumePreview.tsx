@@ -14,17 +14,17 @@ export default function ResumePreview() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="relative rounded-2xl border border-border/50 bg-gradient-to-br 
-                 from-[var(--surface)] to-[var(--bg)] shadow-lg hover:shadow-xl 
-                 transition-shadow duration-500 overflow-hidden"
+      className="relative rounded-2xl border border-border bg-white dark:bg-[#161b22]
+                 shadow-md hover:shadow-xl transition-all duration-500
+                 flex flex-col overflow-hidden"
     >
       {/* === PDF Viewer with shimmer === */}
-      <div className="relative h-[480px] w-full overflow-hidden border-b border-border/50">
+      <div className="relative h-[480px] w-full border-b border-border">
         {/* Shimmer Loader */}
         {!loaded && !error && (
           <div
             className="absolute inset-0 animate-pulse bg-gradient-to-r 
-                       from-muted/30 via-muted/40 to-muted/30"
+                       from-muted/20 via-muted/30 to-muted/20"
             aria-hidden="true"
           />
         )}
@@ -34,7 +34,7 @@ export default function ResumePreview() {
           <iframe
             src="/resume/AdamZaatar_CV_2025.pdf"
             loading="lazy"
-            className={`w-full h-full transition-opacity duration-700 will-change-[opacity,transform] ${
+            className={`w-full h-full transition-opacity duration-700 ${
               loaded ? "opacity-100" : "opacity-0"
             }`}
             title="Adam Zaatar Resume Preview"
@@ -53,7 +53,7 @@ export default function ResumePreview() {
                 href="/resume/AdamZaatar_CV_2025.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--primary)] underline hover:text-[var(--secondary)] transition-colors"
+                className="text-primary underline hover:text-secondary transition-colors"
               >
                 download the resume
               </a>{" "}
@@ -64,8 +64,7 @@ export default function ResumePreview() {
       </div>
 
       {/* === Footer with actions === */}
-      <div className="p-6 flex justify-between items-center bg-gradient-to-r 
-                      from-[var(--surface)]/90 to-[var(--bg)]/80 border-t border-border/40">
+      <div className="p-6 flex justify-between items-center bg-white dark:bg-[#161b22] border-t border-border">
         <h3 className="text-lg font-semibold">Resume</h3>
         <Button asChild variant="primary" size="sm">
           <a

@@ -3,13 +3,13 @@
 import { useEffect, useRef } from "react";
 import { useDayCycle } from "@/hooks/useDayCycle";
 
-export default function AnimatedBackgroundChrome() {
+export default function AnimatedBackgroundSafari() {
   const trailRef = useRef<HTMLDivElement[]>([]);
-  const { gradient, sunMoon, progress } = useDayCycle(); // 🌗 synced animation state
+  const { gradient, sunMoon, progress } = useDayCycle();
 
   useEffect(() => {
-    // Chrome can handle more trail dots
-    const coords = Array.from({ length: 16 }, () => ({
+    // Safari: fewer dots for smooth FPS
+    const coords = Array.from({ length: 6 }, () => ({
       x: window.innerWidth / 2,
       y: window.innerHeight / 2,
     }));
@@ -25,8 +25,8 @@ export default function AnimatedBackgroundChrome() {
       trailRef.current.forEach((el, i) => {
         if (!el) return;
         const point = coords[i];
-        const scale = 1 - i * 0.055;
-        const opacity = 1 - i * 0.065;
+        const scale = 1 - i * 0.12;
+        const opacity = 1 - i * 0.18;
 
         el.style.transform = `translate3d(${point.x}px, ${point.y}px, 0) scale(${scale})`;
         el.style.opacity = `${opacity}`;
@@ -35,31 +35,27 @@ export default function AnimatedBackgroundChrome() {
     }
 
     animate();
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouse);
-    };
+    return () => window.removeEventListener("mousemove", handleMouse);
   }, []);
 
   return (
     <div className="absolute inset-0 -z-50 overflow-hidden">
-      {/* === Dynamic Gradient Backdrop (synced to cycle) === */}
+      {/* === Gradient Backdrop === */}
       <div
-        className="absolute inset-0 -z-50 transition-colors duration-[2000ms]"
+        className="absolute inset-0 -z-50 transition-colors duration-[2500ms]"
         style={{
           background: `radial-gradient(circle at 50% 50%, ${gradient[0]}, ${gradient[1]})`,
         }}
       />
 
-      {/* === Parallax Clouds === */}
+      {/* === Clouds (slower & visible) === */}
       <div className="absolute inset-0 -z-40 pointer-events-none">
-        <div className="cloud-far" style={{ top: "10%", left: "-25%", animationDelay: "0s", opacity: 0.4 }} />
-        <div className="cloud-mid" style={{ top: "28%", left: "-35%", animationDelay: "30s", opacity: 0.5 }} />
-        <div className="cloud-near" style={{ top: "50%", left: "-20%", animationDelay: "60s", opacity: 0.55 }} />
-        <div className="cloud-near" style={{ top: "70%", left: "-40%", animationDelay: "90s", opacity: 0.6 }} />
+        <div className="cloud-far" style={{ top: "15%", left: "-25%", animationDelay: "0s", opacity: 0.45 }} />
+        <div className="cloud-mid" style={{ top: "35%", left: "-35%", animationDelay: "60s", opacity: 0.5 }} />
+        <div className="cloud-near" style={{ top: "60%", left: "-40%", animationDelay: "120s", opacity: 0.55 }} />
       </div>
 
-      {/* === Sun & Moon Orbit (synced) === */}
+      {/* === Sun & Moon === */}
       <div
         className="sunmoon absolute -z-30"
         style={{
@@ -69,12 +65,12 @@ export default function AnimatedBackgroundChrome() {
         }}
       />
 
-      {/* === Starfield (night mode) === */}
+      {/* === Starfield (night only, fewer stars) === */}
       <div
         className={`starfield absolute inset-0 -z-20 ${progress > 0.75 ? "active" : ""}`}
         aria-hidden="true"
       >
-        {Array.from({ length: 120 }).map((_, i) => (
+        {Array.from({ length: 40 }).map((_, i) => (
           <div
             key={`star-${i}`}
             className="star"
@@ -83,15 +79,15 @@ export default function AnimatedBackgroundChrome() {
               height: `${Math.random() * 2 + 1}px`,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 6}s`,
+              animationDelay: `${Math.random() * 8}s`,
             }}
           />
         ))}
       </div>
 
-      {/* === Aurora Particles (elegant drift) === */}
+      {/* === Aurora Particles (snail drift) === */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
-        {Array.from({ length: 50 }).map((_, i) => (
+        {Array.from({ length: 10 }).map((_, i) => (
           <span
             key={`particle-${i}`}
             className="particle"
@@ -99,8 +95,8 @@ export default function AnimatedBackgroundChrome() {
               {
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                "--duration": `${18 + Math.random() * 25}s`,
-                "--delay": `${Math.random() * 20}s`,
+                "--duration": `${60 + Math.random() * 40}s`, // 🐌 snail speed
+                "--delay": `${Math.random() * 30}s`,
                 filter: `hue-rotate(${progress * 360}deg)`,
               } as React.CSSProperties & { "--duration"?: string; "--delay"?: string }
             }
@@ -110,13 +106,13 @@ export default function AnimatedBackgroundChrome() {
 
       {/* === Cursor Comet Trail === */}
       <div className="absolute inset-0 -z-0 pointer-events-none">
-        {Array.from({ length: 16 }).map((_, i) => (
+        {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={`trail-${i}`}
             ref={(el) => {
               if (el) trailRef.current[i] = el;
             }}
-            className="trail-dot"
+            className="trail-dot-safari"
           />
         ))}
       </div>

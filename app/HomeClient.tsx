@@ -21,15 +21,17 @@ const fadeUp = (i = 0): Variants => ({
 
 export default function HomeClient() {
   return (
-    <main className="relative overflow-hidden bg-gradient-to-b from-surface/70 to-bg">
-      {/* Animated vignette */}
+    <main className="relative overflow-hidden bg-gradient-to-b from-surface to-bg">
+      {/* Background vignette */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_40%_at_50%_-10%,hsl(var(--primary)/0.15),transparent_60%)] animate-gradientShift"
+        className="pointer-events-none absolute inset-0 -z-10 
+                   bg-[radial-gradient(60%_40%_at_50%_-10%,hsl(var(--primary)/0.12),transparent_70%)] 
+                   animate-gradientShift"
       />
 
       <Container className="py-20 sm:py-28">
-        {/* HERO */}
+        {/* === HERO === */}
         <section className="flex flex-col items-center text-center gap-8">
           <motion.h1
             variants={fadeUp(0)}
@@ -55,7 +57,7 @@ export default function HomeClient() {
           </motion.p>
         </section>
 
-        {/* 3D DOUBLE CARD PORTRAIT */}
+        {/* === PORTRAIT CARD === */}
         <section className="mt-16 flex justify-center">
           <motion.div
             variants={fadeUp(1.5)}
@@ -64,20 +66,24 @@ export default function HomeClient() {
             viewport={{ once: true, amount: 0.4 }}
             className="relative w-72 h-72"
           >
-            {/* Back Glow Card */}
+            {/* Decorative glow behind */}
             <motion.div
               animate={{ rotate: [-4, -6, -4], scale: [1, 1.05, 1] }}
               transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-              className="absolute inset-0 -rotate-6 bg-gradient-to-br from-[var(--secondary)] to-[var(--accent)] 
-                         opacity-50 blur-xl rounded-2xl shadow-neon"
+              className="absolute inset-0 -rotate-6 
+                         bg-gradient-to-br from-[var(--secondary)] to-[var(--accent)] 
+                         opacity-40 blur-2xl rounded-2xl"
             />
 
-            {/* Front Card with tilt */}
+            {/* Solid card with image */}
             <motion.div
-              whileHover={{ rotateX: 8, rotateY: -8, scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 200, damping: 15 }}
-              className="relative z-10 w-full h-full rounded-2xl bg-surface/90 
-                         backdrop-blur-md border border-border/60 shadow-card-hover overflow-hidden p-2"
+              whileHover={{ scale: 1.05, y: -6 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 200, damping: 18 }}
+              className="relative z-10 w-full h-full rounded-2xl 
+                         bg-white dark:bg-[#161b22] 
+                         border border-border shadow-lg hover:shadow-2xl 
+                         overflow-hidden p-2 transition-all duration-300"
             >
               <AppImage
                 image="profile"
@@ -91,7 +97,7 @@ export default function HomeClient() {
           </motion.div>
         </section>
 
-        {/* SNAPSHOT / TAGS */}
+        {/* === SNAPSHOT / TAGS === */}
         <section className="mt-12 flex flex-col items-center gap-6 text-center">
           <motion.h2
             variants={fadeUp(2)}
@@ -126,9 +132,11 @@ export default function HomeClient() {
             ].map((tag) => (
               <motion.span
                 key={tag}
-                whileHover={{ scale: 1.1 }}
-                className="rounded-full bg-surface px-4 py-1.5 text-sm text-foreground/80 
-                           ring-1 ring-border shadow-sm hover:shadow-card transition"
+                whileHover={{ scale: 1.08, y: -2 }}
+                className="rounded-lg bg-white dark:bg-[#161b22] 
+                           px-4 py-2 text-sm text-foreground/90 
+                           border border-border shadow-md hover:shadow-lg 
+                           transition-all"
               >
                 {tag}
               </motion.span>
@@ -136,18 +144,22 @@ export default function HomeClient() {
           </div>
         </section>
 
-        {/* CTA */}
+        {/* === CTA === */}
         <motion.section
           variants={fadeUp(3)}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mt-24 rounded-2xl bg-foreground text-background p-10 sm:p-14 shadow-neon relative overflow-hidden"
+          className="mt-24 rounded-2xl bg-white dark:bg-[#161b22] 
+                     border border-border shadow-xl p-10 sm:p-14 relative overflow-hidden"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--primary)]/20 via-[var(--secondary)]/20 to-[var(--accent)]/20 animate-gradientShift" />
+          <div className="absolute inset-0 bg-gradient-to-r 
+                          from-[var(--primary)]/10 via-[var(--secondary)]/10 to-[var(--accent)]/10" />
           <div className="relative z-10 mx-auto max-w-3xl text-center">
-            <h3 className="text-3xl sm:text-4xl font-extrabold">Let’s build something useful!</h3>
-            <p className="mt-4 text-background/90">
+            <h3 className="text-3xl sm:text-4xl font-extrabold text-foreground">
+              Let’s build something useful!
+            </h3>
+            <p className="mt-4 text-muted">
               Open to roles and collaborations in financial analysis, stock trading,
               software engineering, fintech, and AI-driven projects.
             </p>
@@ -161,18 +173,10 @@ export default function HomeClient() {
                   📄 View Resume
                 </a>
               </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="hover:border-background/50 hover:bg-background/10"
-              >
+              <Button asChild variant="outline">
                 <Link href="/#projects">🚀 Projects</Link>
               </Button>
-              <Button
-                asChild
-                variant="ghost"
-                className="hover:bg-background/10"
-              >
+              <Button asChild variant="ghost">
                 <Link href="/#research">📚 Research</Link>
               </Button>
             </div>

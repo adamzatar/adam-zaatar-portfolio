@@ -3,20 +3,22 @@
 import { motion, Variants } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import AppImage from "@/components/AppImage";
+import { Card } from "@/components/ui/Card";
 import { type ImageKey } from "@/lib/images";
 
 // ----------------------------
 // Motion Variants
 // ----------------------------
 const fadeUp = (i: number = 0): Variants => ({
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 40, scale: 0.96 },
   visible: {
     opacity: 1,
     y: 0,
+    scale: 1,
     transition: {
       duration: 0.65,
       ease: [0.25, 0.1, 0.25, 1],
-      delay: i * 0.08,
+      delay: i * 0.1,
     },
   },
 });
@@ -100,84 +102,71 @@ const websites: Project[] = [
 ];
 
 // ----------------------------
-// Custom Card (Apps)
+// Reusable Card Components
 // ----------------------------
 function AppCard({ title, description, image, alt, codeLink }: Project) {
   return (
-    <motion.div
-      whileHover={{ y: -10, scale: 1.02 }}
-      transition={{ type: "spring", stiffness: 220, damping: 18 }}
-      className="bg-white dark:bg-[#161b22] rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden transition-all flex flex-col"
+    <Card
+      variant="elevated"
+      interactive
+      padding="md"
+      className="flex flex-col bg-white dark:bg-[#161b22] border border-border 
+                 shadow-md hover:shadow-xl transition-all duration-500"
     >
       {/* Image */}
-      <div className="relative h-48 w-full overflow-hidden">
-        <AppImage
-          image={image}
-          alt={alt}
-          fill
-          className="object-cover rounded-t-2xl"
-        />
+      <div className="relative h-48 w-full overflow-hidden rounded-t-2xl">
+        <AppImage image={image} alt={alt} fill className="object-cover" />
       </div>
 
       {/* Content */}
       <div className="p-6 flex flex-col flex-1">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-          {title}
-        </h3>
-        <p className="text-gray-600 dark:text-gray-300 text-sm flex-1">
-          {description}
-        </p>
+        <h3 className="text-xl font-bold mb-2 text-text">{title}</h3>
+        <p className="text-sm text-muted flex-1">{description}</p>
         {codeLink && (
           <a
             href={codeLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-block text-primary dark:text-secondary font-semibold hover:underline"
+            className="mt-4 inline-block font-semibold text-[var(--primary)] hover:underline"
           >
             View Code →
           </a>
         )}
       </div>
-    </motion.div>
+    </Card>
   );
 }
 
-// ----------------------------
-// Custom Card (Websites)
-// ----------------------------
 function WebsiteCard({ title, description, image, alt, codeLink }: Project) {
   return (
-    <motion.div
-      whileHover={{ scale: 1.03 }}
-      transition={{ type: "spring", stiffness: 180, damping: 20 }}
-      className="border border-border bg-surface rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all flex flex-col"
+    <Card
+      variant="surface"
+      interactive
+      padding="md"
+      className="flex flex-col bg-white dark:bg-[#161b22] border border-border 
+                 shadow-sm hover:shadow-lg transition-all duration-500"
     >
       {/* Banner Image */}
-      <div className="relative h-40 w-full overflow-hidden">
-        <AppImage
-          image={image}
-          alt={alt}
-          fill
-          className="object-cover rounded-t-xl"
-        />
+      <div className="relative h-40 w-full overflow-hidden rounded-t-xl">
+        <AppImage image={image} alt={alt} fill className="object-cover" />
       </div>
 
       {/* Content */}
       <div className="p-5 flex flex-col flex-1">
-        <h3 className="text-lg font-semibold text-text mb-2">{title}</h3>
-        <p className="text-muted text-sm flex-1">{description}</p>
+        <h3 className="text-lg font-semibold mb-2 text-text">{title}</h3>
+        <p className="text-sm text-muted flex-1">{description}</p>
         {codeLink && (
           <a
             href={codeLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 inline-block text-[var(--primary)] font-medium hover:underline"
+            className="mt-3 inline-block font-medium text-[var(--primary)] hover:underline"
           >
             GitHub →
           </a>
         )}
       </div>
-    </motion.div>
+    </Card>
   );
 }
 
@@ -186,7 +175,7 @@ function WebsiteCard({ title, description, image, alt, codeLink }: Project) {
 // ----------------------------
 export default function ProjectsGrid() {
   return (
-    <section className="relative py-28 bg-gradient-to-b from-surface/80 to-bg overflow-hidden">
+    <section className="relative py-28 overflow-hidden">
       <Container>
         {/* Header */}
         <motion.div
@@ -200,8 +189,7 @@ export default function ProjectsGrid() {
             Projects
           </h2>
           <p className="mt-4 text-lg text-muted max-w-2xl mx-auto">
-            A curated selection of apps, platforms, and full-stack builds —
-            blending strong infrastructure with clean, user-focused design.
+            A curated selection of apps, platforms, and full-stack builds — blending strong infrastructure with clean, user-focused design.
           </p>
         </motion.div>
 
@@ -213,9 +201,7 @@ export default function ProjectsGrid() {
           viewport={{ once: true }}
           className="mb-20"
         >
-          <h3 className="text-2xl font-bold text-text mb-8 text-center">
-            Apps
-          </h3>
+          <h3 className="text-2xl font-bold text-text mb-8 text-center">Apps</h3>
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
             {apps.map((project, idx) => (
               <motion.div
@@ -258,7 +244,9 @@ export default function ProjectsGrid() {
       </Container>
 
       {/* Decorative Glow */}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 blur-2xl opacity-40" />
+      <div className="pointer-events-none absolute inset-0 -z-10 
+                      bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 
+                      blur-2xl opacity-40" />
     </section>
   );
 }
