@@ -12,15 +12,15 @@ const fadeUp = (i: number = 0): Variants => ({
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.7,
+      duration: 0.65,
       ease: [0.25, 0.1, 0.25, 1],
-      delay: i * 0.15,
+      delay: i * 0.05, // ⚡ faster cascade
     },
   },
 });
 
 // ----------------------------
-// Extend Project type to include imageComponent
+// Project Type
 // ----------------------------
 type Project = Omit<ProjectCardProps, "image" | "imageComponent"> & {
   image: ImageKey;
@@ -124,7 +124,7 @@ export default function ProjectsGrid() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-16 will-change-[transform,opacity]"
         >
           <h2 className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] bg-clip-text text-transparent drop-shadow-sm">
             Projects
@@ -142,7 +142,7 @@ export default function ProjectsGrid() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mb-16"
+          className="mb-16 will-change-[transform,opacity]"
         >
           <h3 className="text-2xl font-bold text-text mb-8 text-center">
             Apps
@@ -155,9 +155,9 @@ export default function ProjectsGrid() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                whileHover={{ scale: 1.05, rotateX: 2, rotateY: -2 }}
-                transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                className="transform-gpu"
+                whileHover={{ scale: 1.04, rotateX: 1.5, rotateY: -1.5 }}
+                transition={{ type: "spring", stiffness: 200, damping: 18 }}
+                className="transform-gpu will-change-[transform,opacity]"
               >
                 <ProjectCard
                   {...project}
@@ -181,6 +181,7 @@ export default function ProjectsGrid() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
+          className="will-change-[transform,opacity]"
         >
           <h3 className="text-2xl font-bold text-text mb-8 text-center">
             Websites & Platforms
@@ -193,9 +194,9 @@ export default function ProjectsGrid() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                whileHover={{ scale: 1.05, rotateX: 2, rotateY: -2 }}
-                transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                className="transform-gpu"
+                whileHover={{ scale: 1.04, rotateX: 1.5, rotateY: -1.5 }}
+                transition={{ type: "spring", stiffness: 200, damping: 18 }}
+                className="transform-gpu will-change-[transform,opacity]"
               >
                 <ProjectCard
                   {...project}
@@ -215,7 +216,7 @@ export default function ProjectsGrid() {
       </Container>
 
       {/* Decorative Glow */}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 blur-3xl opacity-60" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 blur-2xl opacity-50" />
     </section>
   );
 }

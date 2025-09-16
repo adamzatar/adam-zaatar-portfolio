@@ -2,13 +2,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useDayCycle } from "@/hooks/useDayCycle";
 
 export default function AnimatedBackgroundSafari() {
   const trailRef = useRef<HTMLDivElement[]>([]);
+  const { gradient, sunMoon, progress } = useDayCycle(); // 🎶 synced cycle
 
   useEffect(() => {
-    // Safari: fewer dots, lighter trail
-    const coords = Array.from({ length: 8 }, () => ({
+    // Safari: fewer dots for better FPS
+    const coords = Array.from({ length: 6 }, () => ({
       x: window.innerWidth / 2,
       y: window.innerHeight / 2,
     }));
@@ -24,11 +26,10 @@ export default function AnimatedBackgroundSafari() {
       trailRef.current.forEach((el, i) => {
         if (!el) return;
         const point = coords[i];
-        const scale = 1 - i * 0.1;
-        const opacity = 1 - i * 0.15;
+        const scale = 1 - i * 0.12;
+        const opacity = 1 - i * 0.18;
 
-        // GPU-friendly, avoids Safari layout thrash
-        el.style.transform = `translate3d(${point.x}px,${point.y}px,0) scale(${scale})`;
+        el.style.transform = `translate3d(${point.x}px, ${point.y}px, 0) scale(${scale})`;
         el.style.opacity = `${opacity}`;
       });
       requestAnimationFrame(animate);
@@ -43,53 +44,101 @@ export default function AnimatedBackgroundSafari() {
 
   return (
     <div className="absolute inset-0 -z-10 overflow-hidden">
-      {/* === Animated Gradient Backdrop (softer + slower for Safari) === */}
-      <div className="absolute inset-0 animate-gradient bg-[length:300%_300%]" />
+      {/* === Synced Gradient Backdrop === */}
+      <div
+        className="absolute inset-0 transition-colors duration-[2500ms]"
+        style={{
+          background: `radial-gradient(circle at 50% 50%, ${gradient[0]}, ${gradient[1]})`,
+        }}
+      />
 
-      {/* === Layered Clouds (lighter opacity, less movement for FPS) === */}
+      {/* === Clouds (lighter, Safari-friendly) === */}
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="cloud-far"
-          style={{ top: "8%", left: "-20%", animationDelay: "0s", opacity: 0.25 }}
+          style={{
+            top: "12%",
+            left: "-30%",
+            animationDelay: "0s",
+            opacity: 0.25,
+          }}
         />
         <div
           className="cloud-mid"
-          style={{ top: "26%", left: "-30%", animationDelay: "25s", opacity: 0.3 }}
+          style={{
+            top: "32%",
+            left: "-35%",
+            animationDelay: "35s",
+            opacity: 0.3,
+          }}
         />
         <div
           className="cloud-near"
-          style={{ top: "42%", left: "-25%", animationDelay: "50s", opacity: 0.35 }}
+          style={{
+            top: "55%",
+            left: "-40%",
+            animationDelay: "70s",
+            opacity: 0.35,
+          }}
         />
       </div>
 
-      {/* === Sun & Moon (synced with gradient cycle) === */}
-      <div className="sunmoon" />
+      {/* === Sun & Moon (synced orbit) === */}
+      <div
+        className="sunmoon"
+        style={{
+          left: `${sunMoon.x * 100}%`,
+          top: `${sunMoon.y * 100}%`,
+          background: sunMoon.color,
+        }}
+      />
 
-      {/* === Floating Particles (lighter count, subtle shimmer) === */}
-      <div className="absolute inset-0">
-        {Array.from({ length: 18 }).map((_, i) => (
-          <span
-            key={`particle-${i}`}
-            className="absolute block w-1.5 h-1.5 rounded-full bg-white/60 blur-[1px] animate-float"
+      {/* === Starfield (night mode only) === */}
+      <div
+        className={`starfield ${progress > 0.75 ? "active" : ""}`}
+        aria-hidden="true"
+      >
+        {Array.from({ length: 60 }).map((_, i) => (
+          <div
+            key={`star-${i}`}
+            className="star"
             style={{
+              width: `${Math.random() * 2 + 1}px`,
+              height: `${Math.random() * 2 + 1}px`,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 18}s`,
-              animationDuration: `${22 + Math.random() * 20}s`,
-              filter: "hue-rotate(15deg)", // subtle aurora tint
+              animationDelay: `${Math.random() * 6}s`,
+              transform: `translateZ(${Math.random() * 2}px)`,
             }}
           />
         ))}
       </div>
 
-      {/* === Snake Trail (reduced dots, smooth fade) === */}
-      {Array.from({ length: 8 }).map((_, i) => (
+      {/* === Floating Particles (aurora shimmer) === */}
+      <div className="absolute inset-0">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <span
+            key={`particle-${i}`}
+            className="particle"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 20}s`,
+              animationDuration: `${28 + Math.random() * 18}s`,
+              filter: `hue-rotate(${progress * 360}deg)`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* === Snake Trail (lighter) === */}
+      {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={`trail-${i}`}
           ref={(el) => {
             if (el) trailRef.current[i] = el;
           }}
-          className="trail-dot"
+          className="trail-dot-safari"
         />
       ))}
     </div>

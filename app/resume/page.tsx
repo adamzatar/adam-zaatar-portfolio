@@ -1,11 +1,11 @@
 // app/resume/page.tsx
 "use client";
 
+import { useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import ResumePreview from "@/components/ResumePreview";
-import { useEffect, useState } from "react";
 
 export default function Resume() {
   const [resumeAvailable, setResumeAvailable] = useState(false);
@@ -23,11 +23,13 @@ export default function Resume() {
       className="relative py-24 bg-surface overflow-hidden"
       aria-labelledby="resume-heading"
     >
-      {/* Decorative blurred gradient orb */}
+      {/* Decorative background orb */}
       <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] 
-                        bg-gradient-to-r from-[var(--primary)]/30 via-[var(--secondary)]/25 to-[var(--accent)]/20 
-                        rounded-full blur-[140px] animate-pulse-slow" />
+        <div
+          className="absolute top-1/4 left-1/3 w-[600px] h-[600px] 
+                     bg-gradient-to-r from-[var(--primary)]/30 via-[var(--secondary)]/25 to-[var(--accent)]/20 
+                     rounded-full blur-[140px] animate-pulse-slow"
+        />
       </div>
 
       <Container className="text-center">
@@ -38,7 +40,7 @@ export default function Resume() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="relative inline-block text-4xl sm:text-5xl font-extrabold tracking-tight text-text"
+          className="relative inline-block text-4xl sm:text-5xl font-extrabold tracking-tight text-text will-change-[transform,opacity]"
         >
           Resume
           <motion.span
@@ -58,7 +60,7 @@ export default function Resume() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-          className="mt-6 text-lg text-muted max-w-2xl mx-auto leading-relaxed"
+          className="mt-6 text-lg text-muted max-w-2xl mx-auto leading-relaxed will-change-[transform,opacity]"
         >
           A comprehensive overview of my academic background, technical skills,
           and professional experience — presented for clarity and quick
@@ -71,7 +73,7 @@ export default function Resume() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.85, ease: "easeOut", delay: 0.2 }}
-          className="mt-12"
+          className="mt-12 will-change-[transform,opacity]"
         >
           {resumeAvailable ? (
             <Button
@@ -87,6 +89,7 @@ export default function Resume() {
                 href="/resume/AdamZaatar_CV_2025.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
+                download
                 aria-label="Download Adam Zaatar's Resume PDF"
               >
                 Download Resume
@@ -106,7 +109,7 @@ export default function Resume() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.95, ease: "easeOut", delay: 0.35 }}
-            className="mt-16"
+            className="mt-16 will-change-[transform,opacity]"
           >
             <ResumePreview />
           </motion.div>
@@ -114,4 +117,4 @@ export default function Resume() {
       </Container>
     </section>
   );
-}
+}r

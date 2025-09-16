@@ -4,33 +4,51 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
-// Lazy-load to split bundles
+// Lazy-load to reduce bundle size
 const AnimatedBackgroundChrome = dynamic(
   () => import("./AnimatedBackgroundChrome"),
-  { ssr: false }
+  { ssr: false, loading: () => <FallbackBackground /> }
 );
+
 const AnimatedBackgroundSafari = dynamic(
   () => import("./AnimatedBackgroundSafari"),
-  { ssr: false }
+  { ssr: false, loading: () => <FallbackBackground /> }
 );
 
+// Lightweight fallback so background never "blinks"
+function FallbackBackground() {
+  return (
+    <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[var(--bg)] to-[var(--surface)]" />
+  );
+}
+
 export default function AnimatedBackground() {
-  const [isSafari, setIsSafari] = useState(false);
+  const [engine, setEngine] = useState<"safari" | "chrome" | null>(null);
 
   useEffect(() => {
-    // User agent detection (client-side only)
-    const ua = navigator.userAgent;
-    // Safari detection: must include Safari, but not Chrome/Chromium/Android
-    const isSafariBrowser =
-      /^((?!chrome|android).)*safari/i.test(ua) ||
-      /\b(iPad|iPhone|iPod)\b/.test(ua);
+    if (typeof navigator !== "undefined") {
+      const ua = navigator.userAgent;
 
-    setIsSafari(isSafariBrowser);
+      const isSafari =
+        /^((?!chrome|crios|android|fxios).)*safari/i.test(ua) ||
+        /\b(iPad|iPhone|iPod)\b/.test(ua);
+
+      const isChromeLike =
+        /\b(Chrome|Chromium|Edg)\b/i.test(ua) && !isSafari;
+
+      if (isSafari) setEngine("safari");
+      else if (isChromeLike) setEngine("chrome");
+      else setEngine("safari"); // fallback to lightweight mode
+    }
   }, []);
 
-  if (isSafari) {
-    return <AnimatedBackgroundSafari />;
+  if (!engine) {
+    return <FallbackBackground />;
   }
 
-  return <AnimatedBackgroundChrome />;
+  return engine === "safari" ? (
+    <AnimatedBackgroundSafari />
+  ) : (
+    <AnimatedBackgroundChrome />
+  );
 }

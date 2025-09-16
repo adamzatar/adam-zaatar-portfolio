@@ -1,3 +1,4 @@
+// components/NavBar.tsx
 "use client";
 
 import Link from "next/link";
@@ -15,7 +16,9 @@ import {
 } from "framer-motion";
 import AnimatedBackground from "@/components/AnimatedBackground";
 
-// Define nav link type
+// ----------------------------
+// Nav link type
+// ----------------------------
 interface NavLink {
   href: Route | string;
   label: string;
@@ -23,20 +26,21 @@ interface NavLink {
   download?: boolean;
 }
 
+// ----------------------------
+// Main nav links
+// ----------------------------
 const navLinks: NavLink[] = [
   { href: "/", label: "Home" },
   { href: "/projects", label: "Projects" },
   { href: "/research", label: "Research" },
   { href: "/about", label: "About" },
-  { 
-    href: "/resume/AdamZaatar_CV_2025.pdf", 
-    label: "Resume", 
-    external: true, 
-    download: true, // ✅ direct download
-  },
+  { href: "/resume", label: "Resume" }, // ✅ route to Resume page (NOT direct PDF)
   { href: "/contact", label: "Contact" },
 ];
 
+// ----------------------------
+// Animation variants
+// ----------------------------
 const linkVariants = {
   hidden: { opacity: 0, y: -8 },
   visible: { opacity: 1, y: 0 },
@@ -78,7 +82,7 @@ export default function NavBar() {
         aria-label="Main Navigation"
       >
         <Container className="flex justify-between items-center h-20">
-          {/* === Logo (Synced with Gradient Cycle) === */}
+          {/* === Logo === */}
           <motion.div
             className="text-xl sm:text-2xl font-extrabold tracking-tight hover:opacity-90 transition-opacity 
                        bg-clip-text text-transparent animate-logoCycle"
@@ -136,7 +140,7 @@ export default function NavBar() {
             ))}
           </motion.ul>
 
-          {/* === Mobile Menu Toggle === */}
+          {/* === Mobile Toggle === */}
           <motion.button
             whileTap={{ scale: 0.9 }}
             whileHover={{ scale: 1.05 }}
@@ -212,7 +216,7 @@ export default function NavBar() {
         </AnimatePresence>
       </motion.nav>
 
-      {/* === Floating Neon Progress Bar (Synced with Gradient Cycle) === */}
+      {/* === Progress Bar === */}
       <motion.div
         className="fixed bottom-0 left-0 right-0 h-[3px] origin-left 
                    animate-progressCycle
