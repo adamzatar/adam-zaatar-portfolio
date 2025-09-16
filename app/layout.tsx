@@ -1,9 +1,8 @@
+// app/layout.tsx
 import type { Metadata } from "next";
-import Script from "next/script"; // ✅ Import Script for inline instrumentation
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import NavBar from "@/components/NavBar";
-// import AnimatedBackground from "@/components/AnimatedBackground"; // 🚫 Disabled for performance test
 
 export const metadata: Metadata = {
   title: "Adam Zaatar Portfolio",
@@ -17,45 +16,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* 🔍 Safari LongTask Logger */}
-        <Script id="longtasks" strategy="beforeInteractive">
-          {`
-            (function(){
-              if (!('PerformanceObserver' in window)) return;
-              try {
-                const obs = new PerformanceObserver((list) => {
-                  for (const entry of list.getEntries()) {
-                    if (entry.duration >= 50) {
-                      console.log('[LongTask]', {
-                        name: entry.name,
-                        start: Math.round(entry.startTime),
-                        dur: Math.round(entry.duration),
-                        at: entry.attribution || [] // Safari may not expose attribution
-                      });
-                    }
-                  }
-                });
-                obs.observe({ type: 'longtask', buffered: true });
-              } catch (err) {
-                console.warn("LongTask observer failed:", err);
-              }
-            })();
-          `}
-        </Script>
-      </head>
       <body
         className={cn(
           "min-h-screen bg-bg text-text antialiased overflow-x-hidden relative"
         )}
+        style={{
+          background:
+            "linear-gradient(135deg, #9333ea, #ec4899, #f97316, #7c3aed, #1e3a8a)",
+          backgroundSize: "400% 400%",
+          animation: "gradientShift 40s ease infinite",
+        }}
       >
-        {/* Global animated background - Disabled for test */}
-        {/* <AnimatedBackground /> */}
-
-        {/* Navigation bar */}
+        {/* ✅ Navigation bar only */}
         <NavBar />
 
-        {/* Page content */}
+        {/* ✅ Page content */}
         <main className="relative z-10 pt-20">{children}</main>
       </body>
     </html>
