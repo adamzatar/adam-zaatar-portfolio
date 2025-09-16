@@ -1,3 +1,4 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -7,6 +8,29 @@ import AnimatedBackground from "@/components/AnimatedBackground";
 export const metadata: Metadata = {
   title: "Adam Zaatar Portfolio",
   description: "Personal portfolio showcasing projects, research, and resume.",
+  keywords: [
+    "Adam Zaatar",
+    "portfolio",
+    "web development",
+    "research",
+    "projects",
+    "resume",
+  ],
+  authors: [{ name: "Adam Zaatar" }],
+  creator: "Adam Zaatar",
+  openGraph: {
+    title: "Adam Zaatar Portfolio",
+    description:
+      "Personal portfolio showcasing projects, research, and resume.",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Adam Zaatar Portfolio",
+    description:
+      "Personal portfolio showcasing projects, research, and resume.",
+  },
 };
 
 export default function RootLayout({
@@ -21,11 +45,14 @@ export default function RootLayout({
           "min-h-screen bg-bg text-text antialiased overflow-x-hidden relative"
         )}
       >
-        {/* === Global Animated Background (behind everything) === */}
-        <div className="absolute inset-0 -z-10">
+        {/* === Global Animated Background (runs behind everything) === */}
+        <div
+          className="absolute inset-0 -z-10 will-change-transform will-change-opacity"
+          aria-hidden="true"
+        >
           <AnimatedBackground />
 
-          {/* ✅ Fallback static gradient (for Safari/no-JS users) */}
+          {/* ✅ Fallback static gradient for Safari / no-JS */}
           <noscript>
             <div
               className="absolute inset-0 -z-20"
@@ -39,11 +66,18 @@ export default function RootLayout({
           </noscript>
         </div>
 
-        {/* === Top Navigation === */}
+        {/* === Navigation (always above background) === */}
         <NavBar />
 
-        {/* === Page Content === */}
-        <main className="relative z-10 pt-20">{children}</main>
+        {/* === Main Page Content === */}
+        <main
+          className="relative z-10 pt-20"
+          role="main"
+          id="main-content"
+          tabIndex={-1}
+        >
+          {children}
+        </main>
       </body>
     </html>
   );

@@ -129,6 +129,27 @@
   background-size: 400% 400%;
 }
 
+/* === Cursor Trail (comet effect) === */
+.trail-dot, .trail-dot-safari {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  filter: blur(4px);
+  will-change: transform, opacity;
+}
+.trail-dot {
+  box-shadow: 0 0 12px rgba(255,255,255,0.6), 0 0 24px var(--accent);
+}
+.trail-dot-safari {
+  width: 12px;
+  height: 12px;
+  background: var(--secondary);
+}
+
 /* === Starfield (night only, parallax) === */
 .starfield {
   position: absolute;
@@ -150,6 +171,19 @@
 @keyframes twinkle {
   0%, 100% { opacity: 0.5; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* === Aurora Particles === */
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.4;
+  filter: blur(8px);
+  animation: float 20s ease-in-out infinite;
+  mix-blend-mode: screen;
 }
 
 /* === Clouds === */
