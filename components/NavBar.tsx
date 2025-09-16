@@ -1,4 +1,3 @@
-// components/NavBar.tsx
 "use client";
 
 import Link from "next/link";
@@ -14,7 +13,6 @@ import {
   useScroll,
   useSpring,
 } from "framer-motion";
-import AnimatedBackground from "@/components/AnimatedBackground";
 
 // ----------------------------
 // Nav link type
@@ -34,7 +32,7 @@ const navLinks: NavLink[] = [
   { href: "/projects", label: "Projects" },
   { href: "/research", label: "Research" },
   { href: "/about", label: "About" },
-  { href: "/resume", label: "Resume" }, // ✅ route to Resume page (NOT direct PDF)
+  { href: "/resume", label: "Resume" }, // ✅ routes to Resume page
   { href: "/contact", label: "Contact" },
 ];
 
@@ -50,6 +48,7 @@ export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // Progress bar logic
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 180,
@@ -57,6 +56,7 @@ export default function NavBar() {
     restDelta: 0.001,
   });
 
+  // Detect scroll for sticky navbar styling
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -65,8 +65,6 @@ export default function NavBar() {
 
   return (
     <>
-      <AnimatedBackground />
-
       {/* === NavBar === */}
       <motion.nav
         initial={{ opacity: 0, y: -20 }}
@@ -216,7 +214,7 @@ export default function NavBar() {
         </AnimatePresence>
       </motion.nav>
 
-      {/* === Progress Bar === */}
+      {/* === Floating Progress Bar === */}
       <motion.div
         className="fixed bottom-0 left-0 right-0 h-[3px] origin-left 
                    animate-progressCycle
