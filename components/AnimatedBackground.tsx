@@ -15,10 +15,10 @@ const AnimatedBackgroundSafari = dynamic(
   { ssr: false, loading: () => <FallbackBackground /> }
 );
 
-// Lightweight fallback so background never "blinks"
+// Fallback gradient always behind content
 function FallbackBackground() {
   return (
-    <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[var(--bg)] to-[var(--surface)]" />
+    <div className="absolute inset-0 -z-50 bg-gradient-to-b from-[var(--bg)] to-[var(--surface)]" />
   );
 }
 
@@ -46,9 +46,13 @@ export default function AnimatedBackground() {
     return <FallbackBackground />;
   }
 
-  return engine === "safari" ? (
-    <AnimatedBackgroundSafari />
-  ) : (
-    <AnimatedBackgroundChrome />
+  return (
+    <div className="absolute inset-0 -z-50">
+      {engine === "safari" ? (
+        <AnimatedBackgroundSafari />
+      ) : (
+        <AnimatedBackgroundChrome />
+      )}
+    </div>
   );
 }
