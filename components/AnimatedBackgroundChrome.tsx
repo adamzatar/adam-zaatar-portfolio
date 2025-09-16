@@ -43,42 +43,46 @@ export default function AnimatedBackgroundChrome() {
 
   return (
     <div className="absolute inset-0 -z-10 overflow-hidden">
-      {/* Animated multi-phase gradient backdrop */}
+      {/* === Animated Gradient Backdrop === */}
       <div className="absolute inset-0 animate-gradient bg-[length:400%_400%]" />
 
-      {/* Drifting layered clouds */}
-      {Array.from({ length: 4 }).map((_, i) => (
+      {/* === Layered Clouds (Parallax Drift + Tint) === */}
+      <div className="absolute inset-0 pointer-events-none">
         <div
-          key={`cloud-${i}`}
-          className="cloud"
-          style={{
-            top: `${5 + i * 20}%`,
-            animationDelay: `${i * 25}s`,
-            opacity: 0.45 - i * 0.1,
-          }}
+          className="cloud-far"
+          style={{ top: "8%", left: "-20%", animationDelay: "0s" }}
         />
-      ))}
+        <div
+          className="cloud-mid"
+          style={{ top: "22%", left: "-30%", animationDelay: "20s" }}
+        />
+        <div
+          className="cloud-near"
+          style={{ top: "38%", left: "-25%", animationDelay: "40s" }}
+        />
+      </div>
 
-      {/* Sun & Moon synced with gradient */}
+      {/* === Sun & Moon (Synced with Gradient) === */}
       <div className="sunmoon" />
 
-      {/* Floating glowing particles */}
+      {/* === Floating Particles (Aurora shimmer) === */}
       <div className="absolute inset-0">
         {Array.from({ length: 45 }).map((_, i) => (
           <span
             key={`particle-${i}`}
-            className="absolute block w-1.5 h-1.5 rounded-full bg-white/80 blur-[2px] animate-shimmer"
+            className="particle"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               animationDelay: `${Math.random() * 20}s`,
               animationDuration: `${18 + Math.random() * 25}s`,
+              filter: "hue-rotate(20deg)", // subtle aurora tint
             }}
           />
         ))}
       </div>
 
-      {/* Snake trail with glowing comet effect */}
+      {/* === Snake Trail (Glowing comet effect) === */}
       {Array.from({ length: 14 }).map((_, i) => (
         <div
           key={`trail-${i}`}

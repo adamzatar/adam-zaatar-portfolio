@@ -20,6 +20,7 @@ interface NavLink {
   href: Route | string;
   label: string;
   external?: boolean;
+  download?: boolean;
 }
 
 const navLinks: NavLink[] = [
@@ -27,7 +28,12 @@ const navLinks: NavLink[] = [
   { href: "/projects", label: "Projects" },
   { href: "/research", label: "Research" },
   { href: "/about", label: "About" },
-  { href: "/resume", label: "Resume" }, // ✅ route to resume page
+  { 
+    href: "/resume/AdamZaatar_CV_2025.pdf", 
+    label: "Resume", 
+    external: true, 
+    download: true, // ✅ direct download
+  },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -74,7 +80,8 @@ export default function NavBar() {
         <Container className="flex justify-between items-center h-20">
           {/* === Logo (Synced with Gradient Cycle) === */}
           <motion.div
-            className="logo-gradient text-xl sm:text-2xl font-extrabold tracking-tight hover:opacity-90 transition-opacity"
+            className="text-xl sm:text-2xl font-extrabold tracking-tight hover:opacity-90 transition-opacity 
+                       bg-clip-text text-transparent animate-logoCycle"
           >
             <Link href="/" aria-label="Go to Home">
               Adam Zaatar
@@ -88,7 +95,7 @@ export default function NavBar() {
             animate="visible"
             variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
           >
-            {navLinks.map(({ href, label, external }) => (
+            {navLinks.map(({ href, label, external, download }) => (
               <motion.li key={href.toString()} variants={linkVariants}>
                 {external ? (
                   <Button
@@ -101,11 +108,12 @@ export default function NavBar() {
                       href={href.toString()}
                       target="_blank"
                       rel="noopener noreferrer"
+                      {...(download ? { download: true } : {})}
                       aria-label={`Open ${label}`}
                     >
                       {label}
                       <span className="absolute left-0 -bottom-1 h-[2px] w-0 
-                                       bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+                                       animate-underlineCycle
                                        transition-all duration-500 ease-out group-hover:w-full rounded-full" />
                     </a>
                   </Button>
@@ -119,7 +127,7 @@ export default function NavBar() {
                     <Link href={href as Route} aria-label={`Go to ${label} page`}>
                       {label}
                       <span className="absolute left-0 -bottom-1 h-[2px] w-0 
-                                       bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+                                       animate-underlineCycle
                                        transition-all duration-500 ease-out group-hover:w-full rounded-full" />
                     </Link>
                   </Button>
@@ -158,7 +166,7 @@ export default function NavBar() {
               className="md:hidden border-t border-border bg-surface/95 shadow-xl backdrop-blur-xl"
             >
               <Container className="flex flex-col space-y-4 py-6">
-                {navLinks.map(({ href, label, external }, index) => (
+                {navLinks.map(({ href, label, external, download }, index) => (
                   <motion.div
                     key={href.toString()}
                     initial={{ opacity: 0, x: -10 }}
@@ -177,6 +185,7 @@ export default function NavBar() {
                           href={href.toString()}
                           target="_blank"
                           rel="noopener noreferrer"
+                          {...(download ? { download: true } : {})}
                           aria-label={`Open ${label}`}
                         >
                           {label}

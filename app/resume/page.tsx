@@ -1,112 +1,116 @@
+// app/resume/page.tsx
 "use client";
 
 import { Container } from "@/components/ui/Container";
-import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import Resume from "@/components/Resume";
-import { motion, Variants, Transition } from "framer-motion";
-import { Download, Linkedin } from "lucide-react";
+import { motion } from "framer-motion";
+import ResumePreview from "@/components/ResumePreview";
+import { useEffect, useState } from "react";
 
-// Reusable animation
-const fadeUp = (i: number = 0): Variants => ({
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.7,
-      ease: "easeOut",
-      delay: i * 0.15,
-    } as Transition,
-  },
-});
+export default function Resume() {
+  const [resumeAvailable, setResumeAvailable] = useState(false);
 
-export default function ResumePage() {
+  // Check if resume PDF exists in /public/resume
+  useEffect(() => {
+    fetch("/resume/AdamZaatar_CV_2025.pdf", { method: "HEAD" })
+      .then((res) => setResumeAvailable(res.ok))
+      .catch(() => setResumeAvailable(false));
+  }, []);
+
   return (
-    <section className="relative py-28 bg-gradient-to-b from-surface/80 to-bg overflow-hidden">
-      {/* Decorative gradient blob */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 blur-3xl opacity-50" />
+    <section
+      id="resume"
+      className="relative py-24 bg-surface overflow-hidden"
+      aria-labelledby="resume-heading"
+    >
+      {/* Decorative blurred gradient orb */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] 
+                        bg-gradient-to-r from-[var(--primary)]/30 via-[var(--secondary)]/25 to-[var(--accent)]/20 
+                        rounded-full blur-[140px] animate-pulse-slow" />
+      </div>
 
-      <Container>
-        {/* Heading */}
-        <motion.h1
-          variants={fadeUp(0)}
-          initial="hidden"
-          whileInView="visible"
+      <Container className="text-center">
+        {/* === Heading === */}
+        <motion.h2
+          id="resume-heading"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-4xl sm:text-5xl font-extrabold text-center 
-                     bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
-                     bg-clip-text text-transparent drop-shadow-sm"
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="relative inline-block text-4xl sm:text-5xl font-extrabold tracking-tight text-text"
         >
           Resume
-        </motion.h1>
+          <motion.span
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
+            className="absolute left-0 -bottom-2 h-[4px] w-full origin-left 
+                       bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+                       rounded-full shadow-[0_0_12px_var(--primary)]"
+          />
+        </motion.h2>
 
-        {/* Subheading */}
+        {/* === Description === */}
         <motion.p
-          variants={fadeUp(1)}
-          initial="hidden"
-          whileInView="visible"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-6 text-lg sm:text-xl text-muted text-center max-w-3xl mx-auto leading-relaxed"
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+          className="mt-6 text-lg text-muted max-w-2xl mx-auto leading-relaxed"
         >
-          I’m <span className="font-semibold text-foreground">Adam Zaatar</span>, a
-          Computer Science & Economics student at Bowdoin College. My resume
-          highlights a unique mix of{" "}
-          <span className="font-medium text-[var(--primary)]">software engineering</span>,{" "}
-          <span className="font-medium text-[var(--secondary)]">financial analysis</span>, and{" "}
-          <span className="font-medium text-[var(--accent)]">research</span>. 
-          From building cross-platform apps and full-stack platforms to publishing
-          applied economics papers and completing certifications in AI, trading,
-          and financial modeling — I bring both technical execution and
-          market-driven insight.
+          A comprehensive overview of my academic background, technical skills,
+          and professional experience — presented for clarity and quick
+          reference.
         </motion.p>
 
-        {/* Divider */}
+        {/* === Resume Download Button === */}
         <motion.div
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-          className="mt-10 mb-14 h-[3px] w-44 mx-auto bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] rounded-full origin-center"
-        />
-
-        {/* Resume Component */}
-        <motion.div
-          variants={fadeUp(2)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
+          transition={{ duration: 0.85, ease: "easeOut", delay: 0.2 }}
+          className="mt-12"
         >
-          <Card className="p-6 sm:p-10 rounded-2xl backdrop-blur-sm bg-surface/90 border border-border/60 shadow-card hover:shadow-card-hover transition-transform hover:scale-[1.01]">
-            <Resume />
-          </Card>
-        </motion.div>
-
-        {/* CTAs */}
-        <motion.div
-          variants={fadeUp(3)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="mt-10 flex flex-wrap justify-center gap-4"
-        >
-          <Button asChild size="lg" variant="primary" className="gap-2">
-            <a href="/resume/AdamZaatar_CV_2025.pdf" target="_blank">
-              <Download className="h-5 w-5" />
-              Download PDF
-            </a>
-          </Button>
-          <Button asChild size="lg" variant="outline" className="gap-2">
-            <a
-              href="https://www.linkedin.com/in/adamzaatar"
-              target="_blank"
-              rel="noopener noreferrer"
+          {resumeAvailable ? (
+            <Button
+              asChild
+              variant="primary"
+              size="lg"
+              className="px-8 py-4 text-lg font-semibold 
+                         shadow-[0_0_20px_var(--primary),0_0_40px_var(--secondary)] 
+                         hover:shadow-[0_0_30px_var(--accent),0_0_60px_var(--secondary)] 
+                         transition-all duration-500"
             >
-              <Linkedin className="h-5 w-5" />
-              View LinkedIn
-            </a>
-          </Button>
+              <a
+                href="/resume/AdamZaatar_CV_2025.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Download Adam Zaatar's Resume PDF"
+              >
+                Download Resume
+              </a>
+            </Button>
+          ) : (
+            <p className="text-muted text-lg italic">
+              Resume file not found. Please check back soon.
+            </p>
+          )}
         </motion.div>
+
+        {/* === Resume Preview === */}
+        {resumeAvailable && (
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.95, ease: "easeOut", delay: 0.35 }}
+            className="mt-16"
+          >
+            <ResumePreview />
+          </motion.div>
+        )}
       </Container>
     </section>
   );
