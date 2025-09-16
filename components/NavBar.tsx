@@ -32,7 +32,7 @@ const navLinks: NavLink[] = [
   { href: "/projects", label: "Projects" },
   { href: "/research", label: "Research" },
   { href: "/about", label: "About" },
-  { href: "/resume", label: "Resume" }, // ✅ routes to Resume page
+  { href: "/resume", label: "Resume" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -47,6 +47,7 @@ const linkVariants = {
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("Home");
 
   // Progress bar logic
   const { scrollYProgress } = useScroll();
@@ -56,11 +57,34 @@ export default function NavBar() {
     restDelta: 0.001,
   });
 
-  // Detect scroll for sticky navbar styling
+  // Detect scroll for sticky nav styling
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Track active section in viewport
+  useEffect(() => {
+    const sections = document.querySelectorAll("section[id]");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute("id");
+            if (id) {
+              const navLink = navLinks.find((l) =>
+                l.href.replace("/", "") === id.toLowerCase()
+              );
+              setActiveSection(navLink?.label ?? "Home");
+            }
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    sections.forEach((sec) => observer.observe(sec));
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -97,45 +121,60 @@ export default function NavBar() {
             animate="visible"
             variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
           >
-            {navLinks.map(({ href, label, external, download }) => (
-              <motion.li key={href.toString()} variants={linkVariants}>
-                {external ? (
-                  <Button
-                    asChild
-                    variant="ghost"
-                    size="sm"
-                    className="relative font-medium text-foreground group px-3 text-lg"
-                  >
-                    <a
-                      href={href.toString()}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      {...(download ? { download: true } : {})}
-                      aria-label={`Open ${label}`}
+            {navLinks.map(({ href, label, external, download }) => {
+              const isActive = activeSection === label;
+              return (
+                <motion.li key={href.toString()} variants={linkVariants}>
+                  {external ? (
+                    <Button
+                      asChild
+                      variant="ghost"
+                      size="sm"
+                      className="relative font-medium group px-3 text-lg"
                     >
-                      {label}
-                      <span className="absolute left-0 -bottom-1 h-[2px] w-0 
-                                       animate-underlineCycle
-                                       transition-all duration-500 ease-out group-hover:w-full rounded-full" />
-                    </a>
-                  </Button>
-                ) : (
-                  <Button
-                    asChild
-                    variant="ghost"
-                    size="sm"
-                    className="relative font-medium text-foreground group px-3 text-lg"
-                  >
-                    <Link href={href as Route} aria-label={`Go to ${label} page`}>
-                      {label}
-                      <span className="absolute left-0 -bottom-1 h-[2px] w-0 
-                                       animate-underlineCycle
-                                       transition-all duration-500 ease-out group-hover:w-full rounded-full" />
-                    </Link>
-                  </Button>
-                )}
-              </motion.li>
-            ))}
+                      <a
+                        href={href.toString()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        {...(download ? { download: true } : {})}
+                        aria-label={`Open ${label}`}
+                      >
+                        {label}
+                        {/* Gradient underline */}
+                        <span
+                          className={clsx(
+                            "absolute left-0 -bottom-1 h-[2px] w-0 rounded-full transition-all duration-500 ease-out",
+                            "bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]",
+                            (isActive || !external) &&
+                              "w-full shadow-[0_0_8px_var(--primary),0_0_16px_var(--secondary)]"
+                          )}
+                        />
+                      </a>
+                    </Button>
+                  ) : (
+                    <Button
+                      asChild
+                      variant="ghost"
+                      size="sm"
+                      className="relative font-medium group px-3 text-lg"
+                    >
+                      <Link href={href as Route} aria-label={`Go to ${label} page`}>
+                        {label}
+                        {/* Gradient underline */}
+                        <span
+                          className={clsx(
+                            "absolute left-0 -bottom-1 h-[2px] w-0 rounded-full transition-all duration-500 ease-out",
+                            "bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]",
+                            isActive &&
+                              "w-full shadow-[0_0_8px_var(--primary),0_0_16px_var(--secondary)]"
+                          )}
+                        />
+                      </Link>
+                    </Button>
+                  )}
+                </motion.li>
+              );
+            })}
           </motion.ul>
 
           {/* === Mobile Toggle === */}
@@ -180,7 +219,10 @@ export default function NavBar() {
                         asChild
                         variant="outline"
                         size="lg"
-                        className="w-full text-lg font-semibold tracking-wide hover:scale-105 transition-transform shadow-md"
+                        className={clsx(
+                          "w-full text-lg font-semibold tracking-wide hover:scale-105 transition-transform shadow-md",
+                          activeSection === label && "ring-2 ring-[var(--primary)]"
+                        )}
                         onClick={() => setIsOpen(false)}
                       >
                         <a
@@ -198,7 +240,10 @@ export default function NavBar() {
                         asChild
                         variant="outline"
                         size="lg"
-                        className="w-full text-lg font-semibold tracking-wide hover:scale-105 transition-transform shadow-md"
+                        className={clsx(
+                          "w-full text-lg font-semibold tracking-wide hover:scale-105 transition-transform shadow-md",
+                          activeSection === label && "ring-2 ring-[var(--primary)]"
+                        )}
                         onClick={() => setIsOpen(false)}
                       >
                         <Link href={href as Route} aria-label={`Go to ${label} page`}>

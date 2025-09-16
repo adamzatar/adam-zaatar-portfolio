@@ -32,12 +32,12 @@ import { ReactElement } from "react";
 export interface ProjectCardProps {
   title: string;
   description: string;
-  image: ImageKey | string; // ✅ can be centralized key OR raw string path
+  image: ImageKey | string;
   alt: string;
   technologies: string[];
   demoLink?: string;
   codeLink?: string;
-  imageComponent?: React.ReactNode; // ✅ optional override for <AppImage />
+  imageComponent?: React.ReactNode;
 }
 
 // ----------------------------
@@ -85,15 +85,15 @@ export default function ProjectCard({
 }: ProjectCardProps) {
   return (
     <motion.div
-      whileHover={{ y: -8 }}
-      transition={{ type: "spring", stiffness: 200, damping: 15 }}
-      className="group relative bg-surface rounded-xl overflow-hidden shadow-md border border-border hover:shadow-xl transition-shadow"
+      whileHover={{ y: -10, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 200, damping: 18 }}
+      className="group relative bg-white dark:bg-[#161b22] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
     >
       {/* Banner Image */}
-      <div className="relative w-full h-48 overflow-hidden">
+      <div className="relative w-full h-52 overflow-hidden">
         <motion.div
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.4 }}
+          whileHover={{ scale: 1.08 }}
+          transition={{ duration: 0.5 }}
           className="w-full h-full"
         >
           {imageComponent ? (
@@ -103,51 +103,45 @@ export default function ProjectCard({
               image={image as ImageKey}
               alt={alt}
               fill
-              className="object-cover transition-transform duration-500"
+              className="object-cover"
             />
           )}
         </motion.div>
+        {/* Gradient overlay for readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
       </div>
 
       {/* Content */}
       <div className="p-6 space-y-4">
-        <h3 className="text-2xl font-bold text-text">{title}</h3>
-        <p className="text-muted text-sm leading-relaxed">{description}</p>
+        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors">
+          {title}
+        </h3>
+        <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+          {description}
+        </p>
 
         {/* Tech Stack Bubbles */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.05 } },
-          }}
-          className="flex flex-wrap gap-2"
-        >
+        <div className="flex flex-wrap gap-2 pt-2">
           {technologies.map((tech) => {
-            const style = techStyles[tech] || { color: "bg-muted text-text" };
+            const style = techStyles[tech] || {
+              color: "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200",
+            };
             return (
-              <motion.span
+              <span
                 key={tech}
-                variants={{
-                  hidden: { opacity: 0, y: 10 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-                transition={{ duration: 0.3 }}
-                className={`flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-border shadow-sm ${style.color}`}
+                className={`flex items-center gap-1 text-xs px-3 py-1 rounded-full shadow-md ${style.color}`}
               >
                 {style.icon && <span className="text-sm">{style.icon}</span>}
                 {tech}
-              </motion.span>
+              </span>
             );
           })}
-        </motion.div>
+        </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-4 pt-2">
+        <div className="flex gap-3 pt-3">
           {demoLink && (
-            <Button asChild variant="primary" size="md" className="flex-1">
+            <Button asChild variant="primary" size="sm" className="flex-1">
               <a
                 href={demoLink}
                 target="_blank"
@@ -159,7 +153,7 @@ export default function ProjectCard({
             </Button>
           )}
           {codeLink && (
-            <Button asChild variant="outline" size="md" className="flex-1">
+            <Button asChild variant="secondary" size="sm" className="flex-1">
               <a
                 href={codeLink}
                 target="_blank"

@@ -34,12 +34,14 @@ export function ResearchCard({
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
     >
-      <Card className="group p-8 rounded-2xl border border-border/50 bg-surface/90 
-                       backdrop-blur-md shadow-subtle hover:shadow-card-hover 
-                       transition-all duration-500 hover:-translate-y-2">
+      <Card
+        className="group p-8 rounded-2xl border border-border/50 bg-surface/90 
+                   backdrop-blur-md shadow-subtle hover:shadow-card-hover 
+                   transition-all duration-500 hover:-translate-y-2"
+      >
         {/* Title */}
         <h3
-          className="text-xl sm:text-2xl font-bold text-text mb-3 
+          className="text-xl sm:text-2xl font-bold mb-3 
                      bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] 
                      bg-clip-text text-transparent"
         >

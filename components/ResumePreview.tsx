@@ -1,4 +1,3 @@
-// components/ResumePreview.tsx
 "use client";
 
 import { useState } from "react";
@@ -15,7 +14,9 @@ export default function ResumePreview() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="glass border border-border/50 rounded-2xl shadow-card overflow-hidden will-change-[transform,opacity]"
+      className="relative rounded-2xl border border-border/50 bg-gradient-to-br 
+                 from-[var(--surface)] to-[var(--bg)] shadow-lg hover:shadow-xl 
+                 transition-shadow duration-500 overflow-hidden"
     >
       {/* === PDF Viewer with shimmer === */}
       <div className="relative h-[480px] w-full overflow-hidden border-b border-border/50">
@@ -23,7 +24,7 @@ export default function ResumePreview() {
         {!loaded && !error && (
           <div
             className="absolute inset-0 animate-pulse bg-gradient-to-r 
-                       from-muted/30 via-muted/40 to-muted/30 rounded-lg"
+                       from-muted/30 via-muted/40 to-muted/30"
             aria-hidden="true"
           />
         )}
@@ -62,9 +63,10 @@ export default function ResumePreview() {
         )}
       </div>
 
-      {/* === Actions Footer === */}
-      <div className="p-6 flex justify-between items-center bg-surface/70 backdrop-blur-md">
-        <h3 className="text-lg font-semibold text-text">Resume</h3>
+      {/* === Footer with actions === */}
+      <div className="p-6 flex justify-between items-center bg-gradient-to-r 
+                      from-[var(--surface)]/90 to-[var(--bg)]/80 border-t border-border/40">
+        <h3 className="text-lg font-semibold">Resume</h3>
         <Button asChild variant="primary" size="sm">
           <a
             href="/resume/AdamZaatar_CV_2025.pdf"

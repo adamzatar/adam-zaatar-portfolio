@@ -1,11 +1,13 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import ProjectCard, { type ProjectCardProps } from "./ProjectCard";
 import { Container } from "@/components/ui/Container";
 import AppImage from "@/components/AppImage";
 import { type ImageKey } from "@/lib/images";
 
+// ----------------------------
+// Motion Variants
+// ----------------------------
 const fadeUp = (i: number = 0): Variants => ({
   hidden: { opacity: 0, y: 40 },
   visible: {
@@ -14,17 +16,21 @@ const fadeUp = (i: number = 0): Variants => ({
     transition: {
       duration: 0.65,
       ease: [0.25, 0.1, 0.25, 1],
-      delay: i * 0.05, // ⚡ faster cascade
+      delay: i * 0.08,
     },
   },
 });
 
 // ----------------------------
-// Project Type
+// Types
 // ----------------------------
-type Project = Omit<ProjectCardProps, "image" | "imageComponent"> & {
+type Project = {
+  title: string;
+  description: string;
   image: ImageKey;
   alt: string;
+  technologies: string[];
+  codeLink?: string;
 };
 
 // ----------------------------
@@ -34,7 +40,7 @@ const apps: Project[] = [
   {
     title: "Cutaway",
     description:
-      "Cross-platform video editing app enabling synchronized multi-angle recording and playback. Built with SwiftUI and AVFoundation, it introduces seamless workflows for creators and is currently in TestFlight beta.",
+      "Cross-platform video editing app enabling synchronized multi-angle recording and playback. Built with SwiftUI and AVFoundation, currently in TestFlight beta.",
     image: "cutaway",
     alt: "Cutaway multi-angle editing app",
     technologies: ["Swift", "SwiftUI", "AVFoundation"],
@@ -43,7 +49,7 @@ const apps: Project[] = [
   {
     title: "Vector",
     description:
-      "Next-generation two-factor authentication platform with a SwiftUI client and a Vapor/Swift backend. Implements token-based security, PostgreSQL persistence, and AWS SES for automated verification emails — designed as a production-grade 2FA system.",
+      "Next-generation two-factor authentication platform with a SwiftUI client and a Vapor/Swift backend. Implements token-based security and AWS SES verification.",
     image: "vector",
     alt: "Vector 2FA security platform",
     technologies: ["Swift", "SwiftUI", "Vapor", "PostgreSQL", "AWS SES"],
@@ -52,29 +58,11 @@ const apps: Project[] = [
   {
     title: "Investify",
     description:
-      "Educational stock trading simulator delivering live S&P 500 data via Yahoo Finance API. Built with SwiftUI and Firebase, it powers classroom use at Bowdoin Economics, combining finance education with real-time data visualization.",
+      "Educational stock trading simulator with real-time S&P 500 data. Used in Bowdoin Economics classrooms to blend finance education with live markets.",
     image: "certificate",
     alt: "Investify stock trading simulator",
     technologies: ["Swift", "SwiftUI", "Firebase", "Yahoo Finance API"],
     codeLink: "https://github.com/adamzatar/investify",
-  },
-  {
-    title: "Instagram Clone",
-    description:
-      "A polished Instagram-inspired social media clone featuring real-time posts, likes, and comments. Built with Next.js and Firebase for full-stack functionality.",
-    image: "instagramClone",
-    alt: "Instagram clone project",
-    technologies: ["Next.js", "Firebase", "TailwindCSS"],
-    codeLink: "#",
-  },
-  {
-    title: "Twitter Clone",
-    description:
-      "A modern Twitter-inspired platform with user authentication, posting, and interactive timelines. Designed with scalability and sleek UI in mind.",
-    image: "twitterClone",
-    alt: "Twitter clone project",
-    technologies: ["Next.js", "TypeScript", "Prisma"],
-    codeLink: "#",
   },
 ];
 
@@ -85,7 +73,7 @@ const websites: Project[] = [
   {
     title: "Bowdoin Marketplace",
     description:
-      "Production-grade campus marketplace platform built as a TypeScript monorepo. Features secure authentication (Okta + email), Prisma/PostgreSQL persistence, Redis-backed rate limiting, transactional emails via AWS SES, and full observability through OpenTelemetry. Designed for scale, security, and seamless peer-to-peer commerce.",
+      "Production-grade campus marketplace with Okta auth, Prisma/Postgres, Redis rate limiting, AWS SES emails, and OpenTelemetry monitoring.",
     image: "bowdoinMarketplace",
     alt: "Bowdoin Marketplace platform",
     technologies: ["Next.js", "TypeScript", "Prisma", "Redis", "AWS SES"],
@@ -94,7 +82,7 @@ const websites: Project[] = [
   {
     title: "PalPrep",
     description:
-      "Full-stack advocacy platform integrating applications, donations, marketing, and a learning hub. Built with Next.js, Prisma/Postgres, TailwindCSS, and Stripe, it demonstrates robust backend logic paired with a polished frontend for mission-driven organizations.",
+      "Full-stack advocacy platform integrating donations, applications, and a learning hub. Built with Next.js, Prisma, Postgres, TailwindCSS, and Stripe.",
     image: "palprep",
     alt: "PalPrep advocacy platform",
     technologies: ["Next.js", "Prisma", "PostgreSQL", "TailwindCSS", "Stripe"],
@@ -103,7 +91,7 @@ const websites: Project[] = [
   {
     title: "Personal Portfolio",
     description:
-      "High-performance portfolio site showcasing apps, research, and professional experience. Built with Next.js, TypeScript, TailwindCSS, shadcn/ui, and deployed on Vercel with full CI/CD, SEO optimization, accessibility (WCAG 2.2 AA), and analytics integrations.",
+      "High-performance portfolio built with Next.js + TypeScript, deployed on Vercel with SEO, analytics, and full accessibility compliance.",
     image: "personalPortfolio",
     alt: "Personal Portfolio website",
     technologies: ["Next.js", "TailwindCSS", "TypeScript", "Vercel"],
@@ -112,7 +100,89 @@ const websites: Project[] = [
 ];
 
 // ----------------------------
-// Component
+// Custom Card (Apps)
+// ----------------------------
+function AppCard({ title, description, image, alt, codeLink }: Project) {
+  return (
+    <motion.div
+      whileHover={{ y: -10, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 220, damping: 18 }}
+      className="bg-white dark:bg-[#161b22] rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden transition-all flex flex-col"
+    >
+      {/* Image */}
+      <div className="relative h-48 w-full overflow-hidden">
+        <AppImage
+          image={image}
+          alt={alt}
+          fill
+          className="object-cover rounded-t-2xl"
+        />
+      </div>
+
+      {/* Content */}
+      <div className="p-6 flex flex-col flex-1">
+        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+          {title}
+        </h3>
+        <p className="text-gray-600 dark:text-gray-300 text-sm flex-1">
+          {description}
+        </p>
+        {codeLink && (
+          <a
+            href={codeLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-block text-primary dark:text-secondary font-semibold hover:underline"
+          >
+            View Code →
+          </a>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+// ----------------------------
+// Custom Card (Websites)
+// ----------------------------
+function WebsiteCard({ title, description, image, alt, codeLink }: Project) {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.03 }}
+      transition={{ type: "spring", stiffness: 180, damping: 20 }}
+      className="border border-border bg-surface rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all flex flex-col"
+    >
+      {/* Banner Image */}
+      <div className="relative h-40 w-full overflow-hidden">
+        <AppImage
+          image={image}
+          alt={alt}
+          fill
+          className="object-cover rounded-t-xl"
+        />
+      </div>
+
+      {/* Content */}
+      <div className="p-5 flex flex-col flex-1">
+        <h3 className="text-lg font-semibold text-text mb-2">{title}</h3>
+        <p className="text-muted text-sm flex-1">{description}</p>
+        {codeLink && (
+          <a
+            href={codeLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-block text-[var(--primary)] font-medium hover:underline"
+          >
+            GitHub →
+          </a>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+// ----------------------------
+// Section
 // ----------------------------
 export default function ProjectsGrid() {
   return (
@@ -124,25 +194,24 @@ export default function ProjectsGrid() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="text-center mb-16 will-change-[transform,opacity]"
+          className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] bg-clip-text text-transparent drop-shadow-sm">
             Projects
           </h2>
           <p className="mt-4 text-lg text-muted max-w-2xl mx-auto">
-            A curated selection of cross-platform apps, full-stack platforms,
-            and fintech-inspired builds — blending strong infrastructure with
-            user-focused design.
+            A curated selection of apps, platforms, and full-stack builds —
+            blending strong infrastructure with clean, user-focused design.
           </p>
         </motion.div>
 
-        {/* Apps */}
+        {/* Apps Section */}
         <motion.div
           variants={fadeUp(1)}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mb-16 will-change-[transform,opacity]"
+          className="mb-20"
         >
           <h3 className="text-2xl font-bold text-text mb-8 text-center">
             Apps
@@ -155,33 +224,19 @@ export default function ProjectsGrid() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                whileHover={{ scale: 1.04, rotateX: 1.5, rotateY: -1.5 }}
-                transition={{ type: "spring", stiffness: 200, damping: 18 }}
-                className="transform-gpu will-change-[transform,opacity]"
               >
-                <ProjectCard
-                  {...project}
-                  imageComponent={
-                    <AppImage
-                      image={project.image}
-                      alt={project.alt}
-                      fill
-                      className="object-cover"
-                    />
-                  }
-                />
+                <AppCard {...project} />
               </motion.div>
             ))}
           </div>
         </motion.div>
 
-        {/* Websites */}
+        {/* Websites Section */}
         <motion.div
           variants={fadeUp(2)}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="will-change-[transform,opacity]"
         >
           <h3 className="text-2xl font-bold text-text mb-8 text-center">
             Websites & Platforms
@@ -194,21 +249,8 @@ export default function ProjectsGrid() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                whileHover={{ scale: 1.04, rotateX: 1.5, rotateY: -1.5 }}
-                transition={{ type: "spring", stiffness: 200, damping: 18 }}
-                className="transform-gpu will-change-[transform,opacity]"
               >
-                <ProjectCard
-                  {...project}
-                  imageComponent={
-                    <AppImage
-                      image={project.image}
-                      alt={project.alt}
-                      fill
-                      className="object-cover"
-                    />
-                  }
-                />
+                <WebsiteCard {...project} />
               </motion.div>
             ))}
           </div>
@@ -216,7 +258,7 @@ export default function ProjectsGrid() {
       </Container>
 
       {/* Decorative Glow */}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 blur-2xl opacity-50" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 blur-2xl opacity-40" />
     </section>
   );
 }
