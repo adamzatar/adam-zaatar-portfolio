@@ -17,23 +17,22 @@ import AnimatedBackground from "@/components/AnimatedBackground";
 
 // Define nav link type
 interface NavLink {
-  href: Route | string; // internal routes = Route, external = string
+  href: Route | string;
   label: string;
   external?: boolean;
 }
 
-// 🔑 Internal routes use Link, external ones use <a>
 const navLinks: NavLink[] = [
   { href: "/", label: "Home" },
   { href: "/projects", label: "Projects" },
   { href: "/research", label: "Research" },
   { href: "/about", label: "About" },
-  { href: "/resume/AdamZaatar_CV_2025.pdf", label: "Resume", external: true },
+  { href: "/resume", label: "Resume" }, // ✅ route to resume page
   { href: "/contact", label: "Contact" },
 ];
 
 const linkVariants = {
-  hidden: { opacity: 0, y: -10 },
+  hidden: { opacity: 0, y: -8 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -43,14 +42,14 @@ export default function NavBar() {
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
-    stiffness: 200,
-    damping: 40,
+    stiffness: 180,
+    damping: 35,
     restDelta: 0.001,
   });
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -58,46 +57,36 @@ export default function NavBar() {
     <>
       <AnimatedBackground />
 
-      {/* === Main Nav === */}
+      {/* === NavBar === */}
       <motion.nav
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         className={clsx(
-          "fixed top-0 left-0 w-full z-50 transition-all duration-300",
-          "backdrop-blur-2xl border-b",
+          "fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b",
           scrolled
-            ? "bg-surface/90 border-border/40 shadow-2xl"
-            : "bg-transparent border-transparent"
+            ? "bg-surface/90 border-border/40 shadow-lg backdrop-blur-2xl"
+            : "bg-transparent border-transparent backdrop-blur-sm"
         )}
         role="navigation"
         aria-label="Main Navigation"
       >
         <Container className="flex justify-between items-center h-20">
-          {/* Logo */}
+          {/* === Logo (Synced with Gradient Cycle) === */}
           <motion.div
-            animate={{
-              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-            className="bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
-                       bg-clip-text text-transparent bg-[length:200%_200%] animate-pulse"
+            className="logo-gradient text-xl sm:text-2xl font-extrabold tracking-tight hover:opacity-90 transition-opacity"
           >
-            <Link
-              href="/"
-              className="text-xl sm:text-2xl font-extrabold tracking-tight hover:opacity-90 transition-opacity"
-              aria-label="Go to Home"
-            >
+            <Link href="/" aria-label="Go to Home">
               Adam Zaatar
             </Link>
           </motion.div>
 
-          {/* Desktop Menu */}
+          {/* === Desktop Menu === */}
           <motion.ul
             className="hidden md:flex space-x-8 items-center"
             initial="hidden"
             animate="visible"
-            variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+            variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
           >
             {navLinks.map(({ href, label, external }) => (
               <motion.li key={href.toString()} variants={linkVariants}>
@@ -115,9 +104,9 @@ export default function NavBar() {
                       aria-label={`Open ${label}`}
                     >
                       {label}
-                      <span className="absolute left-0 -bottom-1 h-[3px] w-0 
-                                       bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
-                                       transition-all duration-500 ease-out group-hover:w-full rounded-full shadow-[0_0_8px_var(--primary)]" />
+                      <span className="absolute left-0 -bottom-1 h-[2px] w-0 
+                                       bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+                                       transition-all duration-500 ease-out group-hover:w-full rounded-full" />
                     </a>
                   </Button>
                 ) : (
@@ -129,9 +118,9 @@ export default function NavBar() {
                   >
                     <Link href={href as Route} aria-label={`Go to ${label} page`}>
                       {label}
-                      <span className="absolute left-0 -bottom-1 h-[3px] w-0 
-                                       bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
-                                       transition-all duration-500 ease-out group-hover:w-full rounded-full shadow-[0_0_8px_var(--primary)]" />
+                      <span className="absolute left-0 -bottom-1 h-[2px] w-0 
+                                       bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+                                       transition-all duration-500 ease-out group-hover:w-full rounded-full" />
                     </Link>
                   </Button>
                 )}
@@ -139,10 +128,10 @@ export default function NavBar() {
             ))}
           </motion.ul>
 
-          {/* Mobile Menu Toggle */}
+          {/* === Mobile Menu Toggle === */}
           <motion.button
             whileTap={{ scale: 0.9 }}
-            whileHover={{ scale: 1.1 }}
+            whileHover={{ scale: 1.05 }}
             className="md:hidden p-2 rounded-lg hover:bg-muted/40 transition-colors shadow-inner"
             onClick={() => setIsOpen(!isOpen)}
             aria-expanded={isOpen}
@@ -157,24 +146,24 @@ export default function NavBar() {
           </motion.button>
         </Container>
 
-        {/* Mobile Dropdown */}
+        {/* === Mobile Dropdown === */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
               id="mobile-menu"
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-              className="md:hidden border-t border-border bg-surface/95 shadow-2xl backdrop-blur-xl"
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="md:hidden border-t border-border bg-surface/95 shadow-xl backdrop-blur-xl"
             >
               <Container className="flex flex-col space-y-4 py-6">
                 {navLinks.map(({ href, label, external }, index) => (
                   <motion.div
                     key={href.toString()}
-                    initial={{ opacity: 0, x: -15 }}
+                    initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.35, delay: index * 0.08 }}
+                    transition={{ duration: 0.3, delay: index * 0.06 }}
                   >
                     {external ? (
                       <Button
@@ -214,11 +203,11 @@ export default function NavBar() {
         </AnimatePresence>
       </motion.nav>
 
-      {/* Floating Neon Progress Bar */}
+      {/* === Floating Neon Progress Bar (Synced with Gradient Cycle) === */}
       <motion.div
-        className="fixed bottom-0 left-0 right-0 h-[4px] origin-left 
-                   bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
-                   shadow-[0_0_15px_var(--primary),0_0_30px_var(--secondary),0_0_50px_var(--accent)]
+        className="fixed bottom-0 left-0 right-0 h-[3px] origin-left 
+                   animate-progressCycle
+                   shadow-[0_0_8px_var(--primary),0_0_16px_var(--secondary),0_0_24px_var(--accent)]
                    rounded-full z-[60]"
         style={{ scaleX }}
       />

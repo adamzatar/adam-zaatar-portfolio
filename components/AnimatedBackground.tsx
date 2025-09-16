@@ -1,78 +1,36 @@
 // components/AnimatedBackground.tsx
 "use client";
 
-import { useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+
+// Lazy-load to split bundles
+const AnimatedBackgroundChrome = dynamic(
+  () => import("./AnimatedBackgroundChrome"),
+  { ssr: false }
+);
+const AnimatedBackgroundSafari = dynamic(
+  () => import("./AnimatedBackgroundSafari"),
+  { ssr: false }
+);
 
 export default function AnimatedBackground() {
-  const trailRef = useRef<HTMLDivElement[]>([]);
+  const [isSafari, setIsSafari] = useState(false);
 
   useEffect(() => {
-    // Initialize trail coordinates in center of screen
-    const coords = Array.from({ length: 12 }, () => ({
-      x: window.innerWidth / 2,
-      y: window.innerHeight / 2,
-    }));
+    // User agent detection (client-side only)
+    const ua = navigator.userAgent;
+    // Safari detection: must include Safari, but not Chrome/Chromium/Android
+    const isSafariBrowser =
+      /^((?!chrome|android).)*safari/i.test(ua) ||
+      /\b(iPad|iPhone|iPod)\b/.test(ua);
 
-    const handleMouse = (e: MouseEvent) => {
-      coords.unshift({ x: e.clientX, y: e.clientY });
-      coords.pop();
-    };
-
-    window.addEventListener("mousemove", handleMouse, { passive: true });
-
-    function animate() {
-      const els = trailRef.current;
-      for (let i = 0; i < els.length; i++) {
-        const el = els[i];
-        if (!el) continue;
-        const point = coords[i];
-        const scale = 1 - i * 0.07;
-        const opacity = 1 - i * 0.08;
-
-        el.style.transform = `translate3d(${point.x}px, ${point.y}px, 0) scale(${scale})`;
-        el.style.opacity = `${opacity}`;
-      }
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouse);
-    };
+    setIsSafari(isSafariBrowser);
   }, []);
 
-  return (
-    <div className="absolute inset-0 -z-10 overflow-hidden">
-      {/* Smooth shifting gradient backdrop */}
-      <div className="absolute inset-0 animate-gradient bg-[radial-gradient(circle_at_50%_50%,rgba(250,204,21,0.15),rgba(249,115,22,0.05))]" />
+  if (isSafari) {
+    return <AnimatedBackgroundSafari />;
+  }
 
-      {/* Floating glowing particles */}
-      <div className="absolute inset-0">
-        {Array.from({ length: 40 }).map((_, i) => (
-          <span
-            key={i}
-            className="particle"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 20}s`,
-              animationDuration: `${20 + Math.random() * 30}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Snake trail following mouse */}
-      {Array.from({ length: 12 }).map((_, i) => (
-        <div
-          key={i}
-          ref={(el) => {
-            if (el) trailRef.current[i] = el;
-          }}
-          className="trail-dot"
-        />
-      ))}
-    </div>
-  );
+  return <AnimatedBackgroundChrome />;
 }
