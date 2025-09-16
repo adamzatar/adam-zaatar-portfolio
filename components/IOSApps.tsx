@@ -1,139 +1,211 @@
 "use client";
 
-import { useState } from "react";
+import * as React from "react";
+import { motion, type Variants } from "framer-motion";
 import { Container } from "@/components/ui/Container";
-import { motion } from "framer-motion";
-import Image from "next/image";
+import { Card } from "@/components/ui/Card";
+import AppImage from "@/components/AppImage";
+import type { ImageKey } from "@/lib/images";
 
-// ----------------------------
-// App Data
-// ----------------------------
-const apps = [
+/* ----------------------------
+   Motion
+----------------------------- */
+const EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
+
+const fadeUp = (i = 0): Variants => ({
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: EASE, delay: i * 0.12 },
+  },
+});
+
+/* ----------------------------
+   Data (typed ImageKey)
+   NOTE:
+   - bowdoinMarketplace must exist in lib/images.ts (maps to /public/images/bowdoinmarketplace.png)
+   - placeholder used for “Upcoming”
+----------------------------- */
+type AppItem = {
+  title: string;
+  description: string;
+  technologies: string[];
+  appStoreLink?: string;
+  image: ImageKey;
+  alt: string;
+};
+
+const APPS: AppItem[] = [
   {
     title: "Cutaway",
     description:
-      "Cutaway is a creator tool for fast, multi-perspective storytelling. Pick a main video, record reaction shots, and Cutaway alternates them into a punchy timeline automatically. You get sensible defaults—cross-dissolves, caption-style lower-thirds, optional music, and bleeps—plus a live preview and export.",
+      "Creator tool for fast multi-perspective storytelling: pick a main video, capture reaction shots, and Cutaway auto-alternates into a punchy timeline with sensible defaults (cross-dissolves, lower-thirds, optional music/bleeps), live preview, and export.",
     technologies: ["Swift", "SwiftUI", "AVFoundation", "Xcode"],
-    link: "#", // Replace with App Store link
-    image: "/images/cutaway.png",
+    // appStoreLink: "https://apps.apple.com/...", // add when live
+    image: "cutaway",
     alt: "Cutaway app preview screenshot",
   },
   {
     title: "Bowdoin Marketplace",
     description:
-      "Campus marketplace app enabling peer-to-peer exchanges and listings. Built for speed, reliability, and a smooth user experience.",
+      "Campus marketplace enabling peer-to-peer listings and exchanges. Designed for speed, reliability, and a frictionless UX.",
     technologies: ["Swift", "SwiftUI", "CoreData", "REST APIs"],
-    link: "#", // Replace with App Store link
-    image: "/images/bowdoin-marketplace.png",
+    // appStoreLink: "https://apps.apple.com/...", // add when live
+    image: "bowdoinMarketplace",
     alt: "Bowdoin Marketplace app screenshot",
   },
   {
     title: "Upcoming Releases",
     description:
-      "Several additional iOS applications are under active development, with a focus on finance, productivity, and education.",
+      "Additional iOS apps in active development focused on finance, productivity, and education.",
     technologies: ["Swift", "SwiftUI", "AI APIs"],
-    link: "#",
-    image: "/images/upcoming.png",
+    image: "placeholder",
     alt: "Placeholder for upcoming iOS apps",
   },
 ];
 
-// ----------------------------
-// Skeleton shimmer image
-// ----------------------------
+/* ----------------------------
+   ShimmerImage (AppImage + loader)
+----------------------------- */
 function ShimmerImage({
-  src,
+  image,
   alt,
+  sizes,
   className,
+  objectFit = "cover",
 }: {
-  src: string;
+  image: ImageKey;
   alt: string;
+  sizes?: string;
   className?: string;
+  objectFit?: "cover" | "contain";
 }) {
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = React.useState(false);
 
   return (
-    <div className="relative w-full h-64 rounded-xl overflow-hidden">
+    <div className={`relative w-full h-64 rounded-t-2xl overflow-hidden ${className ?? ""}`}>
       {!loaded && (
-        <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-800 dark:to-gray-700" />
+        <div
+          aria-hidden
+          className="absolute inset-0 animate-pulse bg-gradient-to-r
+                     from-[color-mix(in_oklab,var(--surface) 55%,transparent)]
+                     via-[color-mix(in_oklab,var(--surface) 75%,transparent)]
+                     to-[color-mix(in_oklab,var(--surface) 55%,transparent)]"
+        />
       )}
-      <Image
-        src={src}
+      <AppImage
+        image={image}
         alt={alt}
         fill
-        className={`object-cover transition-opacity duration-700 ${
-          loaded ? "opacity-100" : "opacity-0"
-        } ${className ?? ""}`}
+        priority={false}
+        sizes={sizes ?? "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
+        className={`transition-opacity duration-700 ${loaded ? "opacity-100" : "opacity-0"} object-${objectFit}`}
         onLoadingComplete={() => setLoaded(true)}
       />
+      {/* readability wash on hover */}
+      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
+      {/* shimmer sweep */}
+      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/12 to-transparent" />
     </div>
   );
 }
 
-// ----------------------------
-// iOS App Card
-// ----------------------------
-function IOSAppCard({
-  title,
-  description,
-  image,
-  alt,
-  link,
-}: (typeof apps)[number]) {
+/* ----------------------------
+   Chip
+----------------------------- */
+function TechChip({ label }: { label: string }) {
   return (
-    <motion.div
-      whileHover={{ y: -10, scale: 1.02 }}
-      transition={{ type: "spring", stiffness: 200, damping: 18 }}
-      className="bg-white dark:bg-[#161b22] rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden transition-all duration-300 flex flex-col"
+    <span
+      className="px-3 py-1 text-xs font-medium rounded-full border
+                 border-[color-mix(in_oklab,var(--border) 70%,transparent)]
+                 bg-[color-mix(in_oklab,var(--surface) 65%,transparent)]
+                 text-foreground/85 shadow-[0_1px_6px_rgba(0,0,0,0.08)]"
     >
-      {/* Image */}
-      <ShimmerImage src={image} alt={alt} className="rounded-t-2xl" />
+      {label}
+    </span>
+  );
+}
+
+/* ----------------------------
+   Card
+----------------------------- */
+function IOSAppCard({ item }: { item: AppItem }) {
+  const hasStoreLink = Boolean(item.appStoreLink);
+
+  return (
+    <Card
+      variant="surface"
+      padding="none"
+      interactive
+      className="group h-full flex flex-col overflow-hidden"
+      aria-label={item.title}
+    >
+      {/* Media */}
+      <ShimmerImage image={item.image} alt={item.alt} />
 
       {/* Content */}
       <div className="p-6 flex flex-col flex-1">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-          {title}
+        <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-[var(--primary)] transition-colors">
+          {item.title}
         </h3>
-        <p className="text-gray-600 dark:text-gray-300 text-sm flex-1">
-          {description}
-        </p>
+        <p className="text-sm text-foreground/80 leading-relaxed flex-1">{item.description}</p>
 
-        {link && (
+        {/* Tech */}
+        {item.technologies?.length > 0 && (
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {item.technologies.map((t) => (
+              <li key={t}>
+                <TechChip label={t} />
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Action (only if real link) */}
+        {hasStoreLink && (
           <a
-            href={link}
+            href={item.appStoreLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-block text-primary dark:text-secondary font-semibold hover:underline"
+            className="mt-5 inline-flex items-center font-semibold text-[var(--primary)]
+                       hover:text-[var(--secondary)] transition-colors"
+            aria-label={`View ${item.title} on the App Store`}
           >
             View on App Store →
           </a>
         )}
       </div>
-    </motion.div>
+    </Card>
   );
 }
 
-// ----------------------------
-// Section
-// ----------------------------
+/* ----------------------------
+   Section
+----------------------------- */
 export default function IOSApps() {
   return (
     <section
       id="ios-apps"
+      aria-labelledby="ios-apps-heading"
       className="relative py-28 bg-gradient-to-b from-surface/80 to-bg overflow-hidden"
     >
       {/* Decorative background glow */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 blur-xl opacity-40" />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-gradient-to-tr from-[var(--primary)]/12 via-[var(--secondary)]/12 to-[var(--accent)]/12 blur-2xl opacity-50"
+      />
 
       <Container className="text-center">
-        {/* Section Heading */}
+        {/* Heading */}
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl sm:text-5xl font-extrabold 
-                     bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
+          id="ios-apps-heading"
+          variants={fadeUp(0)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.45 }}
+          className="text-4xl sm:text-5xl font-extrabold
+                     bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
                      bg-clip-text text-transparent drop-shadow-sm"
         >
           iOS Applications
@@ -141,15 +213,14 @@ export default function IOSApps() {
 
         {/* Subheading */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.65, delay: 0.1 }}
-          className="mt-4 text-lg text-muted max-w-2xl mx-auto"
+          variants={fadeUp(0.5)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.45 }}
+          className="mt-5 text-lg sm:text-xl text-muted max-w-2xl mx-auto leading-relaxed"
         >
-          A showcase of iOS apps designed and developed with a focus on
-          performance, clean UI, and user experience. Future App Store launches
-          are in progress.
+          A showcase of iOS apps engineered with Swift and SwiftUI — blending performance,
+          clean UI, and a seamless user experience. App Store launches coming soon.
         </motion.p>
 
         {/* Divider */}
@@ -157,32 +228,28 @@ export default function IOSApps() {
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-          className="mt-10 mb-14 h-[3px] w-44 mx-auto bg-gradient-to-r 
-                     from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
+          transition={{ duration: 0.6, delay: 0.15, ease: EASE }}
+          className="mt-10 mb-14 h-[3px] w-44 mx-auto bg-gradient-to-r
+                     from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
                      rounded-full origin-center"
+          aria-hidden
         />
 
         {/* Cards Grid */}
-        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-          {apps.map((app, index) => (
-            <motion.div
-              key={app.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.05,
-                type: "spring",
-                stiffness: 200,
-                damping: 18,
-              }}
-            >
-              <IOSAppCard {...app} />
-            </motion.div>
+        <motion.ul
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.25 }}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
+          className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3"
+          role="list"
+        >
+          {APPS.map((item, index) => (
+            <motion.li key={item.title} variants={fadeUp(index + 1)} className="h-full">
+              <IOSAppCard item={item} />
+            </motion.li>
           ))}
-        </div>
+        </motion.ul>
       </Container>
     </section>
   );

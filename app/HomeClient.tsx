@@ -5,6 +5,7 @@ import { MotionConfig, motion, type Variants } from "framer-motion";
 import AppImage from "@/components/AppImage";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card"; // ✅ use componentized surfaces
 import AnimatedBackground from "@/components/AnimatedBackground";
 
 /* ----------------------------
@@ -39,7 +40,7 @@ export default function HomeClient() {
     <MotionConfig reducedMotion="user">
       {/* IMPORTANT: main must be relative so the background can anchor with absolute -z-50 */}
       <main className="relative overflow-hidden bg-gradient-to-b from-surface to-bg">
-        {/* 🔭 Mount the animated sky BEHIND the page */}
+        {/* 🔭 Mount the animated sky BEHIND the page (clouds + particles + cursor trail) */}
         <AnimatedBackground />
 
         {/* Optional vignette wash ABOVE the sky but below content */}
@@ -72,14 +73,8 @@ export default function HomeClient() {
               CS &amp; Economics student at Bowdoin College. I build at the
               intersection of{" "}
               <span className="font-semibold text-[var(--primary)]">AI</span>,{" "}
-              <span className="font-semibold text-[var(--secondary)]">
-                fintech
-              </span>
-              , and{" "}
-              <span className="font-semibold text-[var(--accent)]">
-                full-stack platforms
-              </span>
-              .
+              <span className="font-semibold text-[var(--secondary)]">fintech</span>, and{" "}
+              <span className="font-semibold text-[var(--accent)]">full-stack platforms</span>.
             </motion.p>
           </header>
 
@@ -103,35 +98,42 @@ export default function HomeClient() {
                 transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
                 className="absolute inset-0 -rotate-6 rounded-2xl
                            bg-gradient-to-br from-[var(--secondary)] to-[var(--accent)]
-                           opacity-35 blur-2xl"
+                           opacity-[0.35] blur-2xl"
               />
 
-              {/* Glass card using tokens */}
+              {/* Glass card using component (keeps tokens & blur inside Card) */}
               <motion.div
                 whileHover={scaleHover}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 220, damping: 20 }}
-                className="relative z-10 w-full h-full rounded-2xl overflow-hidden p-2
-                           bg-[var(--surface)]/80 supports-[backdrop-filter]:backdrop-blur-xl
-                           border border-[color-mix(in_oklab,var(--border) 70%,transparent)]
-                           shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.35)]
-                           ring-1 ring-white/5 transition-all duration-300"
+                className="relative z-10 w-full h-full"
               >
-                <AppImage
-                  image="profile"
-                  alt="Portrait of Adam Zaatar"
-                  width={320}
-                  height={320}
-                  sizes="(min-width: 640px) 320px, 280px"
-                  priority
-                  className="rounded-xl object-cover w-full h-full"
-                />
+                <Card
+                  className="w-full h-full rounded-2xl overflow-hidden p-2
+                             bg-[var(--surface)]/80 supports-[backdrop-filter]:backdrop-blur-xl
+                             border border-[color-mix(in_oklab,var(--border) 70%,transparent)]
+                             shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.35)]
+                             ring-1 ring-white/5 transition-all duration-300"
+                >
+                  <AppImage
+                    image="profile"
+                    alt="Portrait of Adam Zaatar"
+                    width={320}
+                    height={320}
+                    sizes="(min-width: 1024px) 320px, (min-width: 640px) 320px, 280px"
+                    priority
+                    className="rounded-xl object-cover w-full h-full"
+                  />
+                </Card>
               </motion.div>
             </motion.div>
           </section>
 
           {/* === SNAPSHOT / TAGS === */}
-          <section className="mt-12 flex flex-col items-center gap-6 text-center" aria-labelledby="snapshot">
+          <section
+            className="mt-12 flex flex-col items-center gap-6 text-center"
+            aria-labelledby="snapshot"
+          >
             <motion.h2
               id="snapshot"
               variants={fadeUp(2)}
@@ -159,14 +161,15 @@ export default function HomeClient() {
             <ul className="flex flex-wrap justify-center gap-3">
               {TAGS.map((tag) => (
                 <motion.li key={tag} whileHover={{ scale: 1.06, y: -2 }}>
-                  <span
-                    className="ui-card block rounded-lg px-4 py-2 text-sm text-foreground/90
+                  <Card
+                    className="rounded-lg px-4 py-2 text-sm text-foreground/90
+                               bg-[color-mix(in_oklab,var(--surface) 80%,transparent)]
                                border border-[color-mix(in_oklab,var(--border) 70%,transparent)]
                                shadow-[0_8px_24px_rgba(0,0,0,0.22)] hover:shadow-[0_14px_34px_rgba(0,0,0,0.3)]
                                ring-1 ring-white/5 transition-all"
                   >
                     {tag}
-                  </span>
+                  </Card>
                 </motion.li>
               ))}
             </ul>
@@ -209,11 +212,17 @@ export default function HomeClient() {
                     📄 View Resume
                   </a>
                 </Button>
+
+                {/* ✅ Route to real pages, not #anchors */}
                 <Button asChild variant="outline">
-                  <Link href="/#projects" aria-label="Jump to projects">🚀 Projects</Link>
+                  <Link href="/projects" aria-label="Go to projects">
+                    🚀 Projects
+                  </Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link href="/#research" aria-label="Jump to research">📚 Research</Link>
+                  <Link href="/research" aria-label="Go to research">
+                    📚 Research
+                  </Link>
                 </Button>
               </div>
             </div>

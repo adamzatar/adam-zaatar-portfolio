@@ -1,20 +1,29 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
-import { motion, Variants } from "framer-motion";
+import * as React from "react";
+import { motion, type Variants } from "framer-motion";
 import { FileText } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/Card";
 
-type ResearchCardProps = {
+export type ResearchCardProps = {
   title: string;
   description: string;
   paperUrl: string;
   delay?: number;
 };
 
-// ----------------------------
-// Motion Variants
-// ----------------------------
-const fadeUp = (delay: number = 0): Variants => ({
+/* ----------------------------
+   Motion Variants
+----------------------------- */
+const fadeUp = (delay = 0): Variants => ({
   hidden: { opacity: 0, y: 40, scale: 0.97 },
   visible: {
     opacity: 1,
@@ -24,9 +33,9 @@ const fadeUp = (delay: number = 0): Variants => ({
   },
 });
 
-// ----------------------------
-// Component
-// ----------------------------
+/* ----------------------------
+   Component
+----------------------------- */
 export function ResearchCard({
   title,
   description,
@@ -39,47 +48,56 @@ export function ResearchCard({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.25 }}
-      whileHover={{ y: -10, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 220, damping: 22 }}
-      className="group relative overflow-hidden rounded-2xl 
-                 bg-white dark:bg-[#161b22] border border-border 
-                 shadow-md hover:shadow-xl transition-all duration-500 flex flex-col"
+      /* Card handles hover lift via `interactive`; wrapper doesn't need whileHover */
     >
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-[var(--primary)/8] via-transparent to-[var(--secondary)/8] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <Card
+        variant="surface"
+        padding="md"
+        interactive
+        className="group relative overflow-hidden"
+      >
+        {/* Subtle token-aware glow on hover */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500
+                     bg-gradient-to-tr from-[color-mix(in_oklab,var(--primary) 8%,transparent)]
+                     via-transparent to-[color-mix(in_oklab,var(--secondary) 8%,transparent)]"
+        />
 
-      {/* Content */}
-      <div className="relative z-10 p-6 flex flex-col h-full">
-        {/* Title */}
-        <h3
-          className="text-xl sm:text-2xl font-bold mb-3 
-                     bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] 
-                     bg-clip-text text-transparent"
-        >
-          {title}
-        </h3>
+        <CardHeader className="relative z-10 px-0 pt-0 pb-2">
+          <CardTitle className="text-xl sm:text-2xl bg-clip-text text-transparent
+                                bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)]">
+            {title}
+          </CardTitle>
+          {/* Keep for structure; actual body text lives in CardContent for spacing */}
+          <CardDescription className="sr-only">{description}</CardDescription>
+        </CardHeader>
 
-        {/* Description */}
-        <p className="text-muted text-base leading-relaxed flex-1 mb-6 line-clamp-5">
-          {description}
-        </p>
+        <CardContent className="relative z-10 px-0">
+          <p className="text-base leading-relaxed text-foreground/85">
+            {description}
+          </p>
+        </CardContent>
 
-        {/* Action */}
-        <div className="flex justify-end mt-auto">
+        <CardFooter className="relative z-10 px-0 pt-4">
           <Button
             asChild
             variant="primary"
             size="sm"
-            className="gap-2 transform group-hover:-translate-y-0.5 transition-transform duration-300"
+            className="gap-2 transition-transform duration-300 group-hover:-translate-y-0.5"
           >
-            <a href={paperUrl} target="_blank" rel="noopener noreferrer">
+            <a
+              href={paperUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Open paper: ${title}`}
+            >
               <FileText className="w-4 h-4" />
               Read Paper
             </a>
           </Button>
-        </div>
-      </div>
+        </CardFooter>
+      </Card>
     </motion.div>
   );
 }

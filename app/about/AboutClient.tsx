@@ -186,7 +186,7 @@ export default function AboutClient() {
                 {
                   text: "Certificate: Artificial Intelligence A–Z 2025 (Udemy)",
                   icon: "🤖",
-                  image: "certificate" as ImageKey, 
+                  image: "certificate" as ImageKey, // ✅ now resolves to /public/images/certificate.jpg
                 },
                 {
                   text:
@@ -213,7 +213,7 @@ export default function AboutClient() {
                   {item.image && (
                     <AppImage
                       image={item.image}
-                      alt="AI Certificate"
+                      alt="Artificial Intelligence A–Z 2025 Certificate (Udemy)"
                       width={360}
                       height={220}
                       sizes="(min-width: 640px) 360px, 280px"

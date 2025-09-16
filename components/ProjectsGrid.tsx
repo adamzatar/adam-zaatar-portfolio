@@ -1,31 +1,31 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
+import * as React from "react";
+import { motion, type Variants } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import AppImage from "@/components/AppImage";
 import { Card } from "@/components/ui/Card";
-import { type ImageKey } from "@/lib/images";
+import { Button } from "@/components/ui/Button";
+import type { ImageKey } from "@/lib/images";
 
-// ----------------------------
-// Motion Variants
-// ----------------------------
-const fadeUp = (i: number = 0): Variants => ({
-  hidden: { opacity: 0, y: 40, scale: 0.96 },
+/* ----------------------------
+   Motion
+----------------------------- */
+const EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
+
+const fadeUp = (i = 0): Variants => ({
+  hidden: { opacity: 0, y: 32, scale: 0.98 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: {
-      duration: 0.65,
-      ease: [0.25, 0.1, 0.25, 1],
-      delay: i * 0.1,
-    },
+    transition: { duration: 0.55, ease: EASE, delay: i * 0.08 },
   },
 });
 
-// ----------------------------
-// Types
-// ----------------------------
+/* ----------------------------
+   Types
+----------------------------- */
 type Project = {
   title: string;
   description: string;
@@ -33,16 +33,17 @@ type Project = {
   alt: string;
   technologies: string[];
   codeLink?: string;
+  demoLink?: string;
 };
 
-// ----------------------------
-// Apps
-// ----------------------------
-const apps: Project[] = [
+/* ----------------------------
+   Data — Apps
+----------------------------- */
+const APPS: Project[] = [
   {
     title: "Cutaway",
     description:
-      "Cross-platform video editing app enabling synchronized multi-angle recording and playback. Built with SwiftUI and AVFoundation, currently in TestFlight beta.",
+      "Cross-platform video editor for synchronized multi-angle recording & playback. Built in SwiftUI with AVFoundation, currently in TestFlight.",
     image: "cutaway",
     alt: "Cutaway multi-angle editing app",
     technologies: ["Swift", "SwiftUI", "AVFoundation"],
@@ -51,7 +52,7 @@ const apps: Project[] = [
   {
     title: "Vector",
     description:
-      "Next-generation two-factor authentication platform with a SwiftUI client and a Vapor/Swift backend. Implements token-based security and AWS SES verification.",
+      "Next-gen 2FA platform with a SwiftUI client and Vapor/Swift backend. Time-based tokens, AWS SES verification, session handling, and Postgres.",
     image: "vector",
     alt: "Vector 2FA security platform",
     technologies: ["Swift", "SwiftUI", "Vapor", "PostgreSQL", "AWS SES"],
@@ -60,31 +61,31 @@ const apps: Project[] = [
   {
     title: "Investify",
     description:
-      "Educational stock trading simulator with real-time S&P 500 data. Used in Bowdoin Economics classrooms to blend finance education with live markets.",
-    image: "certificate",
+      "Educational stock trading simulator with live S&P 500 data for classroom use at Bowdoin Economics. Charts, portfolios, and order flows.",
+    image: "certificate", // placeholder graphic for now
     alt: "Investify stock trading simulator",
     technologies: ["Swift", "SwiftUI", "Firebase", "Yahoo Finance API"],
     codeLink: "https://github.com/adamzatar/investify",
   },
 ];
 
-// ----------------------------
-// Websites & Platforms
-// ----------------------------
-const websites: Project[] = [
+/* ----------------------------
+   Data — Websites & Platforms
+----------------------------- */
+const SITES: Project[] = [
   {
     title: "Bowdoin Marketplace",
     description:
-      "Production-grade campus marketplace with Okta auth, Prisma/Postgres, Redis rate limiting, AWS SES emails, and OpenTelemetry monitoring.",
+      "Production-grade campus marketplace: Okta auth, Prisma/Postgres, Redis rate limiting, AWS SES, and OpenTelemetry. Monorepo with pnpm.",
     image: "bowdoinMarketplace",
     alt: "Bowdoin Marketplace platform",
-    technologies: ["Next.js", "TypeScript", "Prisma", "Redis", "AWS SES"],
+    technologies: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Redis", "AWS SES"],
     codeLink: "https://github.com/adamzatar/bowdoin-marketplace",
   },
   {
     title: "PalPrep",
     description:
-      "Full-stack advocacy platform integrating donations, applications, and a learning hub. Built with Next.js, Prisma, Postgres, TailwindCSS, and Stripe.",
+      "Advocacy platform: donations, applications, and learning hub in one stack. Next.js 15, Prisma/Postgres, TailwindCSS, Stripe.",
     image: "palprep",
     alt: "PalPrep advocacy platform",
     technologies: ["Next.js", "Prisma", "PostgreSQL", "TailwindCSS", "Stripe"],
@@ -93,160 +94,230 @@ const websites: Project[] = [
   {
     title: "Personal Portfolio",
     description:
-      "High-performance portfolio built with Next.js + TypeScript, deployed on Vercel with SEO, analytics, and full accessibility compliance.",
+      "High-performance Next.js + TypeScript site with animations, accessibility, and SEO. Deployed on Vercel.",
     image: "personalPortfolio",
-    alt: "Personal Portfolio website",
+    alt: "Personal portfolio website",
     technologies: ["Next.js", "TailwindCSS", "TypeScript", "Vercel"],
     codeLink: "https://github.com/adamzatar/adam-zaatar-portfolio",
   },
 ];
 
-// ----------------------------
-// Reusable Card Components
-// ----------------------------
-function AppCard({ title, description, image, alt, codeLink }: Project) {
+/* ----------------------------
+   Small UI bits
+----------------------------- */
+function TechBadges({ items }: { items: string[] }) {
   return (
-    <Card
-      variant="elevated"
-      interactive
-      padding="md"
-      className="flex flex-col bg-white dark:bg-[#161b22] border border-border 
-                 shadow-md hover:shadow-xl transition-all duration-500"
-    >
-      {/* Image */}
-      <div className="relative h-48 w-full overflow-hidden rounded-t-2xl">
-        <AppImage image={image} alt={alt} fill className="object-cover" />
+    <ul className="mt-3 flex flex-wrap gap-2" aria-label="Technologies used">
+      {items.map((t) => (
+        <li key={t}>
+          <span className="inline-flex items-center rounded-full border border-border/70 bg-surface/70 px-2.5 py-1 text-[11px] leading-4 text-foreground/80 shadow-sm">
+            {t}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/* ----------------------------
+   Cards
+----------------------------- */
+function AppCard({ title, description, image, alt, technologies, codeLink, demoLink }: Project) {
+  return (
+    <Card variant="elevated" padding="md" interactive className="flex h-full flex-col">
+      {/* Media */}
+      <div className="relative h-48 w-full overflow-hidden rounded-xl">
+        <AppImage
+          image={image}
+          alt={alt}
+          fill
+          sizes="(min-width: 1024px) 420px, (min-width: 640px) 50vw, 100vw"
+          className="object-cover transition-transform duration-700 will-change-transform group-hover:scale-[1.06]"
+          priority={false}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        />
       </div>
 
-      {/* Content */}
-      <div className="p-6 flex flex-col flex-1">
-        <h3 className="text-xl font-bold mb-2 text-text">{title}</h3>
-        <p className="text-sm text-muted flex-1">{description}</p>
-        {codeLink && (
-          <a
-            href={codeLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-block font-semibold text-[var(--primary)] hover:underline"
-          >
-            View Code →
-          </a>
+      {/* Body */}
+      <div className="mt-4 flex flex-1 flex-col">
+        <h3 className="text-lg font-semibold text-foreground">{title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted">{description}</p>
+        <TechBadges items={technologies} />
+
+        {(codeLink || demoLink) && (
+          <div className="mt-5 flex gap-3">
+            {demoLink && (
+              <Button asChild size="sm" variant="primary">
+                <a href={demoLink} target="_blank" rel="noopener noreferrer" aria-label={`Open live demo for ${title}`}>
+                  Live Demo
+                </a>
+              </Button>
+            )}
+            {codeLink && (
+              <Button asChild size="sm" variant="outline">
+                <a href={codeLink} target="_blank" rel="noopener noreferrer" aria-label={`Open GitHub for ${title}`}>
+                  View Code
+                </a>
+              </Button>
+            )}
+          </div>
         )}
       </div>
     </Card>
   );
 }
 
-function WebsiteCard({ title, description, image, alt, codeLink }: Project) {
+function WebsiteCard({ title, description, image, alt, technologies, codeLink, demoLink }: Project) {
   return (
-    <Card
-      variant="surface"
-      interactive
-      padding="md"
-      className="flex flex-col bg-white dark:bg-[#161b22] border border-border 
-                 shadow-sm hover:shadow-lg transition-all duration-500"
-    >
-      {/* Banner Image */}
-      <div className="relative h-40 w-full overflow-hidden rounded-t-xl">
-        <AppImage image={image} alt={alt} fill className="object-cover" />
+    <Card variant="surface" padding="md" interactive className="flex h-full flex-col">
+      {/* Media */}
+      <div className="relative h-40 w-full overflow-hidden rounded-xl">
+        <AppImage
+          image={image}
+          alt={alt}
+          fill
+          sizes="(min-width: 1024px) 420px, (min-width: 640px) 50vw, 100vw"
+          className="object-cover transition-transform duration-700 will-change-transform group-hover:scale-[1.06]"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        />
       </div>
 
-      {/* Content */}
-      <div className="p-5 flex flex-col flex-1">
-        <h3 className="text-lg font-semibold mb-2 text-text">{title}</h3>
-        <p className="text-sm text-muted flex-1">{description}</p>
-        {codeLink && (
-          <a
-            href={codeLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-block font-medium text-[var(--primary)] hover:underline"
-          >
-            GitHub →
-          </a>
+      {/* Body */}
+      <div className="mt-4 flex flex-1 flex-col">
+        <h3 className="text-base font-semibold text-foreground">{title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted">{description}</p>
+        <TechBadges items={technologies} />
+
+        {(codeLink || demoLink) && (
+          <div className="mt-5 flex gap-3">
+            {demoLink && (
+              <Button asChild size="sm" variant="primary">
+                <a href={demoLink} target="_blank" rel="noopener noreferrer" aria-label={`Open live site for ${title}`}>
+                  Visit Site
+                </a>
+              </Button>
+            )}
+            {codeLink && (
+              <Button asChild size="sm" variant="outline">
+                <a href={codeLink} target="_blank" rel="noopener noreferrer" aria-label={`Open GitHub for ${title}`}>
+                  GitHub
+                </a>
+              </Button>
+            )}
+          </div>
         )}
       </div>
     </Card>
   );
 }
 
-// ----------------------------
-// Section
-// ----------------------------
+/* ----------------------------
+   Section
+----------------------------- */
 export default function ProjectsGrid() {
   return (
-    <section className="relative py-28 overflow-hidden">
+    <section id="projects" aria-labelledby="projects-heading" className="relative overflow-hidden py-28">
+      {/* Subtle global glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_40%_at_50%_-10%,color-mix(in_oklab,var(--primary) 14%,transparent),transparent_70%)]"
+      />
+
       <Container>
         {/* Header */}
-        <motion.div
+        <motion.header
           variants={fadeUp(0)}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
-          className="text-center mb-16"
+          viewport={{ once: true, amount: 0.5 }}
+          className="text-center"
         >
-          <h2 className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] bg-clip-text text-transparent drop-shadow-sm">
+          <h2
+            id="projects-heading"
+            className="text-pretty text-4xl sm:text-5xl font-extrabold tracking-tight
+                       bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+                       bg-clip-text text-transparent drop-shadow-sm"
+          >
             Projects
           </h2>
-          <p className="mt-4 text-lg text-muted max-w-2xl mx-auto">
-            A curated selection of apps, platforms, and full-stack builds — blending strong infrastructure with clean, user-focused design.
+          <p className="mx-auto mt-5 max-w-3xl text-lg leading-relaxed text-muted">
+            A curated selection of apps and full-stack platforms—engineered for performance, security, and polish.
           </p>
-        </motion.div>
 
-        {/* Apps Section */}
-        <motion.div
-          variants={fadeUp(1)}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15, ease: EASE }}
+            className="mx-auto mt-8 h-[3px] w-44 origin-center rounded-full bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]"
+            aria-hidden
+          />
+        </motion.header>
+
+        {/* Apps */}
+        <motion.section
+          aria-labelledby="apps-heading"
+          variants={fadeUp(0.6)}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
-          className="mb-20"
+          viewport={{ once: true, amount: 0.25 }}
+          className="mt-14"
         >
-          <h3 className="text-2xl font-bold text-text mb-8 text-center">Apps</h3>
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            {apps.map((project, idx) => (
-              <motion.div
-                key={project.title}
-                variants={fadeUp(idx)}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-              >
-                <AppCard {...project} />
-              </motion.div>
+          <h3 id="apps-heading" className="mb-8 text-center text-2xl font-bold text-foreground">
+            Apps
+          </h3>
+
+          <motion.ul
+            role="list"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
+            className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {APPS.map((p, i) => (
+              <motion.li key={p.title} variants={fadeUp(i + 1)} className="h-full">
+                <AppCard {...p} />
+              </motion.li>
             ))}
-          </div>
-        </motion.div>
+          </motion.ul>
+        </motion.section>
 
-        {/* Websites Section */}
-        <motion.div
-          variants={fadeUp(2)}
+        {/* Websites & Platforms */}
+        <motion.section
+          aria-labelledby="sites-heading"
+          variants={fadeUp(0.8)}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.25 }}
+          className="mt-20"
         >
-          <h3 className="text-2xl font-bold text-text mb-8 text-center">
+          <h3 id="sites-heading" className="mb-8 text-center text-2xl font-bold text-foreground">
             Websites & Platforms
           </h3>
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            {websites.map((project, idx) => (
-              <motion.div
-                key={project.title}
-                variants={fadeUp(idx)}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-              >
-                <WebsiteCard {...project} />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </Container>
 
-      {/* Decorative Glow */}
-      <div className="pointer-events-none absolute inset-0 -z-10 
-                      bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 
-                      blur-2xl opacity-40" />
+          <motion.ul
+            role="list"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
+            className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {SITES.map((p, i) => (
+              <motion.li key={p.title} variants={fadeUp(i + 1)} className="h-full">
+                <WebsiteCard {...p} />
+              </motion.li>
+            ))}
+          </motion.ul>
+        </motion.section>
+      </Container>
     </section>
   );
 }

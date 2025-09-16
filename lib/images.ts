@@ -17,7 +17,7 @@ export const IMAGES = {
   // --- Projects: Apps ---
   cutaway: "/images/cutaway.png",
   vector: "/images/vector.png",
-  certificate: "/images/certificate.png", 
+  certificate: "/images/certificate.jpg", // ✅ fix: actual file is .jpg in /public/images
   instagramClone: "/images/instagramclone.png",
   twitterClone: "/images/twitterclone.png",
 
@@ -47,7 +47,7 @@ export const IMAGE_ALTS: Record<ImageKey, string> = {
   // Apps
   cutaway: "Cutaway multi-angle editing app",
   vector: "Vector 2FA authentication platform",
-  certificate: "Artificial Intelligence A–Z 2025 Certificate (Udemy)", // ✅ updated description
+  certificate: "Artificial Intelligence A–Z 2025 Certificate (Udemy)",
   instagramClone: "Instagram clone project preview",
   twitterClone: "Twitter clone project preview",
 
@@ -65,10 +65,11 @@ export const IMAGE_ALTS: Record<ImageKey, string> = {
  * Warns during development if IMAGES and IMAGE_ALTS ever fall out of sync.
  */
 if (process.env.NODE_ENV === "development") {
-  const imageKeys = Object.keys(IMAGES);
-  const altKeys = Object.keys(IMAGE_ALTS);
+  const imageKeys = Object.keys(IMAGES) as ImageKey[];
+  const altKeys = Object.keys(IMAGE_ALTS) as ImageKey[];
   const missing = imageKeys.filter((key) => !altKeys.includes(key));
   if (missing.length > 0) {
+    // eslint-disable-next-line no-console
     console.warn(`[IMAGE_ALTS] Missing alt text for keys: ${missing.join(", ")}`);
   }
 }

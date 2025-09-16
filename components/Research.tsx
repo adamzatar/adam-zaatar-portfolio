@@ -1,28 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import * as React from "react";
+import { MotionConfig, motion, type Variants } from "framer-motion";
+import { FileText, X } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { motion, Variants } from "framer-motion";
-import { FileText } from "lucide-react";
+import AnimatedBackground from "@/components/AnimatedBackground";
 
-interface ResearchItem {
+/* --------------------------------
+   Types
+--------------------------------- */
+type ResearchItem = {
   title: string;
   description: string;
+  /** Path under /public (e.g. /research/my paper.pdf). */
   file: string;
-}
+};
 
-const research: ResearchItem[] = [
+/* --------------------------------
+   Data
+   (Spaces in filenames are okay; we encode when using them.)
+--------------------------------- */
+const RESEARCH: ResearchItem[] = [
   {
     title: "Economic Statistics Paper (ECON2557)",
     description:
-      "Analyzed 'greedflation' with OLS regressions on corporate profits and producer price indices after COVID.",
+      "Analyzed “greedflation” with OLS regressions on corporate profits and producer price indices after COVID.",
     file: "/research/Zaatar_ECON2557_Paper.pdf",
   },
   {
     title: "Second-Phase Report",
     description:
-      "Expanded the financial literacy study into potential syllabi structures, assignments, grading breakdowns, and implementation strategies for different models of the course, from semester-long to intensive bootcamps.",
+      "Expanded the financial literacy study into potential syllabi structures, assignments, grading breakdowns, and implementation strategies for different course models—from semester-long to intensive bootcamps.",
     file: "/research/Second-Phase Report_ Models of the Class.pdf",
   },
   {
@@ -33,151 +42,209 @@ const research: ResearchItem[] = [
   },
 ];
 
-// ----------------------------
-// Motion Variants
-// ----------------------------
-const fadeUp = (i: number = 0): Variants => ({
-  hidden: { opacity: 0, y: 40, scale: 0.97 },
+/* --------------------------------
+   Motion
+--------------------------------- */
+const fadeUp = (i = 0): Variants => ({
+  hidden: { opacity: 0, y: 40, scale: 0.98 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.65, ease: "easeOut", delay: i * 0.08 },
+    transition: { duration: 0.55, ease: "easeOut", delay: i * 0.08 },
   },
 });
 
-// ----------------------------
-// Component
-// ----------------------------
-export default function Research() {
-  const [selected, setSelected] = useState<ResearchItem | null>(null);
-  const [loading, setLoading] = useState(false);
+/* --------------------------------
+   Helpers
+--------------------------------- */
+const encodePath = (p: string) => encodeURI(p);
+
+/* --------------------------------
+   Page
+--------------------------------- */
+export default function ResearchPage() {
+  const [selected, setSelected] = React.useState<ResearchItem | null>(null);
+  const [loading, setLoading] = React.useState(false);
+
+  // Close preview with Escape
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelected(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
-    <section
-      id="research"
-      className="relative py-28 bg-gradient-to-b from-surface/80 to-bg overflow-hidden"
-    >
-      {/* Decorative background glow */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 blur-2xl opacity-40" />
+    <MotionConfig reducedMotion="user">
+      <main className="relative overflow-hidden bg-gradient-to-b from-surface/70 to-bg">
+        {/* 🔭 Animated sky behind content (particles + clouds) */}
+        <AnimatedBackground />
 
-      <Container>
-        {/* Heading */}
-        <motion.h2
-          variants={fadeUp(0)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="text-4xl sm:text-5xl font-extrabold text-center 
-                     bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
-                     bg-clip-text text-transparent drop-shadow-sm"
-        >
-          Research
-        </motion.h2>
-
-        {/* Subheading */}
-        <motion.p
-          variants={fadeUp(1)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="mt-6 text-lg sm:text-xl text-muted text-center max-w-3xl mx-auto leading-relaxed"
-        >
-          A selection of academic research projects combining{" "}
-          <span className="text-[var(--primary)] font-semibold">economics</span>,{" "}
-          <span className="text-[var(--secondary)] font-semibold">behavioral insights</span>, and{" "}
-          <span className="text-[var(--accent)] font-semibold">quantitative methods</span>.
-        </motion.p>
-
-        {/* Divider */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-          className="mt-10 mb-14 h-[3px] w-44 mx-auto bg-gradient-to-r 
-                     from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
-                     rounded-full origin-center"
+        {/* Subtle wash above sky */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10
+                     bg-[radial-gradient(60%_40%_at_50%_-10%,color-mix(in_oklab,var(--primary) 18%,transparent),transparent_70%)]"
         />
 
-        {/* Grid of Research Cards */}
-        <div className="mt-10 grid gap-10 sm:grid-cols-2">
-          {research.map((item, index) => (
-            <motion.div
-              key={index}
-              variants={fadeUp(index)}
+        <Container className="py-20 sm:py-28 relative z-0">
+          {/* Heading */}
+          <header className="text-center max-w-4xl mx-auto">
+            <motion.h1
+              variants={fadeUp(0)}
               initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              whileHover={{ y: -12, scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 220, damping: 18 }}
-              className="rounded-2xl shadow-lg hover:shadow-2xl 
-                         border border-border bg-surface/90 
-                         backdrop-blur-sm cursor-pointer transition-all duration-300 flex flex-col"
-              onClick={() => {
-                setSelected(item);
-                setLoading(true);
-              }}
+              animate="visible"
+              className="text-pretty text-4xl sm:text-5xl font-extrabold tracking-tight
+                         bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+                         bg-clip-text text-transparent drop-shadow-sm"
             >
-              <div className="p-6 sm:p-8 flex flex-col flex-1">
-                <h3
-                  className="text-xl sm:text-2xl font-bold mb-3 
-                             bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] 
-                             bg-clip-text text-transparent"
-                >
-                  {item.title}
-                </h3>
-                <p className="text-muted text-base leading-relaxed flex-1 mb-6 line-clamp-4">
-                  {item.description}
-                </p>
-                <div className="flex justify-end">
-                  <Button asChild variant="primary" size="sm" className="gap-2">
-                    <a href={item.file} target="_blank" rel="noopener noreferrer">
-                      <FileText className="w-4 h-4" />
-                      Read Paper
-                    </a>
+              Research
+            </motion.h1>
+
+            <motion.p
+              variants={fadeUp(0.5)}
+              initial="hidden"
+              animate="visible"
+              className="mt-6 text-balance text-lg sm:text-xl text-muted text-center max-w-3xl mx-auto leading-relaxed"
+            >
+              A selection of academic projects combining{" "}
+              <span className="text-[var(--primary)] font-semibold">economics</span>,{" "}
+              <span className="text-[var(--secondary)] font-semibold">behavioral insights</span>, and{" "}
+              <span className="text-[var(--accent)] font-semibold">quantitative methods</span>.
+            </motion.p>
+
+            {/* Divider */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              className="mt-10 h-[3px] w-44 mx-auto bg-gradient-to-r
+                         from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+                         rounded-full origin-center"
+              aria-hidden
+            />
+          </header>
+
+          {/* Grid of research cards */}
+          <section className="mt-12 grid gap-8 sm:grid-cols-2">
+            {RESEARCH.map((item, index) => (
+              <motion.article
+                key={item.title}
+                variants={fadeUp(1 + index * 0.08)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 220, damping: 18 }}
+                className="ui-card flex flex-col rounded-2xl p-0 overflow-hidden
+                           border border-[color-mix(in_oklab,var(--border) 70%,transparent)]
+                           shadow-[0_8px_24px_rgba(0,0,0,0.22)] hover:shadow-[0_14px_34px_rgba(0,0,0,0.3)]
+                           ring-1 ring-white/5 transition-all"
+              >
+                <div className="p-6 sm:p-7 flex flex-col flex-1">
+                  <h2
+                    className="text-xl sm:text-2xl font-bold mb-3
+                               bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)]
+                               bg-clip-text text-transparent"
+                  >
+                    {item.title}
+                  </h2>
+                  <p className="text-muted text-base leading-relaxed flex-1 mb-6">
+                    {item.description}
+                  </p>
+
+                  <div className="mt-auto flex items-center justify-end gap-3">
+                    <Button asChild variant="primary" size="sm" className="gap-2">
+                      <a
+                        href={encodePath(item.file)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Open ${item.title} PDF in a new tab`}
+                      >
+                        <FileText className="w-4 h-4" />
+                        Read Paper
+                      </a>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setSelected(item);
+                        setLoading(true);
+                      }}
+                      aria-label={`Preview ${item.title}`}
+                    >
+                      Preview
+                    </Button>
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </section>
+
+          {/* Selected research preview */}
+          {selected && (
+            <motion.section
+              key={selected.title}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+              className="mt-14"
+              aria-labelledby="preview-title"
+            >
+              <div className="relative p-6 sm:p-8 rounded-2xl bg-[var(--surface)]/90
+                              supports-[backdrop-filter]:backdrop-blur-xl
+                              border border-[color-mix(in_oklab,var(--border) 70%,transparent)]
+                              shadow-[0_12px_36px_rgba(0,0,0,0.28)]">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 id="preview-title" className="text-2xl sm:text-3xl font-bold text-foreground">
+                      {selected.title}
+                    </h3>
+                    <p className="mt-2 text-muted">{selected.description}</p>
+                  </div>
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelected(null)}
+                    aria-label="Close preview"
+                    className="shrink-0"
+                  >
+                    <X className="w-5 h-5" />
                   </Button>
                 </div>
+
+                {/* Loader */}
+                {loading && (
+                  <div
+                    className="mt-6 w-full h-[600px] rounded-lg border
+                               border-[color-mix(in_oklab,var(--border) 70%,transparent)]
+                               bg-[color-mix(in_oklab,var(--surface) 35%,transparent)]
+                               animate-pulse relative overflow-hidden"
+                    aria-hidden
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent animate-[shimmer_2s_infinite]" />
+                  </div>
+                )}
+
+                {/* PDF iframe */}
+                <iframe
+                  src={encodePath(selected.file)}
+                  className={`mt-6 w-full h-[600px] rounded-lg border
+                              border-[color-mix(in_oklab,var(--border) 70%,transparent)]
+                              transition-opacity duration-500 ${loading ? "opacity-0" : "opacity-100"}`}
+                  title={`${selected.title} (PDF)`}
+                  onLoad={() => setLoading(false)}
+                />
               </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Selected Research Preview */}
-        {selected && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65 }}
-            className="mt-16"
-          >
-            <div className="p-6 sm:p-10 rounded-2xl shadow-2xl bg-surface/95 border border-border backdrop-blur-md">
-              <h3 className="text-2xl sm:text-3xl font-bold text-text mb-4">
-                {selected.title}
-              </h3>
-              <p className="text-muted mb-6">{selected.description}</p>
-
-              {/* Loader */}
-              {loading && (
-                <div className="w-full h-[600px] rounded-lg border border-border bg-muted/20 animate-pulse relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shimmer_2s_infinite]" />
-                </div>
-              )}
-
-              {/* PDF iframe */}
-              <iframe
-                src={selected.file}
-                className={`w-full h-[600px] rounded-lg border border-border transition-opacity duration-700 ${
-                  loading ? "opacity-0" : "opacity-100"
-                }`}
-                title={selected.title}
-                onLoad={() => setLoading(false)}
-              />
-            </div>
-          </motion.div>
-        )}
-      </Container>
-    </section>
+            </motion.section>
+          )}
+        </Container>
+      </main>
+    </MotionConfig>
   );
 }
