@@ -11,13 +11,13 @@
 
 export const IMAGES = {
   // --- Profile Images ---
-  profile: "/images/profilepic.png", // primary profile (used on About page)
+  profile: "/images/profilepic.png", // primary profile (About page)
   profile2: "/images/profile.png",   // alternate profile
 
   // --- Projects: Apps ---
   cutaway: "/images/cutaway.png",
   vector: "/images/vector.png",
-  certificate: "/images/certificate.png", // normalized to PNG
+  certificate: "/images/certificate.png", 
   instagramClone: "/images/instagramclone.png",
   twitterClone: "/images/twitterclone.png",
 
@@ -47,7 +47,7 @@ export const IMAGE_ALTS: Record<ImageKey, string> = {
   // Apps
   cutaway: "Cutaway multi-angle editing app",
   vector: "Vector 2FA authentication platform",
-  certificate: "Investify stock trading simulator certificate",
+  certificate: "Artificial Intelligence A–Z 2025 Certificate (Udemy)", // ✅ updated description
   instagramClone: "Instagram clone project preview",
   twitterClone: "Twitter clone project preview",
 
@@ -69,8 +69,6 @@ if (process.env.NODE_ENV === "development") {
   const altKeys = Object.keys(IMAGE_ALTS);
   const missing = imageKeys.filter((key) => !altKeys.includes(key));
   if (missing.length > 0) {
-    console.warn(
-      `[IMAGE_ALTS] Missing alt text for keys: ${missing.join(", ")}`
-    );
+    console.warn(`[IMAGE_ALTS] Missing alt text for keys: ${missing.join(", ")}`);
   }
 }

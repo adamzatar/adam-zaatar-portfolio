@@ -1,30 +1,27 @@
-// components/AnimatedBackground.tsx
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
 
-// Lazy-load AnimatedSky to reduce bundle size
-const AnimatedSky = dynamic(() => import("./AnimatedSky"), {
+// Lazy-load to keep the main bundle lean
+const AnimatedSky = dynamic(() => import("@/components/AnimatedSky"), {
   ssr: false,
+  // Super lightweight fallback that never blocks content
   loading: () => (
-    <div className="absolute inset-0 -z-50 bg-gradient-to-b from-[var(--bg)] to-[var(--surface)]" />
+    <div className="pointer-events-none absolute inset-0 -z-50 bg-gradient-to-b from-[var(--bg)] to-[var(--surface)]" />
   ),
 });
 
+/**
+ * AnimatedBackground
+ * Mounts the sky system behind page content. Safe to include per page.
+ */
 export default function AnimatedBackground() {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    setReady(true);
-  }, []);
-
-  if (!ready) {
-    return null;
-  }
-
   return (
-    <div className="absolute inset-0 -z-50">
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 -z-50"
+      // ensure a stacking context that sits behind page content
+    >
       <AnimatedSky />
     </div>
   );
