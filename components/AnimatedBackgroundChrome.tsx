@@ -8,7 +8,7 @@ export default function AnimatedBackgroundChrome() {
   const { gradient, sunMoon, progress } = useDayCycle();
 
   useEffect(() => {
-    // Chrome can handle more trail dots
+    // Chrome comet trail
     const coords = Array.from({ length: 16 }, () => ({
       x: window.innerWidth / 2,
       y: window.innerHeight / 2,
@@ -36,9 +36,7 @@ export default function AnimatedBackgroundChrome() {
 
     animate();
 
-    return () => {
-      window.removeEventListener("mousemove", handleMouse);
-    };
+    return () => window.removeEventListener("mousemove", handleMouse);
   }, []);
 
   return (
@@ -51,33 +49,44 @@ export default function AnimatedBackgroundChrome() {
         }}
       />
 
-      {/* === Parallax Clouds (now visible & slower) === */}
-      <div className="absolute inset-0 -z-40 pointer-events-none">
-        <div
-          className="cloud-far"
-          style={{ top: "12%", left: "-30%", animationDelay: "0s", opacity: 0.5 }}
-        />
-        <div
-          className="cloud-mid"
-          style={{ top: "32%", left: "-35%", animationDelay: "45s", opacity: 0.55 }}
-        />
-        <div
-          className="cloud-near"
-          style={{ top: "55%", left: "-20%", animationDelay: "90s", opacity: 0.6 }}
-        />
-        <div
-          className="cloud-near"
-          style={{ top: "72%", left: "-40%", animationDelay: "120s", opacity: 0.65 }}
-        />
+      {/* === Painterly Clouds === */}
+      <div className="absolute inset-0 -z-40 pointer-events-none overflow-hidden">
+        {Array.from({ length: 4 }).map((_, idx) => (
+          <div
+            key={`cloud-${idx}`}
+            className="absolute cloud-group"
+            style={{
+              top: `${20 + idx * 15}%`,
+              left: `${-40 - idx * 20}%`,
+              animation: `drift ${180 + idx * 60}s linear infinite`,
+              opacity: 0.5 + idx * 0.1,
+            }}
+          >
+            {/* Layered blobs per cloud */}
+            {Array.from({ length: 5 }).map((__, j) => (
+              <div
+                key={`blob-${idx}-${j}`}
+                className="absolute rounded-full bg-white/60 dark:bg-white/20 blur-3xl"
+                style={{
+                  width: `${120 + Math.random() * 80}px`,
+                  height: `${60 + Math.random() * 40}px`,
+                  left: `${j * 40}px`,
+                  top: `${Math.sin(j) * 15}px`,
+                }}
+              />
+            ))}
+          </div>
+        ))}
       </div>
 
       {/* === Sun & Moon Orbit === */}
       <div
-        className="sunmoon absolute -z-30"
+        className="sunmoon absolute -z-30 rounded-full w-12 h-12 shadow-lg"
         style={{
           left: `${sunMoon.x * 100}%`,
           top: `${sunMoon.y * 100}%`,
           background: sunMoon.color,
+          transform: "translate(-50%, -50%)",
         }}
       />
 
@@ -88,7 +97,7 @@ export default function AnimatedBackgroundChrome() {
         }`}
         aria-hidden="true"
       >
-        {Array.from({ length: 80 }).map((_, i) => (
+        {Array.from({ length: 60 }).map((_, i) => (
           <div
             key={`star-${i}`}
             className="star"
@@ -98,25 +107,29 @@ export default function AnimatedBackgroundChrome() {
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               animationDelay: `${Math.random() * 8}s`,
-              transform: `translateZ(${Math.random() * 3}px)`,
+              opacity: 0.8,
             }}
           />
         ))}
       </div>
 
-      {/* === Aurora Particles (super slow & elegant) === */}
+      {/* === Aurora Particles (super slow, glowing at night) === */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
         {Array.from({ length: 20 }).map((_, i) => (
           <span
             key={`particle-${i}`}
-            className="particle"
+            className="absolute rounded-full bg-white/40 dark:bg-white/60"
             style={{
+              width: `${4 + Math.random() * 4}px`,
+              height: `${4 + Math.random() * 4}px`,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              // 🚀 snail speed (60–90s)
-              animationDuration: `${60 + Math.random() * 30}s`,
-              animationDelay: `${Math.random() * 40}s`,
-              filter: `hue-rotate(${progress * 360}deg)`,
+              animation: `float ${90 + Math.random() * 40}s ease-in-out infinite`,
+              animationDelay: `${Math.random() * 50}s`,
+              boxShadow:
+                progress > 0.7
+                  ? `0 0 6px 2px rgba(255,255,255,0.6)`
+                  : "none",
             }}
           />
         ))}
@@ -134,6 +147,40 @@ export default function AnimatedBackgroundChrome() {
           />
         ))}
       </div>
+
+      {/* === Animations === */}
+      <style jsx>{`
+        @keyframes float {
+          0% {
+            transform: translateY(0px) translateX(0px);
+          }
+          50% {
+            transform: translateY(-40px) translateX(20px);
+          }
+          100% {
+            transform: translateY(0px) translateX(0px);
+          }
+        }
+
+        @keyframes drift {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(160vw);
+          }
+        }
+
+        .trail-dot {
+          position: absolute;
+          width: 8px;
+          height: 8px;
+          background: rgba(255, 255, 255, 0.8);
+          border-radius: 50%;
+          pointer-events: none;
+          mix-blend-mode: screen;
+        }
+      `}</style>
     </div>
   );
 }

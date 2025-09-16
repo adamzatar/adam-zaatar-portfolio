@@ -144,7 +144,11 @@ export default function AboutPage() {
             {[
               { text: "Founder of the Bowdoin Martial Arts Club", icon: "🥋" },
               { text: "Web Staff at The Bowdoin Orient", icon: "📰" },
-              { text: "Certificate: Artificial Intelligence A–Z 2025 (Udemy)", icon: "🤖" },
+              { 
+                text: "Certificate: Artificial Intelligence A–Z 2025 (Udemy)", 
+                icon: "🤖", 
+                image: "/images/certificate.jpg"  // ✅ optimized certificate image
+              },
               { text: "Research in financial literacy, behavioral economics, econometrics", icon: "📊" },
               { text: "Fluent in English & Arabic; intermediate German", icon: "🌍" },
             ].map((item, idx) => (
@@ -155,12 +159,21 @@ export default function AboutPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.1 + idx * 0.05 }}
                 whileHover={{ scale: 1.04, y: -4 }}
-                className="flex items-center gap-3 p-5 rounded-xl 
+                className="flex flex-col items-center gap-3 p-5 rounded-xl 
                            bg-white dark:bg-[#161b22] border border-border 
                            shadow-md hover:shadow-xl transition-all duration-400 w-full sm:w-[90%]"
               >
                 <span className="text-2xl">{item.icon}</span>
                 <span>{item.text}</span>
+                {item.image && (
+                  <AppImage
+                    image={item.image as ImageKey}
+                    alt="AI Certificate"
+                    width={300}
+                    height={200}
+                    className="mt-2 rounded-lg shadow-md object-contain"
+                  />
+                )}
               </motion.li>
             ))}
           </ul>

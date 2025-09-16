@@ -6,6 +6,9 @@ import { motion, type Variants, type Transition } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 
+// ----------------------------
+// Motion Variants
+// ----------------------------
 const fadeUp = (i = 0): Variants => ({
   hidden: { opacity: 0, y: 32 },
   visible: {
@@ -19,6 +22,9 @@ const fadeUp = (i = 0): Variants => ({
   },
 });
 
+// ----------------------------
+// Component
+// ----------------------------
 export default function HomeClient() {
   return (
     <main className="relative overflow-hidden bg-gradient-to-b from-surface to-bg">
@@ -50,10 +56,14 @@ export default function HomeClient() {
             animate="visible"
             className="max-w-2xl text-lg sm:text-xl leading-relaxed text-muted"
           >
-            CS &amp; Economics student at Bowdoin College. I build at the intersection of{" "}
+            CS &amp; Economics student at Bowdoin College. I build at the
+            intersection of{" "}
             <span className="font-semibold text-[var(--primary)]">AI</span>,{" "}
             <span className="font-semibold text-[var(--secondary)]">fintech</span>, and{" "}
-            <span className="font-semibold text-[var(--accent)]">full-stack platforms</span>.
+            <span className="font-semibold text-[var(--accent)]">
+              full-stack platforms
+            </span>
+            .
           </motion.p>
         </section>
 
@@ -75,13 +85,13 @@ export default function HomeClient() {
                          opacity-40 blur-2xl rounded-2xl"
             />
 
-            {/* Solid card with image */}
+            {/* Solid white card */}
             <motion.div
               whileHover={{ scale: 1.05, y: -6 }}
               whileTap={{ scale: 0.97 }}
               transition={{ type: "spring", stiffness: 200, damping: 18 }}
               className="relative z-10 w-full h-full rounded-2xl 
-                         bg-white dark:bg-[#161b22] 
+                         bg-white dark:bg-surface 
                          border border-border shadow-lg hover:shadow-2xl 
                          overflow-hidden p-2 transition-all duration-300"
             >
@@ -133,7 +143,7 @@ export default function HomeClient() {
               <motion.span
                 key={tag}
                 whileHover={{ scale: 1.08, y: -2 }}
-                className="rounded-lg bg-white dark:bg-[#161b22] 
+                className="rounded-lg bg-white dark:bg-surface 
                            px-4 py-2 text-sm text-foreground/90 
                            border border-border shadow-md hover:shadow-lg 
                            transition-all"
@@ -150,7 +160,7 @@ export default function HomeClient() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mt-24 rounded-2xl bg-white dark:bg-[#161b22] 
+          className="mt-24 rounded-2xl bg-white dark:bg-surface 
                      border border-border shadow-xl p-10 sm:p-14 relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-r 
@@ -160,8 +170,8 @@ export default function HomeClient() {
               Let’s build something useful!
             </h3>
             <p className="mt-4 text-muted">
-              Open to roles and collaborations in financial analysis, stock trading,
-              software engineering, fintech, and AI-driven projects.
+              Open to roles and collaborations in financial analysis, stock
+              trading, software engineering, fintech, and AI-driven projects.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <Button asChild variant="primary">

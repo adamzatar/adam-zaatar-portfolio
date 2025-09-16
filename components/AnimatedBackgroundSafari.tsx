@@ -8,7 +8,7 @@ export default function AnimatedBackgroundSafari() {
   const { gradient, sunMoon, progress } = useDayCycle();
 
   useEffect(() => {
-    // Safari: fewer dots for smooth FPS
+    // Safari: fewer dots for smoother FPS
     const coords = Array.from({ length: 6 }, () => ({
       x: window.innerWidth / 2,
       y: window.innerHeight / 2,
@@ -48,57 +48,89 @@ export default function AnimatedBackgroundSafari() {
         }}
       />
 
-      {/* === Clouds (slower & visible) === */}
-      <div className="absolute inset-0 -z-40 pointer-events-none">
-        <div className="cloud-far" style={{ top: "15%", left: "-25%", animationDelay: "0s", opacity: 0.45 }} />
-        <div className="cloud-mid" style={{ top: "35%", left: "-35%", animationDelay: "60s", opacity: 0.5 }} />
-        <div className="cloud-near" style={{ top: "60%", left: "-40%", animationDelay: "120s", opacity: 0.55 }} />
+      {/* === Painterly Clouds === */}
+      <div className="absolute inset-0 -z-40 pointer-events-none overflow-hidden">
+        {Array.from({ length: 3 }).map((_, idx) => (
+          <div
+            key={`cloud-${idx}`}
+            className="absolute"
+            style={{
+              top: `${20 + idx * 20}%`,
+              left: `${-50 - idx * 25}%`,
+              animation: `drift ${200 + idx * 80}s linear infinite`,
+              opacity: 0.35 + idx * 0.1,
+            }}
+          >
+            {Array.from({ length: 5 }).map((__, j) => (
+              <div
+                key={`blob-${idx}-${j}`}
+                className="absolute rounded-full bg-white/70 dark:bg-white/20 blur-3xl"
+                style={{
+                  width: `${100 + Math.random() * 80}px`,
+                  height: `${60 + Math.random() * 40}px`,
+                  left: `${j * 60}px`,
+                  top: `${Math.sin(j) * 20}px`,
+                }}
+              />
+            ))}
+          </div>
+        ))}
       </div>
 
       {/* === Sun & Moon === */}
       <div
-        className="sunmoon absolute -z-30"
+        className="sunmoon absolute -z-30 rounded-full w-12 h-12 shadow-lg"
         style={{
           left: `${sunMoon.x * 100}%`,
           top: `${sunMoon.y * 100}%`,
           background: sunMoon.color,
+          transform: "translate(-50%, -50%)",
         }}
       />
 
       {/* === Starfield (night only, fewer stars) === */}
       <div
-        className={`starfield absolute inset-0 -z-20 ${progress > 0.75 ? "active" : ""}`}
+        className={`starfield absolute inset-0 -z-20 ${
+          progress > 0.75 ? "active" : ""
+        }`}
         aria-hidden="true"
       >
         {Array.from({ length: 40 }).map((_, i) => (
           <div
             key={`star-${i}`}
-            className="star"
+            className="absolute rounded-full bg-white"
             style={{
               width: `${Math.random() * 2 + 1}px`,
               height: `${Math.random() * 2 + 1}px`,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 8}s`,
+              animation: `twinkle ${6 + Math.random() * 4}s ease-in-out infinite`,
+              animationDelay: `${Math.random() * 6}s`,
+              opacity: 0.8,
             }}
           />
         ))}
       </div>
 
-      {/* === Aurora Particles (snail drift) === */}
+      {/* === Aurora Particles (super slow snowflake drift) === */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
-        {Array.from({ length: 10 }).map((_, i) => (
+        {Array.from({ length: 12 }).map((_, i) => (
           <span
             key={`particle-${i}`}
-            className="particle"
+            className="absolute rounded-full bg-white/40 dark:bg-white/70"
             style={
               {
+                width: `${3 + Math.random() * 4}px`,
+                height: `${3 + Math.random() * 4}px`,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                "--duration": `${60 + Math.random() * 40}s`, // 🐌 snail speed
-                "--delay": `${Math.random() * 30}s`,
-                filter: `hue-rotate(${progress * 360}deg)`,
-              } as React.CSSProperties & { "--duration"?: string; "--delay"?: string }
+                animation: `float ${80 + Math.random() * 50}s ease-in-out infinite`,
+                animationDelay: `${Math.random() * 40}s`,
+                boxShadow:
+                  progress > 0.7
+                    ? "0 0 6px 2px rgba(255,255,255,0.6)"
+                    : "none",
+              } as React.CSSProperties
             }
           />
         ))}
@@ -116,6 +148,49 @@ export default function AnimatedBackgroundSafari() {
           />
         ))}
       </div>
+
+      {/* === Animations === */}
+      <style jsx>{`
+        @keyframes float {
+          0% {
+            transform: translateY(0px) translateX(0px);
+          }
+          50% {
+            transform: translateY(-40px) translateX(20px);
+          }
+          100% {
+            transform: translateY(0px) translateX(0px);
+          }
+        }
+
+        @keyframes drift {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(160vw);
+          }
+        }
+
+        @keyframes twinkle {
+          0%, 100% {
+            opacity: 0.8;
+          }
+          50% {
+            opacity: 0.3;
+          }
+        }
+
+        .trail-dot-safari {
+          position: absolute;
+          width: 6px;
+          height: 6px;
+          background: rgba(255, 255, 255, 0.8);
+          border-radius: 50%;
+          pointer-events: none;
+          mix-blend-mode: screen;
+        }
+      `}</style>
     </div>
   );
 }
