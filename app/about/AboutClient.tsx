@@ -24,12 +24,18 @@ function ShimmerProfile({
       viewport={{ once: true }}
       transition={{ duration: 0.7, ease: "easeOut" }}
       whileHover={{ scale: 1.03, y: -6 }}
-      className="relative w-72 h-80 md:w-80 md:h-96 rounded-3xl overflow-hidden 
-                 bg-white dark:bg-[#161b22] 
-                 shadow-md hover:shadow-xl transition-all duration-500 border border-border"
+      className="relative w-72 h-80 md:w-80 md:h-96 rounded-3xl overflow-hidden
+                 bg-[var(--surface)]/80 supports-[backdrop-filter]:backdrop-blur-xl
+                 border border-[color-mix(in_oklab,var(--border) 70%,transparent)]
+                 shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.35)]
+                 ring-1 ring-white/5 transition-all duration-500"
     >
       {!loaded && (
-        <div className="absolute inset-0 animate-pulse bg-gray-200 dark:bg-gray-700" />
+        <div
+          className="absolute inset-0 animate-pulse
+                     bg-gradient-to-br from-gray-200 via-gray-100 to-gray-300
+                     dark:from-[#1b2029] dark:via-[#1f2630] dark:to-[#222a34]"
+        />
       )}
       <AppImage
         image={image}
@@ -47,7 +53,7 @@ function ShimmerProfile({
 
 export default function AboutPage() {
   return (
-    <main className="relative overflow-hidden bg-gradient-to-b from-surface/90 to-bg">
+    <main className="relative overflow-hidden bg-gradient-to-b from-surface/70 to-bg">
       {/* Decorative background blobs */}
       <motion.div
         className="absolute -top-32 -left-32 w-[400px] h-[400px] bg-primary/20 blur-3xl rounded-full"
@@ -147,7 +153,7 @@ export default function AboutPage() {
               { 
                 text: "Certificate: Artificial Intelligence A–Z 2025 (Udemy)", 
                 icon: "🤖", 
-                image: "/images/certificate.jpg"  // ✅ optimized certificate image
+                image: "/images/certificate.jpg"
               },
               { text: "Research in financial literacy, behavioral economics, econometrics", icon: "📊" },
               { text: "Fluent in English & Arabic; intermediate German", icon: "🌍" },
@@ -159,12 +165,14 @@ export default function AboutPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.1 + idx * 0.05 }}
                 whileHover={{ scale: 1.04, y: -4 }}
-                className="flex flex-col items-center gap-3 p-5 rounded-xl 
-                           bg-white dark:bg-[#161b22] border border-border 
-                           shadow-md hover:shadow-xl transition-all duration-400 w-full sm:w-[90%]"
+                className="flex flex-col items-center gap-3 p-5 rounded-xl
+                           bg-[var(--surface)]/80 supports-[backdrop-filter]:backdrop-blur-xl
+                           border border-[color-mix(in_oklab,var(--border) 70%,transparent)]
+                           shadow-[0_8px_24px_rgba(0,0,0,0.22)] hover:shadow-[0_14px_34px_rgba(0,0,0,0.3)]
+                           ring-1 ring-white/5 transition-all duration-400 w-full sm:w-[90%]"
               >
-                <span className="text-2xl">{item.icon}</span>
-                <span>{item.text}</span>
+                <span className="text-2xl text-foreground/80">{item.icon}</span>
+                <span className="text-foreground/90">{item.text}</span>
                 {item.image && (
                   <AppImage
                     image={item.image as ImageKey}
