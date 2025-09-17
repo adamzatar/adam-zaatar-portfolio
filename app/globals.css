@@ -63,7 +63,7 @@ a:hover {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* === Sky Gradient Cycle === */
+/* === Sky Gradient Cycle (legacy) === */
 .sky-cycle {
   position: fixed;
   inset: 0;
@@ -79,7 +79,7 @@ a:hover {
   100% { background: linear-gradient(to bottom, #87ceeb, #fff); }     /* Back to Day */
 }
 
-/* === Starfield === */
+/* === Starfield (optional) === */
 .starfield {
   position: absolute;
   inset: 0;
@@ -102,10 +102,10 @@ a:hover {
   50% { opacity: 1; transform: scale(1.3); }
 }
 
-/* === Painterly Clouds === */
+/* === Painterly Clouds (AnimatedSky) === */
 .cloud-cluster {
   position: absolute;
-  left: -40vw;
+  left: -40vw; /* start slightly off-screen left for a clean entrance */
   transform: translateZ(0) scale(var(--cluster-scale, 1));
   filter: saturate(105%);
   will-change: transform, opacity;
@@ -116,15 +116,17 @@ a:hover {
 .cloud-blob {
   position: absolute;
   border-radius: 9999px;
-  background: radial-gradient(
-    circle at 40% 40%,
-    color-mix(in oklab, var(--cloud-tint, rgba(255,255,255,0.55)) 85%, transparent),
-    color-mix(in oklab, var(--cloud-tint, rgba(255,255,255,0.55)) 45%, transparent) 50%,
-    transparent 80%
-  );
+  background:
+    radial-gradient(
+      circle at 40% 40%,
+      color-mix(in oklab, var(--cloud-tint, rgba(255,255,255,0.55)) 85%, transparent),
+      color-mix(in oklab, var(--cloud-tint, rgba(255,255,255,0.55)) 45%, transparent) 50%,
+      transparent 80%
+    );
   filter: blur(var(--blob-blur, 24px));
   opacity: var(--blob-alpha, 0.5);
   animation: cloudMorph 120s ease-in-out infinite alternate;
+  will-change: border-radius, filter, opacity;
 }
 @keyframes cloud-drift {
   0%   { transform: translateX(0) translateZ(0) scale(var(--cluster-scale, 1)); }
@@ -136,7 +138,7 @@ a:hover {
   100% { border-radius: 70% 30% 50% 50% / 40% 70% 60% 40%; }
 }
 
-/* === Slow Drifting Particles === */
+/* === Slow Drifting Particles (AnimatedSky) === */
 .drift-particle {
   position: absolute;
   border-radius: 9999px;
@@ -144,8 +146,11 @@ a:hover {
   mix-blend-mode: screen;
   will-change: transform, opacity, filter;
   filter: drop-shadow(0 0 calc(6px * var(--glowOpacity, 0)) rgba(180,200,255, var(--glowOpacity, 0)));
-  animation: particle-float var(--dur, 90s) ease-in-out infinite, particle-glow 12s ease-in-out infinite;
+  animation:
+    particle-float var(--dur, 90s) ease-in-out infinite,
+    particle-glow 12s ease-in-out infinite;
   animation-delay: var(--delay, 0s);
+  transform: translateZ(0);
 }
 @keyframes particle-float {
   0%   { transform: translate3d(0, 0, 0);               opacity: 0.25; }
@@ -159,6 +164,64 @@ a:hover {
   50%      { filter: drop-shadow(0 0 12px rgba(200,220,255,0.8)); }
 }
 
+/* === Cursor Trail (CursorTrail + legacy trail-dot) === */
+.cursor-trail {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+.cursor-trail-dot,
+.trail-dot {
+  position: fixed;
+  left: 0; top: 0;
+  width: 10px; height: 10px; /* default; JS scales per index */
+  border-radius: 9999px;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.85), rgba(255,255,255,0.15));
+  box-shadow:
+    0 0 10px rgba(255,255,255,0.35),
+    0 0 20px color-mix(in oklab, var(--primary) 60%, transparent),
+    0 0 28px color-mix(in oklab, var(--secondary) 50%, transparent);
+  transform: translate3d(0,0,0);
+  opacity: 0.9;
+  transition: opacity 220ms ease;
+}
+
+/* === Helpful global keyframes used across the app === */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes linkColorCycle {
+  0%   { color: var(--primary); }
+  33%  { color: var(--secondary); }
+  66%  { color: var(--accent); }
+  100% { color: var(--primary); }
+}
+
+@keyframes progressCycle {
+  0%   { box-shadow: 0 0 6px var(--primary), 0 0 12px var(--secondary), 0 0 18px var(--accent); }
+  50%  { box-shadow: 0 0 10px var(--primary), 0 0 18px var(--secondary), 0 0 26px var(--accent); }
+  100% { box-shadow: 0 0 6px var(--primary), 0 0 12px var(--secondary), 0 0 18px var(--accent); }
+}
+
+@keyframes logoCycle {
+  0%   { background-image: linear-gradient(90deg, var(--primary), var(--secondary)); }
+  50%  { background-image: linear-gradient(90deg, var(--secondary), var(--accent)); }
+  100% { background-image: linear-gradient(90deg, var(--primary), var(--secondary)); }
+}
+
+/* Optional class hooks if referenced */
+.animate-progressCycle { animation: progressCycle 6s ease-in-out infinite; }
+.animate-logoCycle     { animation: logoCycle 10s ease-in-out infinite; }
+@keyframes gradientShift {
+  0%   { opacity: 0.9; filter: saturate(1); }
+  50%  { opacity: 1;   filter: saturate(1.2); }
+  100% { opacity: 0.9; filter: saturate(1); }
+}
+.animate-gradientShift { animation: gradientShift 12s ease-in-out infinite; }
+
 /* === UI Card Utility === */
 @layer utilities {
   .ui-card {
@@ -170,5 +233,23 @@ a:hover {
   }
   @supports (backdrop-filter: blur(1px)) {
     .ui-card { backdrop-filter: blur(18px) saturate(160%); }
+  }
+}
+
+/* === Accessibility & Perf === */
+@media (prefers-reduced-motion: reduce) {
+  .cloud-cluster,
+  .cloud-blob,
+  .drift-particle,
+  .cursor-trail-dot,
+  .trail-dot,
+  .animate-gradientShift,
+  .animate-logoCycle,
+  .animate-progressCycle,
+  .fade-in,
+  .sky-cycle,
+  .star {
+    animation: none !important;
+    transition: none !important;
   }
 }
