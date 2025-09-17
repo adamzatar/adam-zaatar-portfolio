@@ -1,23 +1,19 @@
 // lib/images.ts
-
 /**
  * Centralized, type-safe image mapping for the portfolio.
- *
- * ✅ Compile-time safety (only valid keys allowed)
- * ✅ Prevents typos in image paths
- * ✅ Canonical source of truth for /public/images
- * ✅ Includes default alt text for SEO/accessibility
  */
-
 export const IMAGES = {
   // --- Profile Images ---
-  profile: "/images/profilepic.png", // primary profile (About page)
-  profile2: "/images/profile.png",   // alternate profile
+  profile: "/images/profilepic.png",
+  profile2: "/images/profile.png",
+
+  // --- Certificates ---
+  certificate: "/images/certificate.jpg", // 🔧 switched to .jpg to match your file on disk
+  stockTradingCertificate: "/images/stock-trading-certificate.jpg",
 
   // --- Projects: Apps ---
   cutaway: "/images/cutaway.png",
   vector: "/images/vector.png",
-  certificate: "/images/certificate.jpg", // ✅ fix: actual file is .jpg in /public/images
   instagramClone: "/images/instagramclone.png",
   twitterClone: "/images/twitterclone.png",
 
@@ -27,27 +23,24 @@ export const IMAGES = {
   personalPortfolio: "/images/personalportfolio.png",
 
   // --- Miscellaneous ---
-  placeholder: "/images/placeholder.png", // fallback if missing
+  placeholder: "/images/placeholder.png",
 } as const;
 
-/**
- * Strongly typed keys for all available images.
- */
 export type ImageKey = keyof typeof IMAGES;
 
-/**
- * Default alt text mapping (SEO + accessibility).
- * Always kept in sync with IMAGES.
- */
 export const IMAGE_ALTS: Record<ImageKey, string> = {
   // Profiles
   profile: "Portrait of Adam Zaatar",
   profile2: "Alternate portrait of Adam Zaatar",
 
+  // Certificates
+  certificate: "Artificial Intelligence A–Z 2025 Certificate (Udemy)",
+  stockTradingCertificate:
+    "Udemy Certificate: The Complete Foundation Stock Trading Course",
+
   // Apps
   cutaway: "Cutaway multi-angle editing app",
   vector: "Vector 2FA authentication platform",
-  certificate: "Artificial Intelligence A–Z 2025 Certificate (Udemy)",
   instagramClone: "Instagram clone project preview",
   twitterClone: "Twitter clone project preview",
 
@@ -60,13 +53,10 @@ export const IMAGE_ALTS: Record<ImageKey, string> = {
   placeholder: "Placeholder image",
 };
 
-/**
- * 🚨 Dev safeguard:
- * Warns during development if IMAGES and IMAGE_ALTS ever fall out of sync.
- */
+// Dev safeguard
 if (process.env.NODE_ENV === "development") {
-  const imageKeys = Object.keys(IMAGES) as ImageKey[];
-  const altKeys = Object.keys(IMAGE_ALTS) as ImageKey[];
+  const imageKeys = Object.keys(IMAGES);
+  const altKeys = Object.keys(IMAGE_ALTS);
   const missing = imageKeys.filter((key) => !altKeys.includes(key));
   if (missing.length > 0) {
     // eslint-disable-next-line no-console

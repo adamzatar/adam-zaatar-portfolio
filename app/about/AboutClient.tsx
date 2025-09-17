@@ -20,7 +20,6 @@ const fadeUp = (i = 0): Variants => ({
     transition: { duration: 0.6, ease: "easeOut", delay: i * 0.12 },
   },
 });
-
 const scaleHover = { scale: 1.05, y: -6 };
 
 /* ----------------------------
@@ -52,7 +51,6 @@ function ShimmerProfile({ image, alt }: { image: ImageKey; alt: string }) {
         />
       )}
 
-      {/* Responsive sizing for Lighthouse */}
       <AppImage
         image={image}
         alt={alt}
@@ -73,6 +71,31 @@ function ShimmerProfile({ image, alt }: { image: ImageKey; alt: string }) {
    Component
 ----------------------------- */
 export default function AboutClient() {
+  // Certificate link data (kept close to the component)
+  const CERTS = [
+    {
+      text: "Certificate: Artificial Intelligence A–Z 2025 (Udemy)",
+      icon: "🤖",
+      image: "certificate" as ImageKey,
+      href: "https://www.udemy.com/certificate/UC-6162dcfe-b4fa-4b30-a7f7-f0ae1204e552/",
+      alt: "Artificial Intelligence A–Z 2025 Certificate (Udemy)",
+    },
+    {
+      text: "Certificate: The Complete Foundation Stock Trading Course (Udemy)",
+      icon: "📈",
+      image: "stockTradingCertificate" as ImageKey,
+      href: "https://ude.my/UC-6162dcfe-b4fa-4b30-a7f7-f0ae1204e552",
+      alt: "The Complete Foundation Stock Trading Course Certificate (Udemy)",
+      meta: {
+        number: "UC-6162dcfe-b4fa-4b30-a7f7-f0ae1204e552",
+        reference: "0004",
+        date: "Sept. 17, 2025",
+        length: "9.5 total hours",
+        instructors: "Mohsen Hassan, bloom team",
+      },
+    },
+  ] as const;
+
   return (
     <MotionConfig reducedMotion="user">
       <main className="relative overflow-hidden bg-gradient-to-b from-surface/70 to-bg">
@@ -180,14 +203,10 @@ export default function AboutClient() {
             </h3>
 
             <ul className="max-w-3xl mx-auto grid gap-6 sm:grid-cols-2 justify-items-center">
+              {/* Static facts */}
               {[
                 { text: "Founder of the Bowdoin Martial Arts Club", icon: "🥋" },
                 { text: "Web Staff at The Bowdoin Orient", icon: "📰" },
-                {
-                  text: "Certificate: Artificial Intelligence A–Z 2025 (Udemy)",
-                  icon: "🤖",
-                  image: "certificate" as ImageKey, // ✅ now resolves to /public/images/certificate.jpg
-                },
                 {
                   text:
                     "Research in financial literacy, behavioral economics, econometrics",
@@ -209,17 +228,69 @@ export default function AboutClient() {
                 >
                   <span className="text-2xl text-foreground/80">{item.icon}</span>
                   <span className="text-foreground/90">{item.text}</span>
+                </motion.li>
+              ))}
 
-                  {item.image && (
+              {/* Certificates */}
+              {CERTS.map((cert, idx) => (
+                <motion.li
+                  key={cert.text}
+                  variants={fadeUp(1.8 + idx * 0.08)}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.3 }}
+                  whileHover={{ scale: 1.04, y: -4 }}
+                  className="ui-card flex flex-col items-center gap-3 p-5 rounded-xl
+                             border border-[color-mix(in_oklab,var(--border) 70%,transparent)]
+                             shadow-[0_8px_24px_rgba(0,0,0,0.22)] hover:shadow-[0_14px_34px_rgba(0,0,0,0.3)]
+                             ring-1 ring-white/5 transition-all duration-300 w-full sm:w-[90%]"
+                >
+                  <span className="text-2xl text-foreground/80">{cert.icon}</span>
+                  <span className="text-foreground/90">{cert.text}</span>
+
+                  <a
+                    href={cert.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] rounded-md"
+                    aria-label={`${cert.text} — open certificate`}
+                  >
                     <AppImage
-                      image={item.image}
-                      alt="Artificial Intelligence A–Z 2025 Certificate (Udemy)"
+                      image={cert.image}
+                      alt={cert.alt}
                       width={360}
                       height={220}
                       sizes="(min-width: 640px) 360px, 280px"
-                      className="mt-2 rounded-lg shadow-md object-contain"
+                      className="mt-2 rounded-lg shadow-md object-contain hover:brightness-105 transition"
                     />
-                  )}
+                  </a>
+
+                  {/* Optional meta for the stock certificate */}
+                  {"meta" in cert && cert.meta ? (
+                    <div className="text-xs text-foreground/70 grid gap-1 mt-1">
+                      <div>
+                        <span className="font-semibold">Certificate no:</span>{" "}
+                        {cert.meta.number}
+                      </div>
+                      <div>
+                        <span className="font-semibold">Reference #:</span>{" "}
+                        {cert.meta.reference}
+                      </div>
+                      <div className="flex flex-wrap gap-3 justify-center">
+                        <span>
+                          <span className="font-semibold">Date:</span> {cert.meta.date}
+                        </span>
+                        <span>•</span>
+                        <span>
+                          <span className="font-semibold">Length:</span> {cert.meta.length}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-semibold">Instructors:</span>{" "}
+                        {cert.meta.instructors}
+                      </div>
+                    </div>
+                  ) : null}
                 </motion.li>
               ))}
             </ul>
