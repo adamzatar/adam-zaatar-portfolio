@@ -1,11 +1,10 @@
 // app/api/contact/route.ts
-"use server";
 
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
 
-export const runtime = "nodejs";
+export const runtime = "nodejs"; 
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -53,7 +52,7 @@ export async function POST(req: Request) {
 
     const { error } = await resend.emails.send({
       from,
-      to, // string is fine; SDK also accepts string[]
+      to,
       replyTo: `${name} <${email}>`,
       subject: `New contact form message from ${name}`,
       text: `From: ${name} <${email}>\n\n${message}`,
