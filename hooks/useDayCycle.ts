@@ -6,7 +6,6 @@ import { useEffect, useMemo, useState } from "react";
 /** Small color helpers */
 type RGB = [number, number, number];
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
 const mix = (c1: RGB, c2: RGB, t: number): RGB => [
   Math.round(lerp(c1[0], c2[0], t)),
   Math.round(lerp(c1[1], c2[1], t)),

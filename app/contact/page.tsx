@@ -3,7 +3,8 @@
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { motion, Variants, Transition } from "framer-motion";
+import { Variants, Transition } from "framer-motion";
+import { motion } from "framer-motion";
 import { Mail, Github, Linkedin } from "lucide-react";
 
 const fadeUp = (i: number = 0): Variants => ({
@@ -23,7 +24,7 @@ export default function ContactPage() {
   return (
     <section
       id="contact"
-      className="relative py-24 bg-gradient-to-b from-surface/80 to-bg overflow-hidden"
+      className="relative overflow-hidden py-24"
     >
       <Container>
         {/* Heading */}
@@ -33,7 +34,7 @@ export default function ContactPage() {
           whileInView="visible"
           viewport={{ once: true }}
           className="text-4xl sm:text-5xl font-extrabold text-center 
-            bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
+            bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent) 
             bg-clip-text text-transparent drop-shadow-sm"
         >
           Let’s Connect
@@ -106,7 +107,7 @@ export default function ContactPage() {
                 </Button>
               ),
             },
-          ].map(({ icon, title, text, button }, i) => (
+          ].map(({ icon, title, text, button }) => (
             <Card
               key={title}
               className="p-6 text-center rounded-xl backdrop-blur-sm bg-surface/80 
@@ -172,7 +173,7 @@ export default function ContactPage() {
       </Container>
 
       {/* Decorative Gradient Glow */}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-tr 
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-tr 
         from-primary/10 via-secondary/10 to-accent/10 opacity-70 blur-3xl" />
     </section>
   );

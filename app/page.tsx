@@ -1,19 +1,36 @@
+// -----------------------------------------------------------------------------
 // app/page.tsx
-import HomeClient from "./HomeClient";
+// Server Component — Composition root of the Home page
+// Imports and arranges all top-level sections with consistent scroll rhythm.
+// -----------------------------------------------------------------------------
 
-export const metadata = {
-  title: "Adam Zaatar — Portfolio",
+import type { Metadata } from "next";
+import Hero from "@/components/home/Hero";
+import Pillars from "@/components/home/Pillars";
+import HowIBuild from "@/components/home/HowIBuild";
+import BuildDiagram from "@/components/home/BuildDiagram";
+import Featured from "@/components/home/Featured";
+import Learning from "@/components/home/Learning";
+import FinalCTA from "@/components/home/FinalCTA";
+import { Container } from "@/components/ui/Container";
+
+// -----------------------------------------------------------------------------
+
+export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Adam Zaatar — Cloud, AI, & Security Engineer",
   description:
-    "Adam Zaatar — Computer Science & Economics student at Bowdoin College. Developer, researcher, and builder at the intersection of software engineering, fintech, and applied economics.",
+    "Adam Zaatar is a Bowdoin College CS & Economics student building scalable cloud, AI, and cybersecurity systems. Focused on resilient infrastructure, FinOps, and trust-centered platforms.",
   openGraph: {
-    title: "Adam Zaatar — Portfolio",
+    title: "Adam Zaatar — Cloud, AI, & Security Engineer",
     description:
-      "Portfolio of Adam Zaatar: CS & Economics student at Bowdoin College. Projects in cross-platform app development, fintech platforms, AI/ML applications, and economic research.",
+      "Systems-minded builder delivering cloud reliability, AI practicality, and security discipline. Explore projects, research, and certifications.",
     url: "https://adamzaatar.vercel.app",
     siteName: "Adam Zaatar Portfolio",
     images: [
       {
-        url: "/images/projects/profilepic.png", // ✅ use correct public path
+        url: "/images/profilepic.png",
         width: 1200,
         height: 630,
         alt: "Portrait of Adam Zaatar",
@@ -23,30 +40,41 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Adam Zaatar — Portfolio",
+    title: "Adam Zaatar — Cloud, AI, & Security Engineer",
     description:
-      "CS & Economics student at Bowdoin College. Builder of cross-platform apps, fintech tools, and research at the nexus of AI, markets, and technology.",
-    images: ["/images/projects/profilepic.png"], // ✅ consistent with public path
+      "Portfolio showcasing cloud architecture, cybersecurity, AI, and FinOps-driven systems by Adam Zaatar.",
+    images: ["/images/profilepic.png"],
   },
   keywords: [
     "Adam Zaatar",
+    "Cloud Engineering",
+    "SRE",
+    "AI Security",
+    "FinOps",
+    "Systems Optimization",
     "Bowdoin College",
-    "Computer Science",
-    "Economics",
-    "Software Engineering",
-    "Fintech",
-    "AI",
-    "Machine Learning",
-    "Full-stack Development",
-    "iOS Development",
-    "Android Development",
-    "Web Development",
-    "Financial Research",
-    "Quantitative Analysis",
+    "Next.js Portfolio",
+    "Framer Motion",
   ],
   authors: [{ name: "Adam Zaatar" }],
 };
 
-export default function Page() {
-  return <HomeClient />;
+// -----------------------------------------------------------------------------
+
+export default async function Page() {
+  return (
+    <main className="relative flex flex-col">
+      <Hero />
+      <Pillars />
+      <HowIBuild />
+      <section className="relative ui-section py-20 sm:py-24 lg:py-28 overflow-hidden">
+        <Container className="relative z-10">
+          <BuildDiagram />
+        </Container>
+      </section>
+      <Featured />
+      <Learning />
+      <FinalCTA />
+    </main>
+  );
 }

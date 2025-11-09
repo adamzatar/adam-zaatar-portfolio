@@ -3,7 +3,8 @@
 import * as React from "react";
 import ProjectCard from "./ProjectCard";
 import { Container } from "@/components/ui/Container";
-import { motion, type Variants } from "framer-motion";
+import { type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ImageKey } from "@/lib/images"; // enforce keys from images.ts
 
 /* ----------------------------
@@ -88,7 +89,7 @@ export default function Apps() {
     <section
       id="apps"
       aria-labelledby="apps-heading"
-      className="relative py-24 bg-gradient-to-b from-surface/80 to-bg overflow-hidden"
+      className="relative py-24 bg-linear-to-b from-surface/80 to-bg overflow-hidden"
     >
       <Container className="text-center">
         {/* Heading */}
@@ -98,7 +99,7 @@ export default function Apps() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.5 }}
-          className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] bg-clip-text text-transparent drop-shadow-sm"
+          className="text-4xl sm:text-5xl font-extrabold bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent) bg-clip-text text-transparent drop-shadow-sm"
         >
           iOS Applications
         </motion.h2>
@@ -121,7 +122,7 @@ export default function Apps() {
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.6, delay: 0.2, ease: customEase }}
-          className="mt-10 mb-14 h-[3px] w-40 mx-auto bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] rounded-full origin-center"
+          className="mt-10 mb-14 h-[3px] w-40 mx-auto bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent) rounded-full origin-center"
           aria-hidden
         />
 

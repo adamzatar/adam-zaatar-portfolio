@@ -2,7 +2,8 @@
 "use client";
 
 import * as React from "react";
-import { motion, type Variants } from "framer-motion";
+import { type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -40,7 +41,7 @@ export default function CallToAction() {
     <section
       id="contact"
       aria-labelledby="cta-heading"
-      className="relative overflow-hidden py-28 bg-gradient-to-b from-surface/70 to-bg"
+      className="relative overflow-hidden py-28 bg-linear-to-b from-surface/70 to-bg"
     >
       {/* Soft ambient glow behind section */}
       <div
@@ -57,14 +58,14 @@ export default function CallToAction() {
             whileInView={{ opacity: 0.35, scale: 1, x: 0, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: EASE }}
-            className="absolute left-[-10%] top-[-10%] h-[34rem] w-[34rem] rounded-full bg-[var(--primary)]/18 blur-3xl"
+            className="absolute left-[-10%] top-[-10%] h-[34rem] w-[34rem] rounded-full bg-(--primary)/18 blur-3xl"
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.9, x: 40, y: 20 }}
             whileInView={{ opacity: 0.28, scale: 1, x: 0, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, delay: 0.15, ease: EASE }}
-            className="absolute right-[-12%] bottom-[-18%] h-[28rem] w-[28rem] rounded-full bg-[var(--accent)]/18 blur-3xl"
+            className="absolute right-[-12%] bottom-[-18%] h-[28rem] w-[28rem] rounded-full bg-(--accent)/18 blur-3xl"
           />
         </div>
 
@@ -84,7 +85,7 @@ export default function CallToAction() {
             {/* Subtle overlay to increase contrast on busy backgrounds */}
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-t from-bg/30 via-transparent to-transparent"
+              className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-t from-bg/30 via-transparent to-transparent"
             />
 
             <div className="relative z-10">
@@ -107,7 +108,7 @@ export default function CallToAction() {
                 whileInView="visible"
                 viewport={{ once: true }}
                 className="mt-4 text-pretty text-3xl sm:text-5xl font-extrabold tracking-tight
-                           bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+                           bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent)
                            bg-clip-text text-transparent drop-shadow-sm"
               >
                 Let’s Build Something Together

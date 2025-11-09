@@ -9,13 +9,13 @@ export default function Resume() {
   return (
     <section
       id="resume"
-      className="relative py-28 bg-gradient-to-b from-surface/90 to-bg overflow-hidden"
+      className="relative py-28 bg-linear-to-b from-surface/90 to-bg overflow-hidden"
       aria-labelledby="resume-heading"
     >
       {/* === Decorative blurred gradient orb (background accent) === */}
       <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] 
-                        bg-gradient-to-r from-[var(--primary)]/30 via-[var(--secondary)]/25 to-[var(--accent)]/20 
+                        bg-linear-to-r from-(--primary)/30 via-(--secondary)/25 to-(--accent)/20 
                         rounded-full blur-[140px] animate-pulse-slow" />
       </div>
 
@@ -37,7 +37,7 @@ export default function Resume() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
             className="absolute left-0 -bottom-2 h-[4px] w-full origin-left 
-                       bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+                       bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent)
                        rounded-full shadow-[0_0_12px_var(--primary)]"
           />
         </motion.h2>

@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { MotionConfig, motion, type Variants } from "framer-motion";
+import { MotionConfig, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import AppImage from "@/components/AppImage";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card"; // ✅ use componentized surfaces
-import AnimatedBackground from "@/components/AnimatedBackground";
 
 /* ----------------------------
    Motion: consistent, typed, reusable
@@ -38,18 +38,7 @@ const TAGS = [
 export default function HomeClient() {
   return (
     <MotionConfig reducedMotion="user">
-      {/* IMPORTANT: main must be relative so the background can anchor with absolute -z-50 */}
-      <main className="relative overflow-hidden bg-gradient-to-b from-surface to-bg">
-        {/* 🔭 Mount the animated sky BEHIND the page (clouds + particles + cursor trail) */}
-        <AnimatedBackground />
-
-        {/* Optional vignette wash ABOVE the sky but below content */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10
-                     bg-[radial-gradient(60%_40%_at_50%_-10%,color-mix(in_oklab,var(--primary) 18%,transparent),transparent_70%)]"
-        />
-
+      <main className="relative overflow-hidden text-foreground">
         <Container className="py-20 sm:py-28 relative z-0">
           {/* === HERO === */}
           <header className="flex flex-col items-center text-center gap-8">
@@ -58,7 +47,7 @@ export default function HomeClient() {
               initial="hidden"
               animate="visible"
               className="text-pretty text-5xl sm:text-6xl font-extrabold tracking-tight
-                         bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+                         bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent)
                          bg-clip-text text-transparent drop-shadow-lg"
             >
               Hi, I’m Adam Zaatar
@@ -72,9 +61,9 @@ export default function HomeClient() {
             >
               CS &amp; Economics student at Bowdoin College. I build at the
               intersection of{" "}
-              <span className="font-semibold text-[var(--primary)]">AI</span>,{" "}
-              <span className="font-semibold text-[var(--secondary)]">fintech</span>, and{" "}
-              <span className="font-semibold text-[var(--accent)]">full-stack platforms</span>.
+              <span className="font-semibold text-(--primary)">AI</span>,{" "}
+              <span className="font-semibold text-(--secondary)">fintech</span>, and{" "}
+              <span className="font-semibold text-(--accent)">full-stack platforms</span>.
             </motion.p>
           </header>
 
@@ -97,7 +86,7 @@ export default function HomeClient() {
                 animate={{ rotate: [-4, -6, -4], scale: [1, 1.05, 1] }}
                 transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
                 className="absolute inset-0 -rotate-6 rounded-2xl
-                           bg-gradient-to-br from-[var(--secondary)] to-[var(--accent)]
+                           bg-linear-to-br from-(--secondary) to-(--accent)
                            opacity-[0.35] blur-2xl"
               />
 
@@ -110,7 +99,7 @@ export default function HomeClient() {
               >
                 <Card
                   className="w-full h-full rounded-2xl overflow-hidden p-2
-                             bg-[var(--surface)]/80 supports-[backdrop-filter]:backdrop-blur-xl
+                             bg-(--surface)/80 supports-backdrop-filter:backdrop-blur-xl
                              border border-[color-mix(in_oklab,var(--border) 70%,transparent)]
                              shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.35)]
                              ring-1 ring-white/5 transition-all duration-300"
@@ -154,8 +143,8 @@ export default function HomeClient() {
             >
               From shipping <span className="font-medium">full-stack apps</span> to{" "}
               <span className="font-medium">capital budgeting</span>, I thrive where{" "}
-              <span className="text-[var(--secondary)]">code</span> meets{" "}
-              <span className="text-[var(--accent)]">markets</span>.
+              <span className="text-(--secondary)">code</span> meets{" "}
+              <span className="text-(--accent)">markets</span>.
             </motion.p>
 
             <ul className="flex flex-wrap justify-center gap-3">
@@ -183,15 +172,15 @@ export default function HomeClient() {
             viewport={{ once: true }}
             aria-labelledby="cta"
             className="mt-24 relative overflow-hidden rounded-2xl
-                       bg-[var(--surface)]/85 supports-[backdrop-filter]:backdrop-blur-xl
+                       bg-(--surface)/85 supports-backdrop-filter:backdrop-blur-xl
                        border border-[color-mix(in_oklab,var(--border) 70%,transparent)]
                        shadow-xl p-10 sm:p-14"
           >
             {/* Subtle gradient wash */}
             <div
               aria-hidden
-              className="absolute inset-0 bg-gradient-to-r
-                         from-[var(--primary)]/10 via-[var(--secondary)]/10 to-[var(--accent)]/10"
+              className="absolute inset-0 bg-linear-to-r
+                         from-(--primary)/10 via-(--secondary)/10 to-(--accent)/10"
             />
             <div className="relative z-10 mx-auto max-w-3xl text-center">
               <h2 id="cta" className="text-pretty text-3xl sm:text-4xl font-extrabold text-foreground">

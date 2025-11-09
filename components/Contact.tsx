@@ -68,7 +68,7 @@ export default function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="w-full max-w-3xl rounded-2xl
-                     bg-[var(--surface)]/85 supports-[backdrop-filter]:backdrop-blur-xl
+                     bg-(--surface)/85 supports-backdrop-filter:backdrop-blur-xl
                      border border-[color-mix(in_oklab,var(--border) 70%,transparent)]
                      shadow-xl hover:shadow-2xl transition-all duration-500 p-8 sm:p-10"
         >

@@ -14,7 +14,7 @@ export default function NotFound() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
-        className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/10 to-secondary/20 dark:from-primary/10 dark:via-accent/20 dark:to-secondary/10"
+        className="absolute inset-0 bg-linear-to-br from-primary/20 via-accent/10 to-secondary/20 dark:from-primary/10 dark:via-accent/20 dark:to-secondary/10"
       />
 
       {/* Optional Floating Illustration */}

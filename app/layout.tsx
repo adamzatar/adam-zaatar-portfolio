@@ -1,38 +1,90 @@
 // app/layout.tsx
-import type { Metadata } from "next";
+if (process.env.NODE_ENV === "development") {
+  import("../lib/debug/hydrationTrace");
+}
+
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import NavBar from "@/components/NavBar";
-import AnimatedBackground from "@/components/AnimatedBackground";
+import GlobalVisuals from "@/components/visuals/GlobalVisuals";
+import CustomCursor from "@/components/visuals/CustomCursor";
+
+/* --------------------------------------------------------------------------
+   🌐 Global Metadata (SEO + OpenGraph + Twitter)
+   Dynamically resolves `metadataBase` based on environment.
+--------------------------------------------------------------------------- */
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://adamzaatar.com";
 
 export const metadata: Metadata = {
-  title: "Adam Zaatar Portfolio",
-  description: "Personal portfolio showcasing projects, research, and resume.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Adam Zaatar — Cloud, AI, & Security Engineer",
+    template: "%s | Adam Zaatar",
+  },
+  description:
+    "Portfolio of Adam Zaatar — building scalable systems at the intersection of cloud, AI, and cybersecurity.",
   keywords: [
     "Adam Zaatar",
     "portfolio",
-    "web development",
-    "research",
-    "projects",
-    "resume",
+    "cloud computing",
+    "AI security",
+    "cybersecurity",
+    "SRE",
+    "infrastructure",
+    "DevOps",
+    "software engineer",
   ],
-  authors: [{ name: "Adam Zaatar" }],
+  authors: [{ name: "Adam Zaatar", url: siteUrl }],
   creator: "Adam Zaatar",
   openGraph: {
-    title: "Adam Zaatar Portfolio",
+    title: "Adam Zaatar — Cloud, AI, & Security Engineer",
     description:
-      "Personal portfolio showcasing projects, research, and resume.",
-    type: "website",
+      "Portfolio showcasing projects, research, and system design at scale.",
+    url: siteUrl,
+    siteName: "Adam Zaatar Portfolio",
     locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/images/profile-home.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Adam Zaatar Portfolio — Cloud, AI, & Security Engineer",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Adam Zaatar Portfolio",
+    title: "Adam Zaatar — Cloud, AI, & Security Engineer",
     description:
-      "Personal portfolio showcasing projects, research, and resume.",
+      "Building resilient, data-driven systems across cloud and AI security.",
+    creator: "@adamzaatar",
+    images: ["/images/profile-home.jpg"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 };
 
+/* --------------------------------------------------------------------------
+   📱 Viewport & Theme Configuration
+--------------------------------------------------------------------------- */
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fff8f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0f" },
+  ],
+  viewportFit: "cover",
+};
+
+/* --------------------------------------------------------------------------
+   🧱 Root Layout
+--------------------------------------------------------------------------- */
 export default function RootLayout({
   children,
 }: {
@@ -42,31 +94,32 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-bg text-text antialiased overflow-x-hidden relative"
+          "relative min-h-screen overflow-x-hidden bg-bg text-text antialiased"
         )}
       >
-        {/* === Global Animated Background (runs behind everything) === */}
-        <div
-          className="absolute inset-0 -z-10 will-change-transform will-change-opacity"
-          aria-hidden="true"
-        >
-          <AnimatedBackground />
+        {/* 🌈 Static gradient + sun orb base layer */}
+        <div aria-hidden className="sky-gradient" />
 
-          {/* ✅ Fallback static gradient for Safari / no-JS */}
-          <noscript>
-            <div
-              className="absolute inset-0 -z-20"
-              style={{
-                background:
-                  "linear-gradient(135deg, #9333ea, #ec4899, #f97316, #7c3aed, #1e3a8a)",
-                backgroundSize: "400% 400%",
-                animation: "gradientShift 40s ease infinite",
-              }}
-            />
-          </noscript>
-        </div>
+        {/* ✨ Dynamic visuals (particles, beams, etc.) */}
+        <GlobalVisuals />
 
-        {/* === Navigation (always above background) === */}
+        {/* 🖱️ Global custom cursor (optional visual layer) */}
+        <CustomCursor />
+
+        {/* ✅ Fallback static gradient for no-JS / Safari */}
+        <noscript>
+          <div
+            className="absolute inset-0 -z-50"
+            style={{
+              background:
+                "linear-gradient(135deg, #9333ea, #ec4899, #f97316, #7c3aed, #1e3a8a)",
+              backgroundSize: "400% 400%",
+              animation: "gradientShift 40s ease infinite",
+            }}
+          />
+        </noscript>
+
+        {/* === Navigation === */}
         <NavBar />
 
         {/* === Main Page Content === */}

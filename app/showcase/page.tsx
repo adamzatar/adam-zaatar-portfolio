@@ -1,11 +1,11 @@
 // app/showcase/page.tsx
 "use client";
-
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import ProjectShowcase from "@/components/sections/ProjectShowcase";
 import { Button } from "@/components/ui/Button";
-import { motion, Variants, Transition } from "framer-motion";
+import { Variants, Transition } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 // Reusable animation
@@ -24,9 +24,9 @@ const fadeUp = (i: number = 0): Variants => ({
 
 export default function ShowcasePage() {
   return (
-    <section className="relative py-28 bg-gradient-to-b from-surface/80 to-bg overflow-hidden">
+    <section className="relative overflow-hidden py-28">
       {/* Decorative background blob */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 blur-3xl opacity-40" />
+      <div className="absolute inset-0 -z-10 bg-linear-to-tr from-primary/10 via-secondary/10 to-accent/10 blur-3xl opacity-40" />
 
       <Container>
         {/* Heading */}
@@ -36,7 +36,7 @@ export default function ShowcasePage() {
           whileInView="visible"
           viewport={{ once: true }}
           className="text-4xl sm:text-6xl font-extrabold text-center 
-                     bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
+                     bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent) 
                      bg-clip-text text-transparent drop-shadow-sm"
         >
           Project Showcase
@@ -51,9 +51,9 @@ export default function ShowcasePage() {
           className="mt-6 text-lg sm:text-xl text-muted text-center max-w-3xl mx-auto leading-relaxed"
         >
           A curated selection of my most impactful work — spanning{" "}
-          <span className="text-[var(--primary)] font-semibold">cross-platform apps</span>,{" "}
-          <span className="text-[var(--secondary)] font-semibold">full-stack platforms</span>, and{" "}
-          <span className="text-[var(--accent)] font-semibold">applied research</span>. 
+          <span className="text-(--primary) font-semibold">cross-platform apps</span>,{" "}
+          <span className="text-(--secondary) font-semibold">full-stack platforms</span>, and{" "}
+          <span className="text-(--accent) font-semibold">applied research</span>. 
           These projects bring together strong engineering,{" "}
           data-driven economics, and thoughtful design — from{" "}
           secure authentication systems and trading simulators to{" "}
@@ -67,7 +67,7 @@ export default function ShowcasePage() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
           className="mt-10 mb-14 h-[3px] w-44 mx-auto 
-                     bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
+                     bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent) 
                      rounded-full origin-center"
         />
 

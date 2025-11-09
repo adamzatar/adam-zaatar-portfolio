@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { motion, type Variants } from "framer-motion";
+import { type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import AppImage from "@/components/AppImage";
 import { Card } from "@/components/ui/Card";
@@ -137,7 +138,7 @@ function AppCard({ title, description, image, alt, technologies, codeLink, demoL
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/35 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         />
       </div>
 
@@ -184,7 +185,7 @@ function WebsiteCard({ title, description, image, alt, technologies, codeLink, d
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         />
       </div>
 
@@ -241,7 +242,7 @@ export default function ProjectsGrid() {
           <h2
             id="projects-heading"
             className="text-pretty text-4xl sm:text-5xl font-extrabold tracking-tight
-                       bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+                       bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent)
                        bg-clip-text text-transparent drop-shadow-sm"
           >
             Projects
@@ -255,7 +256,7 @@ export default function ProjectsGrid() {
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15, ease: EASE }}
-            className="mx-auto mt-8 h-[3px] w-44 origin-center rounded-full bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]"
+            className="mx-auto mt-8 h-[3px] w-44 origin-center rounded-full bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent)"
             aria-hidden
           />
         </motion.header>

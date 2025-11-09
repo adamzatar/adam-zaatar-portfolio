@@ -1,47 +1,57 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
+    /* === Core Targets === */
+    "target": "ES2022",                         // Modern output; smaller, faster builds
+    "lib": ["dom", "dom.iterable", "esnext"],   // Modern JS + DOM types
+    "module": "esnext",                         // Required by Next.js app dir
+    "moduleResolution": "bundler",              // Ensures compatibility with Next.js bundler
+
+    /* === TypeScript Strictness === */
+    "strict": true,                             // Enable all strict type-checking options
+    "noImplicitAny": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,                       // Avoid type noise from node_modules
+    "allowJs": false,                           // JS files should be migrated to TS
+    "isolatedModules": true,                    // Needed for Next.js + SWC
+    "noEmit": true,                             // Next.js handles output
+
+    /* === Interop & Module Options === */
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "types": [
-      "react",
-      "react-dom",
-      "node",
-      "next"
-    ],
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "allowSyntheticDefaultImports": true,
+    "jsx": "preserve",                          // Let Next handle JSX transform
+    "incremental": true,                        // Speeds up rebuilds with .tsbuildinfo cache
+
+    /* === Aliases & Types === */
+    "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
-    }
+      "@/*": ["./*"]
+    },
+    "types": ["react", "react-dom", "node", "next"],
+
+    /* === Plugins === */
+    "plugins": [
+      { "name": "next" }
+    ],
+
+    /* === Optional Optimization Flags === */
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,                // Can be turned on if team ready
+    "skipDefaultLibCheck": true
   },
+
+  /* === File Inclusion / Exclusion === */
   "include": [
+    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "next-env.d.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    ".next"
+    ".next",
+    "dist",
+    "build"
   ]
 }

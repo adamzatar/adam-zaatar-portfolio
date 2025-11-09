@@ -19,7 +19,7 @@ import * as React from "react";
 const AnimatedSky = dynamic(() => import("@/components/AnimatedSky"), {
   ssr: false,
   loading: () => (
-    <div className="pointer-events-none absolute inset-0 -z-50 bg-gradient-to-b from-[var(--bg)] to-[var(--surface)]" />
+    <div className="pointer-events-none absolute inset-0 -z-50 bg-linear-to-b from-(--bg) to-(--surface)" />
   ),
 });
 

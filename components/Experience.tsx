@@ -116,7 +116,7 @@ export default function Skills() {
 
               {/* Gradient divider between categories */}
               {idx < skillCategories.length - 1 && (
-                <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-border to-transparent mt-10" />
+                <div className="h-[1px] w-full bg-linear-to-r from-transparent via-border to-transparent mt-10" />
               )}
             </motion.div>
           ))}

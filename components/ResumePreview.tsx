@@ -70,7 +70,7 @@ export default function ResumePreview() {
                 aria-hidden="true"
                 className="absolute inset-0 animate-pulse"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-[shimmer_1.8s_infinite]" />
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent animate-[shimmer_1.8s_infinite]" />
               </div>
             )}
 
@@ -99,7 +99,7 @@ export default function ResumePreview() {
                     href={resumeHref}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[var(--primary)] underline hover:text-[var(--secondary)] transition-colors"
+                    className="text-(--primary) underline hover:text-(--secondary) transition-colors"
                   >
                     Click here to download it
                   </a>

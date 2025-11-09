@@ -1,72 +1,57 @@
-// app/api/contact/route.ts
-
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
-import { z } from "zod";
 
-export const runtime = "nodejs"; 
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-const ContactSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100, "Name is too long"),
-  email: z.string().email("Invalid email"),
-  message: z.string().min(10, "Please include a bit more detail").max(5000, "Message is too long"),
-});
+type ContactPayload = {
+  name?: string;
+  email?: string;
+  message?: string;
+};
 
 export async function POST(req: Request) {
+  // Keep email disabled by default unless both a flag and key are present
+  const EMAIL_ENABLED =
+    (process.env.EMAIL_ENABLED ?? "0").toLowerCase() !== "0" &&
+    (process.env.EMAIL_ENABLED ?? "").toLowerCase() !== "false";
+  const key = process.env.RESEND_API_KEY;
+
+  if (!EMAIL_ENABLED || !key) {
+    // No-op response so UI can treat as “accepted”
+    return NextResponse.json(
+      { ok: true, delivered: false, reason: "email-disabled" },
+      { status: 202 }
+    );
+  }
+
+  const body: ContactPayload = await req.json().catch(() => ({}));
+  const name = body.name?.trim() || "Portfolio";
+  const replyTo = body.email?.trim() || undefined;
+  const message = body.message?.trim() || "";
+
+  // Lazy import to avoid top-level side effects at build time
+  const { Resend } = await import("resend");
+  const resend = new Resend(key);
+
   try {
-    const contentType = req.headers.get("content-type") ?? "";
-    if (!contentType.includes("application/json")) {
-      return NextResponse.json(
-        { error: "Content-Type must be application/json" },
-        { status: 415 }
-      );
-    }
-
-    const json = await req.json().catch(() => null);
-    const parsed = ContactSchema.safeParse(json);
-    if (!parsed.success) {
-      return NextResponse.json(
-        { error: "Invalid payload", details: parsed.error.issues.map(i => i.message) },
-        { status: 400 }
-      );
-    }
-
-    const { name, email, message } = parsed.data;
-
-    const to = process.env.CONTACT_RECIPIENT || process.env.EMAIL_TO || "";
-    const from = process.env.CONTACT_FROM || "Portfolio <onboarding@resend.dev>";
-
-    if (!process.env.RESEND_API_KEY) {
-      return NextResponse.json({ error: "Email service not configured" }, { status: 500 });
-    }
-    if (!to) {
-      return NextResponse.json({ error: "Recipient not configured on server" }, { status: 500 });
-    }
-
-    const refId =
-      typeof crypto !== "undefined" && "randomUUID" in crypto
-        ? crypto.randomUUID()
-        : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
-
-    const { error } = await resend.emails.send({
-      from,
-      to,
-      replyTo: `${name} <${email}>`,
-      subject: `New contact form message from ${name}`,
-      text: `From: ${name} <${email}>\n\n${message}`,
-      headers: { "X-Entity-Ref-ID": refId },
+    const result = await resend.emails.send({
+      from: process.env.CONTACT_FROM || "Adam Portfolio <onboarding@resend.dev>",
+      to: (process.env.CONTACT_TO || "adam@example.com")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+      subject: `Portfolio contact from ${name}`,
+      replyTo: replyTo,
+      text: message,
     });
 
-    if (error) {
-      console.error("[/api/contact] Resend error:", error);
-      return NextResponse.json({ error: "Failed to send email" }, { status: 502 });
-    }
-
-    return NextResponse.json({ ok: true });
-  } catch (err) {
-    console.error("[/api/contact] unexpected error:", err);
-    return NextResponse.json({ error: "Unexpected server error" }, { status: 500 });
+    return NextResponse.json({ ok: true, id: result?.data?.id ?? null });
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "send_failed";
+    return NextResponse.json(
+      { ok: false, error: message },
+      { status: 500 }
+    );
   }
 }
+
+// Ensure runtime execution; avoid static optimization assumptions
+export const dynamic = "force-dynamic";

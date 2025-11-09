@@ -1,7 +1,6 @@
 "use client";
-
-import * as React from "react";
-import { motion, type Variants } from "framer-motion";
+import { type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import AppImage from "@/components/AppImage";
@@ -25,7 +24,7 @@ const fadeUp = (i = 0): Variants => ({
    Data (typed ImageKey)
    NOTE:
    - bowdoinMarketplace must exist in lib/images.ts (maps to /public/images/bowdoinmarketplace.png)
-   - placeholder used for “Upcoming”
+   - personalPortfolio artwork reused for upcoming releases placeholder
 ----------------------------- */
 type AppItem = {
   title: string;
@@ -60,8 +59,8 @@ const APPS: AppItem[] = [
     description:
       "Additional iOS apps in active development focused on finance, productivity, and education.",
     technologies: ["Swift", "SwiftUI", "AI APIs"],
-    image: "placeholder",
-    alt: "Placeholder for upcoming iOS apps",
+    image: "personalPortfolio",
+    alt: "Upcoming iOS apps preview artwork",
   },
 ];
 
@@ -81,32 +80,20 @@ function ShimmerImage({
   className?: string;
   objectFit?: "cover" | "contain";
 }) {
-  const [loaded, setLoaded] = React.useState(false);
-
   return (
-    <div className={`relative w-full h-64 rounded-t-2xl overflow-hidden ${className ?? ""}`}>
-      {!loaded && (
-        <div
-          aria-hidden
-          className="absolute inset-0 animate-pulse bg-gradient-to-r
-                     from-[color-mix(in_oklab,var(--surface) 55%,transparent)]
-                     via-[color-mix(in_oklab,var(--surface) 75%,transparent)]
-                     to-[color-mix(in_oklab,var(--surface) 55%,transparent)]"
-        />
-      )}
+    <div className={`relative h-64 w-full overflow-hidden rounded-t-2xl ${className ?? ""}`}>
       <AppImage
         image={image}
         alt={alt}
         fill
-        priority={false}
+        withShimmer
         sizes={sizes ?? "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
-        className={`transition-opacity duration-700 ${loaded ? "opacity-100" : "opacity-0"} object-${objectFit}`}
-        onLoadingComplete={() => setLoaded(true)}
+        className={`object-${objectFit}`}
       />
       {/* readability wash on hover */}
-      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-linear-to-t from-black/45 via-black/10 to-transparent" />
       {/* shimmer sweep */}
-      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 animate-[shimmer_2s_infinite] bg-linear-to-r from-transparent via-white/12 to-transparent" />
     </div>
   );
 }
@@ -146,7 +133,7 @@ function IOSAppCard({ item }: { item: AppItem }) {
 
       {/* Content */}
       <div className="p-6 flex flex-col flex-1">
-        <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-[var(--primary)] transition-colors">
+        <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-(--primary) transition-colors">
           {item.title}
         </h3>
         <p className="text-sm text-foreground/80 leading-relaxed flex-1">{item.description}</p>
@@ -168,8 +155,8 @@ function IOSAppCard({ item }: { item: AppItem }) {
             href={item.appStoreLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 inline-flex items-center font-semibold text-[var(--primary)]
-                       hover:text-[var(--secondary)] transition-colors"
+            className="mt-5 inline-flex items-center font-semibold text-(--primary)
+                       hover:text-(--secondary) transition-colors"
             aria-label={`View ${item.title} on the App Store`}
           >
             View on App Store →
@@ -188,12 +175,12 @@ export default function IOSApps() {
     <section
       id="ios-apps"
       aria-labelledby="ios-apps-heading"
-      className="relative py-28 bg-gradient-to-b from-surface/80 to-bg overflow-hidden"
+      className="relative py-28 bg-linear-to-b from-surface/80 to-bg overflow-hidden"
     >
       {/* Decorative background glow */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-tr from-[var(--primary)]/12 via-[var(--secondary)]/12 to-[var(--accent)]/12 blur-2xl opacity-50"
+        className="absolute inset-0 -z-10 bg-linear-to-tr from-(--primary)/12 via-(--secondary)/12 to-(--accent)/12 blur-2xl opacity-50"
       />
 
       <Container className="text-center">
@@ -205,7 +192,7 @@ export default function IOSApps() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.45 }}
           className="text-4xl sm:text-5xl font-extrabold
-                     bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+                     bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent)
                      bg-clip-text text-transparent drop-shadow-sm"
         >
           iOS Applications
@@ -229,8 +216,8 @@ export default function IOSApps() {
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.15, ease: EASE }}
-          className="mt-10 mb-14 h-[3px] w-44 mx-auto bg-gradient-to-r
-                     from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)]
+          className="mt-10 mb-14 h-[3px] w-44 mx-auto bg-linear-to-r
+                     from-(--primary) via-(--secondary) to-(--accent)
                      rounded-full origin-center"
           aria-hidden
         />

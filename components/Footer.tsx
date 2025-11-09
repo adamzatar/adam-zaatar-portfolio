@@ -27,7 +27,7 @@ export default function Footer() {
       {/* Decorative background glow */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-[var(--primary)]/10 via-[var(--secondary)]/10 to-[var(--accent)]/10 blur-3xl opacity-60"
+        className="absolute inset-0 -z-10 bg-linear-to-r from-(--primary)/10 via-(--secondary)/10 to-(--accent)/10 blur-3xl opacity-60"
       />
 
       <Container className="flex flex-col sm:flex-row justify-between items-center gap-6">
@@ -53,7 +53,7 @@ export default function Footer() {
                     {label}
                     <span
                       className="absolute left-0 -bottom-1 h-[2px] w-0 
-                        bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
+                        bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent) 
                         transition-all duration-300 group-hover:w-full"
                     />
                   </a>

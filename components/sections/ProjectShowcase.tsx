@@ -1,7 +1,8 @@
 // components/sections/ProjectShowcase.tsx
 "use client";
 
-import { motion, Variants, easeOut } from "framer-motion";
+import { Variants, easeOut } from "framer-motion";
+import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import Image from "next/image";
@@ -25,7 +26,7 @@ export default function ProjectShowcase() {
   return (
     <section
       id="projects"
-      className="relative py-28 bg-gradient-to-b from-surface/60 to-bg"
+      className="relative py-28 bg-linear-to-b from-surface/60 to-bg"
     >
       <Container>
         {/* Section Heading */}
@@ -67,8 +68,8 @@ export default function ProjectShowcase() {
                     priority={i < 2}
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-bg/80 via-bg/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 animate-[shimmer_2s_infinite]" />
+                  <div className="absolute inset-0 bg-linear-to-t from-bg/80 via-bg/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 animate-[shimmer_2s_infinite]" />
                 </div>
 
                 {/* Content */}
@@ -85,7 +86,7 @@ export default function ProjectShowcase() {
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-3 py-1 text-xs font-medium rounded-full bg-gradient-to-r from-primary/10 to-accent/10 border border-border text-text/80 shadow-sm"
+                        className="px-3 py-1 text-xs font-medium rounded-full bg-linear-to-r from-primary/10 to-accent/10 border border-border text-text/80 shadow-sm"
                       >
                         {tag}
                       </span>

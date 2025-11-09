@@ -108,7 +108,7 @@ export default function ProjectCard({
           )}
         </motion.div>
         {/* Gradient overlay for readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
       </div>
 
       {/* Content */}
@@ -153,7 +153,7 @@ export default function ProjectCard({
             </Button>
           )}
           {codeLink && (
-            <Button asChild variant="secondary" size="sm" className="flex-1">
+            <Button asChild variant="outline" size="sm" className="flex-1">
               <a
                 href={codeLink}
                 target="_blank"

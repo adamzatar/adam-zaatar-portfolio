@@ -8,7 +8,7 @@ export default function About() {
   return (
     <section id="about" className="relative border-t border-transparent bg-surface/50">
       {/* Gradient Divider */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+      <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-primary/40 to-transparent" />
 
       <Container className="py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">

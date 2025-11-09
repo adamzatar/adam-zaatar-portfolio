@@ -20,6 +20,14 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+### Rain / Animated Background Toggle
+
+Rain and animated background layers are temporarily gated behind an environment flag while hydration is verified.
+
+- Disable (default): `NEXT_PUBLIC_RAIN_ENABLED=0`
+- Enable locally: `export NEXT_PUBLIC_RAIN_ENABLED=1 && pnpm run dev`
+- Enable on Vercel (or other hosting): set the environment variable `NEXT_PUBLIC_RAIN_ENABLED=1`
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

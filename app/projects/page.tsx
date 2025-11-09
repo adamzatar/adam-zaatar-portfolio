@@ -2,7 +2,8 @@
 
 import AppImage from "@/components/AppImage";
 import { Container } from "@/components/ui/Container";
-import { motion, type Variants, type Transition } from "framer-motion";
+import { type Variants, type Transition } from "framer-motion";
+import { motion } from "framer-motion";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import type { ImageKey } from "@/lib/images";
@@ -21,54 +22,36 @@ const projects: {
   title: string;
   description: string;
   image: ImageKey;
-  github: string;
-  demo: string;
+  github?: string;
+  demo?: string;
 }[] = [
   {
-    title: "Vector (2FA App)",
+    title: "Vector 2FA (SwiftUI + Vapor)",
     description:
-      "A next-gen 2FA app built with SwiftUI + Vapor for security and seamless UX.",
+      "Multi-platform authenticator with passkeys, encrypted offline vault, biometric fallback, and CloudKit sync — shipping secure onboarding in under 60 seconds.",
     image: "vector",
     github: "https://github.com/adamzatar/vector",
-    demo: "#",
   },
   {
-    title: "Cutaway",
+    title: "Bowdoin Marketplace",
     description:
-      "Mobile-first tool for social music sharing and curated playlist experiences.",
-    image: "cutaway",
-    github: "https://github.com/adamzatar/cutaway",
-    demo: "#",
+      "Honors research in progress: building a student marketplace with faculty collaboration to explore how supply, demand, and pricing affect social efficiency and campus access.",
+    image: "bowdoinMarketplace",
+    github: "https://github.com/adamzatar/bowdoin-marketplace",
   },
   {
-    title: "PalPrep",
+    title: "Personal Portfolio Platform",
     description:
-      "Advocacy platform designed for community organizing, education, and outreach.",
-    image: "palprep",
-    github: "https://github.com/adamzatar/palprep",
-    demo: "#",
-  },
-  {
-    title: "Portfolio Site",
-    description:
-      "This very site – built with Next.js, Tailwind, and Framer Motion, fully animated and responsive.",
+      "This site: Next.js 15, persistent animated background, SmartImage caching, Tailwind tokens, and MotionConfig reduced-motion safety — deployed on Vercel edge.",
     image: "personalPortfolio",
     github: "https://github.com/adamzatar/adam-zaatar-portfolio",
     demo: "/",
-  },
-  {
-    title: "Investify",
-    description:
-      "iOS-first financial literacy app to help young investors learn fundamentals.",
-    image: "certificate", // placeholder until you add investify.png
-    github: "https://github.com/adamzatar/investify",
-    demo: "#",
   },
 ];
 
 export default function ProjectsPage() {
   return (
-    <section className="relative py-28 bg-gradient-to-b from-surface/80 to-bg overflow-hidden">
+    <section className="relative overflow-hidden py-28">
       <Container>
         {/* Heading */}
         <motion.h1
@@ -77,7 +60,7 @@ export default function ProjectsPage() {
           whileInView="visible"
           viewport={{ once: true }}
           className="text-4xl sm:text-5xl font-extrabold text-center 
-                     bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
+                     bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent) 
                      bg-clip-text text-transparent drop-shadow-sm"
         >
           Projects
@@ -92,9 +75,9 @@ export default function ProjectsPage() {
           className="mt-6 text-lg sm:text-xl text-muted text-center max-w-3xl mx-auto leading-relaxed"
         >
           A selection of{" "}
-          <span className="font-semibold text-[var(--primary)]">cross-platform apps</span>,{" "}
-          <span className="font-semibold text-[var(--secondary)]">full-stack platforms</span> and{" "}
-          <span className="font-semibold text-[var(--accent)]">applied research</span> — where strong
+          <span className="font-semibold text-(--primary)">cross-platform apps</span>,{" "}
+          <span className="font-semibold text-(--secondary)">full-stack platforms</span> and{" "}
+          <span className="font-semibold text-(--accent)">applied research</span> — where strong
           infrastructure meets clean design and market-driven insight.
         </motion.p>
 
@@ -105,7 +88,7 @@ export default function ProjectsPage() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
           className="mt-10 mb-14 h-[3px] w-44 mx-auto 
-                     bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
+                     bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent) 
                      rounded-full origin-center"
         />
 
@@ -130,9 +113,9 @@ export default function ProjectsPage() {
               className="rounded-xl shadow-lg mx-auto mb-6"
             />
             <p className="text-muted text-center max-w-2xl mx-auto mb-6">
-              A production-grade campus and community marketplace built as a TypeScript monorepo.
-              Secure authentication, Prisma/PostgreSQL, Redis-backed rate limiting, and full
-              observability with OpenTelemetry. Designed for scale, reliability, and seamless UX.
+              A production-grade campus marketplace delivered as a React/Node monorepo. Next.js frontend, Fastify APIs,
+              Prisma/PostgreSQL on AWS, S3 asset storage, Cognito-backed auth, Redis rate limiting, and OpenTelemetry
+              tracing keep it secure, observable, and cost-aware.
             </p>
             <div className="flex justify-center gap-4">
               <Button asChild variant="primary" size="lg">
@@ -177,19 +160,25 @@ export default function ProjectsPage() {
                 <div className="p-6 space-y-3">
                   <h3 className="text-xl font-semibold text-foreground">{project.title}</h3>
                   <p className="text-muted text-sm leading-relaxed">{project.description}</p>
-                  <div className="flex gap-3 pt-3">
-                    <Button asChild size="sm" variant="primary">
-                      <a href={project.github} target="_blank" rel="noopener noreferrer">
-                        Code
-                      </a>
-                    </Button>
-                    {project.demo !== "#" && (
+                  <div className="flex flex-wrap gap-3 pt-3">
+                    {project.github ? (
+                      <Button asChild size="sm" variant="primary">
+                        <a href={project.github} target="_blank" rel="noopener noreferrer">
+                          Code
+                        </a>
+                      </Button>
+                    ) : (
+                      <Button size="sm" variant="ghost" disabled>
+                        Private
+                      </Button>
+                    )}
+                    {project.demo ? (
                       <Button asChild size="sm" variant="outline">
                         <a href={project.demo} target="_blank" rel="noopener noreferrer">
                           Demo
                         </a>
                       </Button>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </Card>
@@ -200,7 +189,7 @@ export default function ProjectsPage() {
 
       {/* Decorative Background Glow */}
       <div className="pointer-events-none absolute inset-0 -z-10 
-                      bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 
+                      bg-linear-to-tr from-primary/10 via-secondary/10 to-accent/10 
                       blur-3xl opacity-60" />
     </section>
   );

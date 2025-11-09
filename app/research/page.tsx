@@ -1,127 +1,302 @@
+// app/research/page.tsx
 "use client";
-
+import * as React from "react";
+import { MotionConfig, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
+import { FileText, X, AlertTriangle } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import Research from "@/components/Research";
-import { motion, Variants, Transition } from "framer-motion";
 
-// Animation utility
-const fadeUp = (i: number = 0): Variants => ({
-  hidden: { opacity: 0, y: 40 },
+/* --------------------------------
+   Types
+--------------------------------- */
+type ResearchItem = {
+  title: string;
+  description: string;
+  /** Path under /public (e.g. /research/my paper.pdf). */
+  file: string;
+};
+
+/* --------------------------------
+   Data
+   (Spaces in filenames are okay; we encode the trailing file segment only.)
+--------------------------------- */
+const RESEARCH: ResearchItem[] = [
+  {
+    title: "Who Rules? Lobbying’s Grip on Democracy",
+    description:
+      "Examines how corporate lobbying shapes U.S. policy, when it crosses into social irresponsibility, and when transparent advocacy can strengthen democracy.",
+    // ⬇️ Use the actual file name you copied into /public/research
+    file: "/research/Research Paper - Behavioral Economics.pdf",
+  },
+  {
+    title: "Economic Statistics Paper (ECON2557)",
+    description:
+      "Analyzed “greedflation” with OLS regressions on corporate profits and producer price indices after COVID.",
+    file: "/research/Zaatar_ECON2557_Paper.pdf",
+  },
+  {
+    title: "Second-Phase Report",
+    description:
+      "Expanded the financial literacy study into potential syllabi structures, assignments, grading breakdowns, and implementation strategies for different course models—from semester-long to intensive bootcamps.",
+    file: "/research/Second-Phase Report_ Models of the Class.pdf",
+  },
+  {
+    title: "Financial Literacy Programs at Peer Institutions",
+    description:
+      "Studied financial literacy initiatives at peer colleges to inform curriculum design at Bowdoin and local high schools.",
+    file: "/research/Financial Literacy Programs at Peer Institutions.pdf",
+  },
+];
+
+/* --------------------------------
+   Motion
+--------------------------------- */
+const fadeUp = (i = 0): Variants => ({
+  hidden: { opacity: 0, y: 40, scale: 0.98 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.7,
-      ease: "easeOut",
-      delay: i * 0.15,
-    } as Transition,
+    scale: 1,
+    transition: { duration: 0.55, ease: "easeOut", delay: i * 0.08 },
   },
 });
 
+/* --------------------------------
+   Helpers
+--------------------------------- */
+/** Encode only the filename segment; keep path slashes intact. */
+function encodePathSafe(path: string): string {
+  const lastSlash = path.lastIndexOf("/");
+  if (lastSlash === -1) return encodeURIComponent(path);
+  const dir = path.slice(0, lastSlash + 1);
+  const file = path.slice(lastSlash + 1);
+  return dir + encodeURIComponent(file);
+}
+
+/* --------------------------------
+   Page
+--------------------------------- */
 export default function ResearchPage() {
+  const [selected, setSelected] = React.useState<ResearchItem | null>(null);
+  const [loading, setLoading] = React.useState(false);
+  const [iframeError, setIframeError] = React.useState(false);
+  const closeBtnRef = React.useRef<HTMLButtonElement | null>(null);
+
+  // Close with Escape
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelected(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // Focus close button on open; reset states on close
+  React.useEffect(() => {
+    if (selected) {
+      setTimeout(() => closeBtnRef.current?.focus(), 50);
+    } else {
+      setIframeError(false);
+      setLoading(false);
+    }
+  }, [selected]);
+
   return (
-    <section className="relative py-28 bg-gradient-to-b from-surface/80 to-bg overflow-hidden">
-      {/* Decorative Background Glow */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-secondary/10 to-accent/10 blur-3xl opacity-50" />
-
-      <Container>
-        {/* Page Heading */}
-        <motion.h1
-          variants={fadeUp(0)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="text-4xl sm:text-5xl font-extrabold text-center 
-                     bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] 
-                     bg-clip-text text-transparent drop-shadow-sm"
-        >
-          Research
-        </motion.h1>
-
-        {/* Subheading */}
-        <motion.p
-          variants={fadeUp(1)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="mt-6 text-lg sm:text-xl text-muted text-center max-w-3xl mx-auto leading-relaxed"
-        >
-          A portfolio of{" "}
-          <span className="text-[var(--primary)] font-semibold">funded fellowships</span>,{" "}
-          <span className="text-[var(--secondary)] font-semibold">behavioral economics</span>, and{" "}
-          <span className="text-[var(--accent)] font-semibold">applied econometrics</span>.  
-          My work explores how data and incentives shape policy, markets, and financial literacy—bridging 
-          quantitative rigor with real-world impact in{" "}
-          <span className="font-semibold">finance, technology, and governance</span>.
-        </motion.p>
-
-        {/* Divider */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-          className="mt-10 mb-14 h-[3px] w-44 mx-auto bg-gradient-to-r from-[var(--primary)] via-[var(--secondary)] to-[var(--accent)] rounded-full origin-center"
+    <MotionConfig reducedMotion="user">
+      <main className="relative overflow-hidden">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10
+                     bg-[radial-gradient(60%_40%_at_50%_-10%,color-mix(in_oklab,var(--primary)_18%,transparent),transparent_70%)]"
         />
 
-        {/* Featured Research Highlight */}
-        <motion.div
-          variants={fadeUp(2)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="mb-20"
-        >
-          <Card className="p-8 sm:p-12 rounded-2xl shadow-card hover:shadow-card-hover backdrop-blur-sm bg-surface/90 border border-border/60 transition-all">
-            <h2 className="text-2xl sm:text-3xl font-bold text-center text-text mb-4">
-              Featured Research: <span className="text-gradient">Who Rules? Lobbying’s Grip on Democracy</span>
-            </h2>
-            <p className="text-muted text-center max-w-3xl mx-auto mb-6 leading-relaxed">
-              This paper investigates how corporate lobbying influences U.S. democracy and when it crosses into 
-              <span className="font-medium"> social irresponsibility</span>.  
-              Using{" "}
-              <span className="font-medium">Thomas Lyon’s Corporate Political Responsibility framework</span>,{" "}
-              <span className="font-medium">Lock & Seele’s CSR decoupling</span>, and{" "}
-              <span className="font-medium">behavioral economics insights</span>, it reveals how firms publicly 
-              champion ethics while privately lobbying against reform. Case studies in the{" "}
-              <span className="font-medium">pharmaceutical</span>,{" "}
-              <span className="font-medium">defense</span>, and{" "}
-              <span className="font-medium">tech</span> sectors highlight how legal precedents and strategic 
-              framing entrench corporate power. The work also contrasts harmful lobbying with{" "}
-              <span className="font-medium">renewable energy and privacy advocacy</span>, showing that lobbying 
-              can strengthen democracy when it is transparent and aligned with public interest.
-            </p>
-<div className="flex justify-center">
-  <Button asChild variant="primary" size="lg">
-    <a href="/papers/lobbying_democracy.pdf" target="_blank">
-      📄 Read Paper
-    </a>
-  </Button>
+        <Container className="py-20 sm:py-28 relative z-0">
+          {/* Heading */}
+          <header className="text-center max-w-4xl mx-auto">
+            <motion.h1
+              variants={fadeUp(0)}
+              initial="hidden"
+              animate="visible"
+              className="text-pretty text-4xl sm:text-5xl font-extrabold tracking-tight
+                         bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent)
+                         bg-clip-text text-transparent drop-shadow-sm"
+            >
+              Research
+            </motion.h1>
 
-              <Button asChild variant="outline" size="lg">
-                <a href="https://github.com/adamzatar/research-projects" target="_blank">
-                  GitHub Repository
-                </a>
-              </Button>
-            </div>
-          </Card>
-        </motion.div>
+            <motion.p
+              variants={fadeUp(0.5)}
+              initial="hidden"
+              animate="visible"
+              className="mt-6 text-balance text-lg sm:text-xl text-muted text-center max-w-3xl mx-auto leading-relaxed"
+            >
+              A selection of academic projects combining{" "}
+              <span className="text-(--primary) font-semibold">economics</span>,{" "}
+              <span className="text-(--secondary) font-semibold">behavioral insights</span>, and{" "}
+              <span className="text-(--accent) font-semibold">quantitative methods</span>.
+            </motion.p>
 
-        {/* Other Research */}
-        <motion.div
-          variants={fadeUp(3)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <Card className="p-8 rounded-2xl backdrop-blur-sm bg-surface/80 border border-border/60 
-                           shadow-subtle hover:shadow-card-hover transition-transform hover:scale-[1.02]">
-            <Research />
-          </Card>
-        </motion.div>
-      </Container>
-    </section>
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              className="mt-10 h-[3px] w-44 mx-auto bg-linear-to-r
+                         from-(--primary) via-(--secondary) to-(--accent)
+                         rounded-full origin-center"
+              aria-hidden
+            />
+          </header>
+
+          {/* Grid of research cards */}
+          <section className="mt-12 grid gap-8 sm:grid-cols-2">
+            {RESEARCH.map((item, index) => (
+              <motion.article
+                key={item.title}
+                variants={fadeUp(1 + index * 0.08)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 220, damping: 18 }}
+                className="ui-card flex flex-col rounded-2xl p-0 overflow-hidden
+                           border border-[color-mix(in_oklab,var(--border)_70%,transparent)]
+                           shadow-[0_8px_24px_rgba(0,0,0,0.22)] hover:shadow-[0_14px_34px_rgba(0,0,0,0.3)]
+                           ring-1 ring-white/5 transition-all"
+              >
+                <div className="p-6 sm:p-7 flex flex-col flex-1">
+                  <h2
+                    className="text-xl sm:text-2xl font-bold mb-3
+                               bg-linear-to-r from-(--primary) to-(--secondary)
+                               bg-clip-text text-transparent"
+                  >
+                    {item.title}
+                  </h2>
+                  <p className="text-muted text-base leading-relaxed flex-1 mb-6">
+                    {item.description}
+                  </p>
+
+                  <div className="mt-auto flex items-center justify-end gap-3">
+                    <Button asChild variant="primary" size="sm" className="gap-2">
+                      <a
+                        href={encodePathSafe(item.file)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Open ${item.title} PDF in a new tab`}
+                      >
+                        <FileText className="w-4 h-4" />
+                        Read Paper
+                      </a>
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setSelected(item);
+                        setIframeError(false);
+                        setLoading(true);
+                      }}
+                      aria-label={`Preview ${item.title}`}
+                    >
+                      Preview
+                    </Button>
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </section>
+
+          {/* Selected research preview */}
+          {selected && (
+            <motion.section
+              key={selected.file}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+              className="mt-14"
+              aria-labelledby="preview-title"
+            >
+              <div className="relative p-6 sm:p-8 rounded-2xl bg-(--surface)/90
+                              supports-backdrop-filter:backdrop-blur-xl
+                              border border-[color-mix(in_oklab,var(--border)_70%,transparent)]
+                              shadow-[0_12px_36px_rgba(0,0,0,0.28)]">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 id="preview-title" className="text-2xl sm:text-3xl font-bold text-foreground">
+                      {selected.title}
+                    </h3>
+                    <p className="mt-2 text-muted">{selected.description}</p>
+                  </div>
+
+                  <Button
+                    ref={closeBtnRef}
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelected(null)}
+                    aria-label="Close preview"
+                    className="shrink-0"
+                  >
+                    <X className="w-5 h-5" />
+                  </Button>
+                </div>
+
+                {loading && !iframeError && (
+                  <div
+                    className="mt-6 w-full h-[600px] rounded-lg border
+                               border-[color-mix(in_oklab,var(--border)_70%,transparent)]
+                               bg-[color-mix(in_oklab,var(--surface)_35%,transparent)]
+                               animate-pulse relative overflow-hidden"
+                    aria-hidden
+                  >
+                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/25 to-transparent animate-[shimmer_2s_infinite]" />
+                  </div>
+                )}
+
+                {iframeError && (
+                  <div className="mt-6 w-full rounded-lg border border-[color-mix(in_oklab,var(--border)_70%,transparent)] p-6 bg-[color-mix(in_oklab,var(--surface)_35%,transparent)]">
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="w-5 h-5 text-(--accent) mt-0.5" />
+                      <div className="text-sm text-muted">
+                        <p className="font-medium text-foreground mb-1">Couldn’t load the preview.</p>
+                        <p>
+                          Some browsers block inline PDF viewing.{" "}
+                          <a
+                            href={encodePathSafe(selected.file)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-(--primary) underline hover:opacity-90"
+                          >
+                            Open the paper in a new tab
+                          </a>
+                          .
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {!iframeError && (
+                  <iframe
+                    key={encodePathSafe(selected.file)}
+                    src={encodePathSafe(selected.file)}
+                    className={`mt-6 w-full h-[600px] rounded-lg border
+                                border-[color-mix(in_oklab,var(--border)_70%,transparent)]
+                                transition-opacity duration-500 ${loading ? "opacity-0" : "opacity-100"}`}
+                    title={`${selected.title} (PDF)`}
+                    onLoad={() => setLoading(false)}
+                    onError={() => {
+                      setLoading(false);
+                      setIframeError(true);
+                    }}
+                  />
+                )}
+              </div>
+            </motion.section>
+          )}
+        </Container>
+      </main>
+    </MotionConfig>
   );
 }
