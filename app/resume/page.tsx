@@ -5,13 +5,14 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import ResumePreview from "@/components/ResumePreview";
+import { RESUME_PATH } from "@/lib/constants/resume";
 
 export default function Resume() {
   const [resumeAvailable, setResumeAvailable] = useState(false);
 
   // Check if resume PDF exists in /public/resume
   useEffect(() => {
-    fetch("/resume/AdamZaatar_CV_2025.pdf", { method: "HEAD" })
+    fetch(RESUME_PATH, { method: "HEAD" })
       .then((res) => setResumeAvailable(res.ok))
       .catch(() => setResumeAvailable(false));
   }, []);
@@ -85,7 +86,7 @@ export default function Resume() {
                          transition-all duration-500"
             >
               <a
-                href="/resume/AdamZaatar_CV_2025.pdf"
+                href={RESUME_PATH}
                 target="_blank"
                 rel="noopener noreferrer"
                 download

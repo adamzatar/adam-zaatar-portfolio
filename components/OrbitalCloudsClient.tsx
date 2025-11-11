@@ -99,7 +99,7 @@ export default function OrbitalCloudsClient({ ambient = false }: OrbitalCloudsCl
               cloud.opacity
             }) 75%, transparent 100%)`,
             filter: `blur(${cloud.blur}rem) saturate(105%)`,
-            animation: `cloudDrift ${cloud.duration}s linear infinite`,
+            animation: `cloud-drift ${cloud.duration}s linear infinite`,
             animationDelay: `${cloud.delay}s`,
             transform: `scale(${cloud.scale})`,
             opacity: cloud.opacity,

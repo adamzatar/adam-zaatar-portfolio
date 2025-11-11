@@ -76,12 +76,18 @@ export function CloudLayer({ seed = 42, onBadgeClick }: CloudLayerProps) {
     );
   }, [seed]);
 
+  const hasInteractiveBadges = typeof onBadgeClick === "function";
+  const layerPointerClass = hasInteractiveBadges ? "pointer-events-auto" : "pointer-events-none";
+
   return (
-    <div className="absolute inset-0 pointer-events-auto" aria-hidden>
+    <div
+      className={`absolute inset-0 ${layerPointerClass}`}
+      aria-hidden={!hasInteractiveBadges}
+    >
       {clouds.map((cloud) => (
         <div
           key={cloud.id}
-          className="absolute pointer-events-none"
+          className="cloud-blob absolute"
           style={{
               top: `${cloud.top}%`,
               left: cloud.direction > 0 ? "-30%" : "130%",
@@ -99,7 +105,7 @@ export function CloudLayer({ seed = 42, onBadgeClick }: CloudLayerProps) {
             }}
         >
           {cloud.badge ? (
-            <div className="pointer-events-auto">
+            <div className="cloud-badge-wrapper pointer-events-auto">
               <CloudBadge
                 label={cloud.badge.label}
                 tagline={cloud.badge.tagline}

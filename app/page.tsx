@@ -1,20 +1,5 @@
-// -----------------------------------------------------------------------------
-// app/page.tsx
-// Server Component — Composition root of the Home page
-// Imports and arranges all top-level sections with consistent scroll rhythm.
-// -----------------------------------------------------------------------------
-
 import type { Metadata } from "next";
-import Hero from "@/components/home/Hero";
-import Pillars from "@/components/home/Pillars";
-import HowIBuild from "@/components/home/HowIBuild";
-import BuildDiagram from "@/components/home/BuildDiagram";
-import Featured from "@/components/home/Featured";
-import Learning from "@/components/home/Learning";
-import FinalCTA from "@/components/home/FinalCTA";
-import { Container } from "@/components/ui/Container";
-
-// -----------------------------------------------------------------------------
+import HomePageClient from "@/app/HomePageClient";
 
 export const dynamic = "force-dynamic";
 
@@ -59,22 +44,6 @@ export const metadata: Metadata = {
   authors: [{ name: "Adam Zaatar" }],
 };
 
-// -----------------------------------------------------------------------------
-
-export default async function Page() {
-  return (
-    <main className="relative flex flex-col">
-      <Hero />
-      <Pillars />
-      <HowIBuild />
-      <section className="relative ui-section py-20 sm:py-24 lg:py-28 overflow-hidden">
-        <Container className="relative z-10">
-          <BuildDiagram />
-        </Container>
-      </section>
-      <Featured />
-      <Learning />
-      <FinalCTA />
-    </main>
-  );
+export default function Page() {
+  return <HomePageClient />;
 }

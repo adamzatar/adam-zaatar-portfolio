@@ -8,6 +8,7 @@ import { useEffect } from "react";
 
 import { Container } from "@/components/ui/Container";
 import AppImage from "@/components/AppImage";
+import type { ImageKey } from "@/lib/images";
 import {
   buttonBase,
   cardBase,
@@ -58,19 +59,58 @@ const projects = [
   {
     title: "Cutaway",
     summary:
-      "Lightweight iOS creator tool for multi-perspective mini-episodes. On-device editing, instant preview, and export — built for speed and privacy.",
+      "Lightweight iOS creator tool for multi-perspective mini-episodes. On-device editing, instant preview, and export. Built for speed and privacy.",
     stack: ["SwiftUI", "AVFoundation"],
     link: "https://github.com/adamzatar/cutaway",
     image: "cutaway",
   },
 ];
 
-const certifications = [
-  "AI A–Z (Udemy, 2025)",
-  "Foundation Stock Trading (Udemy, 2025)",
-  "AWS Solutions Architect (in progress)",
-  "CompTIA Security+ (in progress)",
-  "Azure Fundamentals (in progress)",
+type CertificationCard = {
+  title: string;
+  meta: string;
+  status: "complete" | "in-progress";
+  proofHref?: string;
+  image?: ImageKey;
+};
+
+const certifications: readonly CertificationCard[] = [
+  {
+    title: "Artificial Intelligence A–Z",
+    meta: "Udemy • 2025",
+    status: "complete",
+    proofHref: "/images/AIcertificate.jpg",
+    image: "certificate",
+  },
+  {
+    title: "Foundation Stock Trading",
+    meta: "Udemy • 2025",
+    status: "complete",
+    proofHref: "/images/stocktradingcertificate.jpg",
+    image: "stockTradingCertificate",
+  },
+  {
+    title: "Git & GitHub Masterclass",
+    meta: "Udemy • 2025",
+    status: "complete",
+    proofHref: "/images/gitcertificate.png",
+    image: "gitCertificate",
+  },
+  {
+    title: "AWS Solutions Architect",
+    meta: "Amazon Web Services • In Progress",
+    status: "in-progress",
+  },
+  {
+    title: "CompTIA Security+",
+    meta: "CompTIA • In Progress",
+    status: "in-progress",
+  },
+  {
+    title: "Azure Fundamentals",
+    meta: "Microsoft • In Progress",
+    status: "in-progress",
+  },
 ];
 
 
@@ -170,14 +210,15 @@ function HeroSection() {
             )}
             variants={fadeUp(1)}
           >
-            Hey, I’m Adam Zaatar — I build scalable systems where cloud, AI, and security converge.
+            Hey, I’m Adam Zaatar!  
+            I build scalable systems where cloud solutions, agentic AI, and cybersecurity converge.
           </motion.h1>
 
           <motion.p
             className={clsx("max-w-2xl text-lg sm:text-xl", textStyles.muted)}
             variants={fadeUp(2)}
           >
-            Computer Science &amp; Economics @ Bowdoin. Focused on reliability and secure digital ecosystems that scale sustainably. Seeking 2025 roles in Cloud, SRE, or AI Security — ideally with teams engineering resilient, measurable systems.
+            Computer Science &amp; Economics @ Bowdoin. Studying to brandish my skills across the reliability, efficiency and the security of digital ecosystems and cloud solutions that scale sustainably. Seeking 2025 roles in Cloud, SRE, AI, or Cybersecurity.
           </motion.p>
 
           <motion.div
@@ -210,24 +251,44 @@ function HeroSection() {
         </motion.div>
 
         <motion.figure
-          className={clsx(
-            cardBase,
-            shadows.soft,
-            "mx-auto h-full max-w-[420px] rounded-3xl border-[color-mix(in_oklab,var(--border) 45%,transparent)] bg-white/85 p-2 backdrop-blur-xl dark:bg-[color-mix(in_oklab,var(--surface) 78%,transparent)]"
-          )}
+          className="relative mx-auto h-full max-w-[420px]"
           variants={fadeUp(1.5)}
           initial="hidden"
           animate="visible"
         >
-          <AppImage
-            image="profileHome"
-            alt="Adam Zaatar — portrait"
-            width={560}
-            height={680}
-            withShimmer
-            className="h-full w-full rounded-[26px] object-cover"
-            sizes="(min-width: 1280px) 420px, (min-width: 768px) 360px, 80vw"
-          />
+          <div className="absolute inset-0 -z-10 blur-3xl opacity-70 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.45),transparent_40%),radial-gradient(circle_at_80%_0%,rgba(14,165,233,0.45),transparent_45%)]" />
+
+          <div className="relative rounded-[34px] bg-[linear-gradient(135deg,rgba(255,255,255,0.75),rgba(96,165,250,0.35),rgba(15,23,42,0.65))] p-[1.5px] shadow-[0_25px_60px_rgba(8,15,40,0.45),0_0_40px_rgba(59,130,246,0.35)]">
+            <div className="relative overflow-hidden rounded-[32px] bg-[color-mix(in_oklab,var(--surface) 70%,transparent)]/60 backdrop-blur-2xl">
+              <AppImage
+                image="profileHome"
+                alt="Adam Zaatar — portrait"
+                width={560}
+                height={680}
+                withShimmer
+                className="h-full w-full object-cover transition duration-700 ease-out hover:scale-[1.025]"
+                sizes="(min-width: 1280px) 420px, (min-width: 768px) 360px, 80vw"
+                priority
+              />
+
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(255,255,255,0.35),transparent_45%),radial-gradient(circle_at_80%_0%,rgba(14,165,233,0.2),transparent_50%)]" />
+
+              <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/90 backdrop-blur-md shadow-[0_5px_20px_rgba(15,23,42,0.4)]">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.9)]" />
+                Available · Summer 2026
+              </div>
+
+              <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/20 bg-black/50 p-4 text-white/90 backdrop-blur">
+                <p className="text-sm uppercase tracking-[0.4em] text-white/70">
+                  Aspiring Systems Engineer
+                </p>
+                <p className="mt-2 text-2xl font-semibold">Adam Zaatar</p>
+                <p className="text-sm text-white/70">
+                  Cloud · AI · Cybersecurity · SRE
+                </p>
+              </div>
+            </div>
+          </div>
         </motion.figure>
       </Container>
     </section>
@@ -239,8 +300,8 @@ function HeroSection() {
 ============================== */
 function SkillsSection() {
   return (
-    <section className="relative border-t border-[color-mix(in_oklab,var(--border) 40%,transparent)] bg-white/75 py-20 dark:bg-[color-mix(in_oklab,var(--surface) 82%,transparent)]">
-      <Container className="relative z-10 flex flex-col gap-10">
+    <section className="relative border-t border-[color-mix(in_oklab,var(--border) 35%,transparent)] bg-transparent py-20">
+      <Container className="relative z-10 flex flex-col gap-10 rounded-[32px] bg-[color-mix(in_oklab,var(--surface) 65%,transparent)]/55 p-10 backdrop-blur-2xl shadow-[0_25px_80px_rgba(5,8,20,0.35)]">
         <motion.div
           className="max-w-3xl space-y-4"
           variants={staggerContainer}
@@ -282,8 +343,8 @@ function SkillsSection() {
 ============================== */
 function ProjectsSection() {
   return (
-    <section className="relative border-t border-[color-mix(in_oklab,var(--border) 40%,transparent)] bg-linear-to-b from-white via-[#eef2ff] to-white py-24 dark:from-[#060816] dark:via-[#0a0d1c] dark:to-[#060816]">
-      <Container className="relative z-10 flex flex-col gap-12">
+    <section className="relative border-t border-[color-mix(in_oklab,var(--border) 40%,transparent)] bg-transparent py-24">
+      <Container className="relative z-10 flex flex-col gap-12 rounded-[32px] bg-[color-mix(in_oklab,var(--surface) 70%,transparent)]/55 p-10 backdrop-blur-2xl shadow-[0_30px_80px_rgba(5,8,20,0.35)]">
         <motion.div
           className="space-y-4"
           variants={staggerContainer}
@@ -347,8 +408,8 @@ function ProjectsSection() {
 ============================== */
 function CertificationsSection() {
   return (
-    <section className="relative border-t border-[color-mix(in_oklab,var(--border) 38%,transparent)] bg-white/80 py-24 dark:bg-[color-mix(in_oklab,var(--surface) 82%,transparent)]">
-      <Container className="relative z-10 flex flex-col gap-10">
+    <section className="relative border-t border-[color-mix(in_oklab,var(--border) 38%,transparent)] bg-transparent py-24">
+      <Container className="relative z-10 flex flex-col gap-10 rounded-[32px] bg-[color-mix(in_oklab,var(--surface) 68%,transparent)]/55 p-10 backdrop-blur-2xl shadow-[0_22px_80px_rgba(5,8,20,0.35)]">
         <motion.div
           className="space-y-4"
           variants={staggerContainer}
@@ -360,7 +421,7 @@ function CertificationsSection() {
             certifications
           </motion.span>
           <motion.h2 className="text-pretty text-3xl font-semibold text-foreground sm:text-4xl" variants={fadeUp(1)}>
-            Staying sharp across AI, finance, and cloud security.
+            Staying sharp across AI, finance, cloud, full-stack website and IOS development
           </motion.h2>
           <motion.p className={clsx("max-w-3xl text-base", textStyles.muted)} variants={fadeUp(2)}>
             Learning paths that reinforce decision-making, policy, and delivery for systems at scale.
@@ -376,16 +437,71 @@ function CertificationsSection() {
         >
           {certifications.map((cert, index) => (
             <motion.div
-              key={cert}
+              key={cert.title}
               variants={fadeUp(index)}
               className={certificationCardClass}
             >
+              {cert.image ? (
+                <div className="relative mb-4 aspect-[4/3] overflow-hidden rounded-xl border border-[color-mix(in_oklab,var(--border) 50%,transparent)]">
+                  {cert.proofHref ? (
+                    <Link
+                      href={cert.proofHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block h-full w-full"
+                      aria-label={`${cert.title} certificate preview`}
+                    >
+                      <AppImage
+                        image={cert.image}
+                        alt={`${cert.title} certificate`}
+                        fill
+                        className="object-cover"
+                        wrapperClassName="w-full h-full relative"
+                      />
+                    </Link>
+                  ) : (
+                    <AppImage
+                      image={cert.image}
+                      alt={`${cert.title} certificate`}
+                      fill
+                      className="object-cover"
+                      wrapperClassName="w-full h-full relative"
+                    />
+                  )}
+                </div>
+              ) : null}
+
               <span className="text-sm font-semibold uppercase tracking-wide text-(--primary)">
-                Credential
+                {cert.status === "complete" ? "Credential" : "In Progress"}
               </span>
-              <p className="mt-2 text-base font-medium text-foreground">
-                {cert}
+              <p className="mt-1 text-xs uppercase tracking-[0.3em] text-foreground/60">
+                {cert.meta}
               </p>
+              <h3 className="mt-2 text-base font-semibold text-foreground">
+                {cert.title}
+              </h3>
+              <div className="mt-4 flex items-center gap-3">
+                <span
+                  className={clsx(
+                    "inline-flex w-fit items-center rounded-full px-3 py-1 text-xs font-semibold",
+                    cert.status === "complete"
+                      ? "bg-emerald-500/15 text-emerald-400"
+                      : "bg-amber-400/15 text-amber-500",
+                  )}
+                >
+                  {cert.status === "complete" ? "Completed" : "In Progress"}
+                </span>
+                {cert.proofHref ? (
+                  <Link
+                    href={cert.proofHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-auto inline-flex items-center text-xs font-semibold uppercase tracking-wide text-(--primary) hover:text-(--primary)/85"
+                  >
+                    View Certificate →
+                  </Link>
+                ) : null}
+              </div>
             </motion.div>
           ))}
         </motion.div>
@@ -399,8 +515,8 @@ function CertificationsSection() {
 ============================== */
 function FinalCTASection() {
   return (
-    <section className="relative border-t border-[color-mix(in_oklab,var(--border) 35%,transparent)] bg-linear-to-b from-white via-[#f5f7ff] to-white py-24 dark:from-[#060816] dark:via-[#0a0d1c] dark:to-[#060816]">
-      <Container className="relative z-10">
+    <section className="relative border-t border-[color-mix(in_oklab,var(--border) 35%,transparent)] bg-transparent py-24">
+      <Container className="relative z-10 rounded-[32px] bg-[color-mix(in_oklab,var(--surface) 60%,transparent)]/55 p-10 backdrop-blur-2xl shadow-[0_30px_90px_rgba(5,8,20,0.38)]">
         <motion.div
           className={clsx(
             cardBase,
@@ -421,7 +537,7 @@ function FinalCTASection() {
             className={clsx("mt-4 text-base sm:text-lg", textStyles.muted)}
             variants={fadeUp(1)}
           >
-            Open to Cloud, SRE, and AI Security collaborations — especially with teams focused on resilient, measurable systems.
+            Open to Cloud, SRE, AI, and Cybersecurity collaborations, especially with teams focused on resilient and measurable systems!
           </motion.p>
           <motion.div
             className="mt-10 flex flex-wrap items-center justify-center gap-4"

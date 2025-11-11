@@ -3,6 +3,7 @@ import Link from "next/link";
 import { HOME_DATA } from "@/app/data/home";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import AppImage from "@/components/AppImage";
 
 export default function Learning() {
   const certifications = HOME_DATA.certifications;
@@ -27,11 +28,45 @@ export default function Learning() {
         </header>
 
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" role="list">
-          {certifications.map((cert) => (
+          {certifications.map((cert) => {
+            const proofHref = cert.credentialUrl;
+            return (
             <li
               key={cert.name}
               className="ui-card rounded-xl border border-(--border)/60 bg-(--surface)/85 supports-[backdrop-filter]:backdrop-blur-xl p-6 sm:p-7 flex flex-col gap-4"
             >
+              {cert.image ? (
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-border/40 bg-surface/60">
+                  {proofHref ? (
+                    <Link
+                      href={proofHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block h-full w-full"
+                      aria-label={`${cert.name} certificate preview`}
+                    >
+                      <AppImage
+                        image={cert.image}
+                        alt={`${cert.name} certificate`}
+                        fill
+                        className="object-cover"
+                        wrapperClassName="w-full h-full relative"
+                        priority={false}
+                      />
+                    </Link>
+                  ) : (
+                    <AppImage
+                      image={cert.image}
+                      alt={`${cert.name} certificate`}
+                      fill
+                      className="object-cover"
+                      wrapperClassName="w-full h-full relative"
+                      priority={false}
+                    />
+                  )}
+                </div>
+              ) : null}
+
               <header className="space-y-1">
                 <p className="text-xs uppercase tracking-[0.25em] text-foreground/50">
                   {typeof cert.year === "number" ? cert.year : cert.year.toString()}
@@ -47,15 +82,16 @@ export default function Learning() {
                 {cert.status === "complete" ? "Completed" : "In Progress"}
               </span>
 
-              {cert.credentialUrl ? (
+              {proofHref ? (
                 <Button asChild variant="ghost" size="sm" className="mt-auto">
-                  <Link href={cert.credentialUrl} target="_blank" rel="noopener noreferrer">
+                  <Link href={proofHref} target="_blank" rel="noopener noreferrer">
                     View Credential
                   </Link>
                 </Button>
               ) : null}
             </li>
-          ))}
+          );
+        })}
         </ul>
       </Container>
     </section>

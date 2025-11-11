@@ -10,12 +10,13 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/Card";
+import { RESUME_PATH } from "@/lib/constants/resume";
 
 export default function ResumePreview() {
   const [loaded, setLoaded] = React.useState(false);
   const [error, setError] = React.useState(false);
 
-  const resumeHref = "/resume/AdamZaatar_CV_2025.pdf";
+  const resumeHref = RESUME_PATH;
 
   return (
     <motion.div

@@ -107,7 +107,7 @@ export default function BuildDiagram() {
             y={n.y + 5}
             textAnchor="middle"
             fontSize="16"
-            fill="var(--foreground)"
+            fill="hsl(var(--foreground))"
             fontWeight={600}
             style={{ fontFamily: "system-ui, sans-serif" }}
           >

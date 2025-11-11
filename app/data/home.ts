@@ -39,12 +39,15 @@ export interface Project {
   image?: string;
 }
 
+import type { ImageKey } from "@/lib/images";
+
 export interface Certification {
   name: string;
   provider: string;
   year: number | string;
   status: "complete" | "in-progress";
   credentialUrl?: string;
+  image?: ImageKey;
 }
 
 export interface CTA {
@@ -197,15 +200,24 @@ export const CERTIFICATIONS: readonly Certification[] = [
     provider: "Udemy",
     year: 2025,
     status: "complete",
-    credentialUrl:
-      "https://www.udemy.com/certificate/UC-6162dcfe-b4fa-4b30-a7f7-f0ae1204e552/",
+    credentialUrl: "/images/AIcertificate.jpg",
+    image: "certificate",
   },
   {
     name: "Foundation Stock Trading",
     provider: "Udemy",
     year: 2025,
     status: "complete",
-    credentialUrl: "https://ude.my/UC-6162dcfe-b4fa-4b30-a7f7-f0ae1204e552",
+    credentialUrl: "/images/stocktradingcertificate.jpg",
+    image: "stockTradingCertificate",
+  },
+  {
+    name: "Git & GitHub Masterclass",
+    provider: "Udemy",
+    year: 2025,
+    status: "complete",
+    credentialUrl: "/images/gitcertificate.png",
+    image: "gitCertificate",
   },
   {
     name: "AWS Solutions Architect – Associate",

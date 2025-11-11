@@ -94,19 +94,24 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "relative min-h-screen overflow-x-hidden bg-bg text-text antialiased"
+          "relative min-h-screen overflow-x-hidden bg-bg text-text antialiased",
         )}
       >
-        {/* 🌈 Static gradient + sun orb base layer */}
+        {/* 🌈 Static sky gradient base layer (SSR-safe) */}
         <div aria-hidden className="sky-gradient" />
 
-        {/* ✨ Dynamic visuals (particles, beams, etc.) */}
+        {/* 💫 Aurora overlay (CSS-only, responds to --cloudiness / --sun-elevation) */}
+        <div aria-hidden className="sky-aurora" />
+
+        {/* ☀️🌙 Day/Night orchestrator:
+            - Positions Sun & Moon (via GlobalVisuals)
+            - Drives sky CSS vars, clouds, rain, etc. */}
         <GlobalVisuals />
 
-        {/* 🖱️ Global custom cursor (optional visual layer) */}
+        {/* 🖱️ Global custom cursor (visual sugar, no layout impact) */}
         <CustomCursor />
 
-        {/* ✅ Fallback static gradient for no-JS / Safari */}
+        {/* ✅ Fallback static gradient for no-JS / very old browsers */}
         <noscript>
           <div
             className="absolute inset-0 -z-50"

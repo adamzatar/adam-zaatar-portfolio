@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Variants, Transition } from "framer-motion";
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin } from "lucide-react";
+import { Mail, Github, Linkedin, Phone } from "lucide-react";
 
 const fadeUp = (i: number = 0): Variants => ({
   hidden: { opacity: 0, y: 40 },
@@ -21,6 +21,45 @@ const fadeUp = (i: number = 0): Variants => ({
 });
 
 export default function ContactPage() {
+  const contactMethods = [
+    {
+      icon: <Mail className="mx-auto h-10 w-10 text-(--primary) mb-4" />,
+      title: "Email",
+      text: "azaatar@bowdoin.edu",
+      href: "mailto:azaatar@bowdoin.edu",
+      cta: "Send Email",
+      variant: "primary" as const,
+      external: false,
+    },
+    {
+      icon: <Phone className="mx-auto h-10 w-10 text-(--primary) mb-4" />,
+      title: "Phone",
+      text: "(207) 481-6843",
+      href: "tel:+12074816843",
+      cta: "Call / Text",
+      variant: "outline" as const,
+      external: false,
+    },
+    {
+      icon: <Linkedin className="mx-auto h-10 w-10 text-(--primary) mb-4" />,
+      title: "LinkedIn",
+      text: "Adam Zaatar",
+      href: "https://www.linkedin.com/in/adam-zaatar-09b106304?miniProfileUrn=urn%3Ali%3Afs_miniProfile%3AACoAAE2dNPcBbnu6cGrezXKH7zFdmJefhn6vmXs&lipi=urn%3Ali%3Apage%3Ad_flagship3_search_srp_all%3B5GoLqgRFTeWosocK647j0w%3D%3D",
+      cta: "View Profile",
+      variant: "outline" as const,
+      external: true,
+    },
+    {
+      icon: <Github className="mx-auto h-10 w-10 text-(--primary) mb-4" />,
+      title: "GitHub",
+      text: "github.com/adamzatar",
+      href: "https://github.com/adamzatar",
+      cta: "View Repos",
+      variant: "outline" as const,
+      external: true,
+    },
+  ];
+
   return (
     <section
       id="contact"
@@ -48,128 +87,68 @@ export default function ContactPage() {
           viewport={{ once: true }}
           className="mt-6 text-lg sm:text-xl text-muted text-center max-w-2xl mx-auto leading-relaxed"
         >
-          I’m always open to conversations about{" "}
-          <span className="font-medium text-foreground">software engineering</span>,{" "}
-          <span className="font-medium text-foreground">fintech</span>, and{" "}
-          <span className="font-medium text-foreground">economic research</span>. 
-          Whether you’re a recruiter, a collaborator, or someone with a big idea, 
-          let’s explore how we can work together.
+          I’m focused on{" "}
+          <span className="font-medium text-foreground">cloud architecture</span>,{" "}
+          <span className="font-medium text-foreground">security engineering</span>, and{" "}
+          <span className="font-medium text-foreground">intelligent systems</span>{" "}
+          that stay measurable and trusted. If you’re building resilient platforms or exploring how markets
+          and infrastructure intersect, I’d love to connect.
         </motion.p>
 
-        {/* Contact Cards */}
+        {/* Contact Methods */}
         <motion.div
           variants={fadeUp(2)}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mt-16 grid gap-10 sm:grid-cols-3"
+          className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4"
         >
-          {[
-            {
-              icon: <Mail className="mx-auto h-10 w-10 text-primary mb-4" />,
-              title: "Email",
-              text: "azaatar@bowdoin.edu",
-              button: (
-                <Button asChild variant="primary" size="sm" className="mt-4">
-                  <a href="mailto:azaatar@bowdoin.edu">Send Email</a>
-                </Button>
-              ),
-            },
-            {
-              icon: <Linkedin className="mx-auto h-10 w-10 text-primary mb-4" />,
-              title: "LinkedIn",
-              text: "Professional Profile",
-              button: (
-                <Button asChild variant="outline" size="sm" className="mt-4">
-                  <a
-                    href="https://www.linkedin.com/in/adamzaatar"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View Profile
-                  </a>
-                </Button>
-              ),
-            },
-            {
-              icon: <Github className="mx-auto h-10 w-10 text-primary mb-4" />,
-              title: "GitHub",
-              text: "Explore my projects",
-              button: (
-                <Button asChild variant="outline" size="sm" className="mt-4">
-                  <a
-                    href="https://github.com/adamzatar"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View Repos
-                  </a>
-                </Button>
-              ),
-            },
-          ].map(({ icon, title, text, button }) => (
+          {contactMethods.map(({ icon, title, text, href, cta, variant, external }) => (
             <Card
               key={title}
-              className="p-6 text-center rounded-xl backdrop-blur-sm bg-surface/80 
+              className="p-6 text-center rounded-xl backdrop-blur-sm bg-surface/85 
                 border border-border/60 shadow-subtle hover:shadow-card-hover 
-                transition-transform hover:scale-[1.03]"
+                transition-transform hover:scale-[1.02]"
             >
               {icon}
               <h3 className="font-semibold text-text text-lg">{title}</h3>
               <p className="text-muted text-sm mt-1">{text}</p>
-              {button}
+              <Button asChild variant={variant} size="sm" className="mt-4">
+                <a
+                  href={href}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                >
+                  {cta}
+                </a>
+              </Button>
             </Card>
           ))}
         </motion.div>
 
-        {/* Divider + CTA */}
+        {/* Availability Note */}
         <motion.div
           variants={fadeUp(3)}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mt-20 text-center"
+          className="mt-16 max-w-3xl mx-auto text-center space-y-3"
         >
           <p className="text-muted text-base sm:text-lg">
-            Prefer a direct note? Drop me a message below — I reply quickly.
+            I respond quickly during Eastern Time business hours, and I keep an eye on email and texts after-hours for urgent notes.
+          </p>
+          <p className="text-sm text-foreground/70">
+            For anything sensitive or time-critical, emailing{" "}
+            <a className="font-semibold text-(--primary)" href="mailto:azaatar@bowdoin.edu">
+              azaatar@bowdoin.edu
+            </a>{" "}
+            or texting{" "}
+            <a className="font-semibold text-(--primary)" href="tel:+12074816843">
+              (207) 481-6843
+            </a>{" "}
+            is the fastest way to reach me.
           </p>
         </motion.div>
-
-        {/* Contact Form */}
-        <motion.form
-          variants={fadeUp(4)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="mt-10 max-w-xl mx-auto grid gap-5"
-        >
-          <input
-            type="text"
-            placeholder="Your Name"
-            className="w-full rounded-lg border border-border bg-surface/90 px-4 py-3 text-text 
-              shadow-sm focus:ring-2 focus:ring-primary focus:outline-none transition"
-          />
-          <input
-            type="email"
-            placeholder="Your Email"
-            className="w-full rounded-lg border border-border bg-surface/90 px-4 py-3 text-text 
-              shadow-sm focus:ring-2 focus:ring-primary focus:outline-none transition"
-          />
-          <textarea
-            placeholder="Your Message"
-            rows={5}
-            className="w-full rounded-lg border border-border bg-surface/90 px-4 py-3 text-text 
-              shadow-sm focus:ring-2 focus:ring-primary focus:outline-none transition"
-          />
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            className="w-full shadow-md hover:shadow-lg transition-shadow"
-          >
-            Send Message
-          </Button>
-        </motion.form>
       </Container>
 
       {/* Decorative Gradient Glow */}

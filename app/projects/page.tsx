@@ -40,12 +40,39 @@ const projects: {
     github: "https://github.com/adamzatar/bowdoin-marketplace",
   },
   {
-    title: "Personal Portfolio Platform",
+    title: "PalPrep",
     description:
-      "This site: Next.js 15, persistent animated background, SmartImage caching, Tailwind tokens, and MotionConfig reduced-motion safety — deployed on Vercel edge.",
+      "Advocacy platform designed for community organizing, education, and outreach — empowering coalitions with content hubs, action alerts, and multilingual resources.",
+    image: "palprep",
+    github: "https://github.com/adamzatar/Palprep-Website",
+  },
+  {
+    title: "Portfolio Site",
+    description:
+      "This very site – built with Next.js, Tailwind, and Framer Motion, fully animated and responsive, with data-driven sections and realtime visual systems.",
     image: "personalPortfolio",
-    github: "https://github.com/adamzatar/adam-zaatar-portfolio",
     demo: "/",
+  },
+  {
+    title: "IntCalculator.java",
+    description:
+      "A Java-based integer calculator showcasing classic parsing, operator precedence handling, and arithmetic evaluation for CLI workflows.",
+    image: "intCalculator",
+    github: "https://github.com/adamzatar/IntCalculator.java",
+  },
+  {
+    title: "TwitterSwiftUI",
+    description:
+      "A full-featured Twitter clone built in SwiftUI with timelines, profile views, post composition, and Firebase-backed auth.",
+    image: "twitterClone",
+    github: "https://github.com/adamzatar/TwitterSwiftUI",
+  },
+  {
+    title: "InstagramClone",
+    description:
+      "An Instagram clone app using SwiftUI and Firebase, delivering feed rendering, story reels, and optimistic interactions.",
+    image: "instagramClone",
+    github: "https://github.com/adamzatar/InstagramClone",
   },
 ];
 
@@ -92,44 +119,16 @@ export default function ProjectsPage() {
                      rounded-full origin-center"
         />
 
-        {/* Featured Project */}
-        <motion.div
+        {/* Section Label */}
+        <motion.h2
           variants={fadeUp(2)}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mb-20"
+          className="text-2xl sm:text-3xl font-semibold text-center text-foreground mb-12"
         >
-          <Card className="p-8 sm:p-12 rounded-2xl shadow-card hover:shadow-card-hover 
-                           backdrop-blur-sm bg-surface/90 border border-border/60 transition-all">
-            <h2 className="text-2xl sm:text-3xl font-bold text-center text-text mb-6">
-              Featured: Bowdoin Marketplace
-            </h2>
-            <AppImage
-              image="bowdoinMarketplace"
-              alt="Bowdoin Marketplace"
-              width={900}
-              height={500}
-              className="rounded-xl shadow-lg mx-auto mb-6"
-            />
-            <p className="text-muted text-center max-w-2xl mx-auto mb-6">
-              A production-grade campus marketplace delivered as a React/Node monorepo. Next.js frontend, Fastify APIs,
-              Prisma/PostgreSQL on AWS, S3 asset storage, Cognito-backed auth, Redis rate limiting, and OpenTelemetry
-              tracing keep it secure, observable, and cost-aware.
-            </p>
-            <div className="flex justify-center gap-4">
-              <Button asChild variant="primary" size="lg">
-                <a
-                  href="https://github.com/adamzatar/bowdoin-marketplace"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View Code
-                </a>
-              </Button>
-            </div>
-          </Card>
-        </motion.div>
+          Notable Projects
+        </motion.h2>
 
         {/* Projects Grid */}
         <motion.div
