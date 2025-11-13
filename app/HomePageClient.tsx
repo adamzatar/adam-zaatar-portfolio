@@ -8,6 +8,7 @@ import { useEffect } from "react";
 
 import { Container } from "@/components/ui/Container";
 import AppImage from "@/components/AppImage";
+import { RESUME_PATH } from "@/lib/constants/resume";
 import type { ImageKey } from "@/lib/images";
 import {
   buttonBase,
@@ -218,7 +219,7 @@ function HeroSection() {
             className={clsx("max-w-2xl text-lg sm:text-xl", textStyles.muted)}
             variants={fadeUp(2)}
           >
-            Computer Science &amp; Economics @ Bowdoin. Studying to brandish my skills across the reliability, efficiency and the security of digital ecosystems and cloud solutions that scale sustainably. Seeking 2025 roles in Cloud, SRE, AI, or Cybersecurity.
+            Computer Science &amp; Economics @ Bowdoin. Studying to brandish my skills across the reliability, efficiency and the security of digital ecosystems and cloud solutions that scale sustainably. Seeking 2026 roles in Cloud, SRE, AI, or Cybersecurity.
           </motion.p>
 
           <motion.div
@@ -237,7 +238,7 @@ function HeroSection() {
             variants={fadeUp(4)}
           >
             <Link
-              href="/resume/AdamZaatar_CV_2025.pdf"
+              href={RESUME_PATH}
               className={resumeButtonClass}
               target="_blank"
               rel="noopener noreferrer"

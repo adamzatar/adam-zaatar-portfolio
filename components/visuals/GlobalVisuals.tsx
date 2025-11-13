@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useReducedMotion } from "framer-motion";
 
 import { useTimeOfDay } from "@/hooks/useTimeOfDay";
 import Sun from "@/components/visuals/Sun";
@@ -32,8 +33,20 @@ const MOON_CENTER_OFFSET_Y_VH = 5;
 const MOON_PHASE_OFFSET = 0.5; // perfect opposition
 
 export default function GlobalVisuals() {
+  const prefersReducedMotion = useReducedMotion();
   const [mounted, setMounted] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const query = window.matchMedia("(max-width: 768px)");
+    const update = () => setIsMobileViewport(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
 
   // Shared, SSR-aware time-of-day phase ∈ [0,1)
   const phaseRaw = useTimeOfDay(ORBIT_CYCLE_MINUTES);
@@ -150,6 +163,12 @@ export default function GlobalVisuals() {
   // Simple orientation: waxing in the first half, waning in the second.
   const moonOrientation: "waxing" | "waning" =
     phase < 0.5 ? "waxing" : "waning";
+
+  const heavyVisualsDisabled = prefersReducedMotion || isMobileViewport;
+
+  if (heavyVisualsDisabled) {
+    return null;
+  }
 
   return (
     <div className="effects-layer pointer-events-none" aria-hidden="true">
