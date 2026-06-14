@@ -1,4 +1,3 @@
-// app/layout.tsx
 if (process.env.NODE_ENV === "development") {
   import("../lib/debug/hydrationTrace");
 }
@@ -7,41 +6,35 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import NavBar from "@/components/NavBar";
-import GlobalVisuals from "@/components/visuals/GlobalVisuals";
-import CustomCursor from "@/components/visuals/CustomCursor";
 
-/* --------------------------------------------------------------------------
-   🌐 Global Metadata (SEO + OpenGraph + Twitter)
-   Dynamically resolves `metadataBase` based on environment.
---------------------------------------------------------------------------- */
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://adamzaatar.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Adam Zaatar — Cloud, AI, & Security Engineer",
+    default: "Adam Zaatar | Computer Science and Economics at Bowdoin",
     template: "%s | Adam Zaatar",
   },
   description:
-    "Portfolio of Adam Zaatar — building scalable systems at the intersection of cloud, AI, and cybersecurity.",
+    "Portfolio for Adam Zaatar, a Bowdoin College student focused on backend systems, applied AI, economics research, and software projects.",
   keywords: [
     "Adam Zaatar",
     "portfolio",
-    "cloud computing",
-    "AI security",
-    "cybersecurity",
-    "SRE",
-    "infrastructure",
-    "DevOps",
+    "Bowdoin College",
+    "computer science",
+    "economics",
+    "backend systems",
+    "applied AI",
+    "economics research",
     "software engineer",
   ],
   authors: [{ name: "Adam Zaatar", url: siteUrl }],
   creator: "Adam Zaatar",
   openGraph: {
-    title: "Adam Zaatar — Cloud, AI, & Security Engineer",
+    title: "Adam Zaatar | Computer Science and Economics at Bowdoin",
     description:
-      "Portfolio showcasing projects, research, and system design at scale.",
+      "Portfolio for Adam Zaatar, a Bowdoin College student focused on backend systems, applied AI, economics research, and software projects.",
     url: siteUrl,
     siteName: "Adam Zaatar Portfolio",
     locale: "en_US",
@@ -51,15 +44,15 @@ export const metadata: Metadata = {
         url: "/images/profile-home.jpg",
         width: 1200,
         height: 630,
-        alt: "Adam Zaatar Portfolio — Cloud, AI, & Security Engineer",
+        alt: "Adam Zaatar portfolio",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Adam Zaatar — Cloud, AI, & Security Engineer",
+    title: "Adam Zaatar | Computer Science and Economics at Bowdoin",
     description:
-      "Building resilient, data-driven systems across cloud and AI security.",
+      "Portfolio for Adam Zaatar, a Bowdoin College student focused on backend systems, applied AI, economics research, and software projects.",
     creator: "@adamzaatar",
     images: ["/images/profile-home.jpg"],
   },
@@ -70,9 +63,6 @@ export const metadata: Metadata = {
   },
 };
 
-/* --------------------------------------------------------------------------
-   📱 Viewport & Theme Configuration
---------------------------------------------------------------------------- */
 export const viewport: Viewport = {
   colorScheme: "light dark",
   themeColor: [
@@ -82,9 +72,6 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-/* --------------------------------------------------------------------------
-   🧱 Root Layout
---------------------------------------------------------------------------- */
 export default function RootLayout({
   children,
 }: {
@@ -97,39 +84,10 @@ export default function RootLayout({
           "relative min-h-screen overflow-x-hidden bg-bg text-text antialiased",
         )}
       >
-        {/* 🌈 Static sky gradient base layer (SSR-safe) */}
-        <div aria-hidden className="sky-gradient" />
-
-        {/* 💫 Aurora overlay (CSS-only, responds to --cloudiness / --sun-elevation) */}
-        <div aria-hidden className="sky-aurora" />
-
-        {/* ☀️🌙 Day/Night orchestrator:
-            - Positions Sun & Moon (via GlobalVisuals)
-            - Drives sky CSS vars, clouds, rain, etc. */}
-        <GlobalVisuals />
-
-        {/* 🖱️ Global custom cursor (visual sugar, no layout impact) */}
-        <CustomCursor />
-
-        {/* ✅ Fallback static gradient for no-JS / very old browsers */}
-        <noscript>
-          <div
-            className="absolute inset-0 -z-50"
-            style={{
-              background:
-                "linear-gradient(135deg, #9333ea, #ec4899, #f97316, #7c3aed, #1e3a8a)",
-              backgroundSize: "400% 400%",
-              animation: "gradientShift 40s ease infinite",
-            }}
-          />
-        </noscript>
-
-        {/* === Navigation === */}
         <NavBar />
 
-        {/* === Main Page Content === */}
         <main
-          className="relative z-10 pt-20"
+          className="relative pt-20"
           role="main"
           id="main-content"
           tabIndex={-1}

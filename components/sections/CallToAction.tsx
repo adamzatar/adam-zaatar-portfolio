@@ -8,6 +8,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import Link from "next/link";
+import { RESUME_PATH } from "@/lib/constants/resume";
 
 /* ----------------------------
    Motion
@@ -144,7 +145,7 @@ export default function CallToAction() {
                 {/* External/static file → <a> */}
                 <Button asChild size="lg" variant="outline" className="min-w-[13rem]">
                   <a
-                    href="/resume/AdamZaatar_CV_2025.pdf"
+                    href={RESUME_PATH}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Open Adam Zaatar resume PDF in a new tab"

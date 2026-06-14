@@ -8,7 +8,7 @@ import { Menu, X } from "lucide-react";
 import clsx from "clsx";
 import { Container } from "@/components/ui/Container";
 import { NavLink as ActiveNavLink, isPathActive } from "@/components/NavLink";
-import { AnimatePresence, useScroll, useSpring } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 
 // ----------------------------
@@ -47,14 +47,6 @@ export default function NavBar() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
-  // Progress bar logic
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 180,
-    damping: 35,
-    restDelta: 0.001,
-  });
-
   // Detect scroll for sticky nav styling
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -81,8 +73,7 @@ export default function NavBar() {
         <Container className="flex justify-between items-center h-20">
           {/* === Logo === */}
           <motion.div
-            className="text-xl sm:text-2xl font-extrabold tracking-tight hover:opacity-90 transition-opacity 
-                       bg-clip-text text-transparent animate-logoCycle"
+            className="text-xl sm:text-2xl font-extrabold tracking-tight text-foreground hover:text-(--primary) transition-colors"
           >
             <Link href="/" aria-label="Go to Home">
               Adam Zaatar
@@ -217,15 +208,6 @@ export default function NavBar() {
           )}
         </AnimatePresence>
       </motion.nav>
-
-      {/* === Floating Progress Bar === */}
-      <motion.div
-        className="fixed bottom-0 left-0 right-0 h-[3px] origin-left 
-                   animate-progressCycle
-                   shadow-[0_0_8px_var(--primary),0_0_16px_var(--secondary),0_0_24px_var(--accent)]
-                   rounded-full z-[60]"
-        style={{ scaleX }}
-      />
     </>
   );
 }

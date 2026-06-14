@@ -122,7 +122,7 @@ export const aboutPageContent: AboutPageContent = {
       id: "information-diet",
       title: "Staying plugged into the world",
       body: [
-        "A senior FinOps manager at AWS once told me that if I want to be useful in this space, staying informed isn’t optional; it’s part of the job.",
+        "A software manager once told me that staying informed matters if I want to understand the technical and business constraints around engineering work.",
         "Since then, I’ve built a simple routine into my day:",
         {
           type: "list",

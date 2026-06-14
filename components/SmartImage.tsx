@@ -16,11 +16,11 @@ type SmartImageProps = ImageProps & {
 };
 
 /**
- * 🔆 SmartImage — Production-grade Next.js image wrapper
+ * SmartImage - Next.js image wrapper
  * ------------------------------------------------------
  * - Handles shimmer skeletons and fade-in transitions
  * - Ensures GPU-friendly decoding and cache-aware loading
- * - Uses color-aware shimmer that adapts to theme (rain/cloud contrast)
+ * - Uses color-aware shimmer that adapts to the current theme
  * - Provides fallback image protection against invalid URLs
  */
 export default function SmartImage({
@@ -77,7 +77,7 @@ export default function SmartImage({
         wrapperClassName
       )}
     >
-      {/* === Shimmer Placeholder === */}
+      {/* Shimmer placeholder */}
       {showShimmer && (
         <div
           aria-hidden="true"
@@ -97,7 +97,7 @@ export default function SmartImage({
         />
       )}
 
-      {/* === Actual Image === */}
+      {/* Actual image */}
       <Image
         {...rest}
         src={effectiveSrc}
@@ -118,7 +118,7 @@ export default function SmartImage({
         )}
       />
 
-      {/* === Accessibility overlay (optional for shimmer phase) === */}
+      {/* Accessibility text for the shimmer phase */}
       {showShimmer && (
         <span className="sr-only">Loading image: {alt}</span>
       )}
@@ -127,12 +127,11 @@ export default function SmartImage({
 }
 
 /* -----------------------------------------
-   ✅ DESIGN & BEHAVIOR NOTES
+   Design and behavior notes
 --------------------------------------------
-- Theme-aware shimmer matches rain/cloud gradient tones.
-- Graceful fallback prevents Next.js build/runtime crashes.
+- Theme-aware shimmer matches the current palette.
+- Fallback image protects against invalid URLs.
 - Uses CSS `color-mix()` for smooth dark/light contrast.
 - Shimmer animation respects user motion settings via prefers-reduced-motion.
 - Caches loadedSrc globally for instant re-renders.
-- Safe for Vercel Edge and Next.js 15 image optimization.
 -------------------------------------------- */

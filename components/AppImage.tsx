@@ -7,14 +7,12 @@ import { IMAGES, IMAGE_ALTS, type ImageKey, resolveImageKey } from "@/lib/images
 import clsx from "clsx";
 
 /**
- * AppImage — Production-grade typed image wrapper
+ * AppImage - typed image wrapper
  *
- * ✅ Compile-time safety via ImageKey
- * ✅ Runtime fallback handling via resolveImageKey()
- * ✅ Optimized responsive sizing & async decoding
- * ✅ Animated shimmer for cloud/rain themes
- * ✅ Graceful fallback image (never crashes builds)
- * ✅ SEO + accessibility enforced with consistent alt text
+ * Compile-time safety via ImageKey.
+ * Runtime fallback handling via resolveImageKey().
+ * Responsive sizing and async decoding.
+ * Consistent fallback image and alt text behavior.
  */
 
 type Props = Omit<ImageProps, "src" | "alt"> & {
@@ -30,9 +28,6 @@ type Props = Omit<ImageProps, "src" | "alt"> & {
   wrapperClassName?: string;
 };
 
-/* ----------------------------
-   🧠 Component
------------------------------ */
 export default function AppImage({
   image,
   alt,
@@ -46,22 +41,19 @@ export default function AppImage({
   wrapperClassName,
   ...rest
 }: Props) {
-  // ✅ Resolve safe key and fallbacks
   const safeKey = resolveImageKey(image);
   const src = IMAGES[safeKey];
   const resolvedAlt = alt ?? IMAGE_ALTS[safeKey] ?? "Image asset";
   const isFallback = safeKey === "fallback" || safeKey === "placeholder";
 
-  // ✅ Set sizing intelligently
   const resolvedWidth = !fill ? width ?? 1200 : undefined;
   const resolvedHeight = !fill ? height ?? 800 : undefined;
   const resolvedSizes =
     sizes ?? "(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 33vw";
 
-  // ✅ Extract loading safely (to override `lazy` if priority)
   const { loading: loadingProp, ...imageRest } = rest;
 
-  // ✅ Adaptive shimmer (harmonized with dark/light/cloud palettes)
+  // Shimmer for optional image loading placeholders.
   const shimmerClass = withShimmer
     ? clsx(
         "absolute inset-0 animate-[shimmer_2.4s_ease-in-out_infinite]",
@@ -70,7 +62,6 @@ export default function AppImage({
       )
     : undefined;
 
-  // ✅ Render final safe image element
   return (
     <SmartImage
       src={src}
@@ -99,12 +90,10 @@ export default function AppImage({
 }
 
 /* ----------------------------
-   ✅ Notes
+   Notes
 -----------------------------
-- Uses `resolveImageKey()` from lib/images.ts for bulletproof runtime safety.
+- Uses `resolveImageKey()` from lib/images.ts for fallback handling.
 - Always falls back to `/images/fallback.png` for missing or invalid keys.
 - Fallback images render subtly desaturated for visual consistency.
-- Shimmer animation syncs with `--surface` / `--muted` for dynamic weather themes.
-- GPU-optimized transitions; no layout shift.
-- Ready for dark/light mode & rain/cloud overlays.
+- Shimmer animation syncs with `--surface` and `--muted`.
 ----------------------------- */

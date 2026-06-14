@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import ResumePreview from "@/components/ResumePreview";
+import { RESUME_PATH } from "@/lib/constants/resume";
 
 export default function Resume() {
   return (
@@ -73,7 +74,7 @@ export default function Resume() {
                        transition-all duration-500"
           >
             <a
-              href="/resume/AdamZaatar_CV_2025.pdf"
+              href={RESUME_PATH}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Download Adam Zaatar's Resume PDF"

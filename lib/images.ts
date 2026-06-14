@@ -79,8 +79,7 @@ export const IMAGE_ALTS: Record<ImageKey, string> = {
 };
 
 /**
- * Utility: resolve any invalid key safely to a fallback image.
- * This ensures runtime robustness when dynamic keys are used.
+ * Utility: resolve any invalid key to a fallback image.
  */
 export const resolveImageKey = (key: string): ImageKey => {
   return (key in IMAGES ? key : "fallback") as ImageKey;

@@ -6,9 +6,6 @@ import {
   forwardRef,
 } from "react";
 
-/* =============================
-   🧩 TYPES
-   ============================= */
 interface ContainerProps extends HTMLAttributes<HTMLElement> {
   /**
    * Semantic HTML element type (e.g. <section>, <main>, <header>).
@@ -36,13 +33,10 @@ interface ContainerProps extends HTMLAttributes<HTMLElement> {
     | "7xl"
     | "full";
 
-  /** Optional background layering for dynamic visuals (rain/clouds) */
+  /** Optional background layering */
   layer?: "default" | "frosted" | "transparent" | "glass";
 }
 
-/* =============================
-   🏗️ COMPONENT
-   ============================= */
 export const Container = forwardRef<HTMLElement, ContainerProps>(
   (
     {
@@ -103,13 +97,4 @@ export const Container = forwardRef<HTMLElement, ContainerProps>(
 
 Container.displayName = "Container";
 
-/* =============================
-   ✅ NOTES
-   =============================
-
-   - Uses static class mappings for Tailwind (avoids dynamic string truncation).
-   - Adds layer modes (“frosted”, “glass”, etc.) for visual harmony with OrbitalClouds + rain.
-   - Padding + max-width scaling keeps layout perfectly centered.
-   - Works seamlessly in app router + supports motion transitions.
-   - Safe for hydration, SSR, and Vercel edge builds.
-*/
+/* Uses static class mappings for Tailwind max-width classes. */

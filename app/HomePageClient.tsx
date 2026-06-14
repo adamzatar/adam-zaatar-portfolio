@@ -1,563 +1,270 @@
-"use client";
-
+import Image from "next/image";
 import Link from "next/link";
-import { MotionConfig } from "framer-motion";
-import { motion } from "framer-motion";
-import clsx from "clsx";
-import { useEffect } from "react";
 
 import { Container } from "@/components/ui/Container";
-import AppImage from "@/components/AppImage";
 import { RESUME_PATH } from "@/lib/constants/resume";
-import type { ImageKey } from "@/lib/images";
-import {
-  buttonBase,
-  cardBase,
-  chipBase,
-  fadeUp,
-  gradients,
-  shadows,
-  staggerContainer,
-  textStyles,
-} from "@/lib/ui";
 
-/* ==============================
-   💡 Data Definitions
-============================== */
-const focusChips = [
-  "Cloud Architecture",
-  "AI Platform",
-  "Identity & Security",
-  "Observability",
-  "FinOps",
-];
+const CLICKERASE_URL = "https://huggingface.co/spaces/azaatar/clickerase";
 
-const capabilities = [
-  "AWS Cognito, ECS, Lambda",
-  "Infrastructure as Code & Policy Guardrails",
-  "Telemetry-first Monitoring & Incident Response",
-  "Passkey, Biometric, and Secure Session Flows",
-  "Cost Modeling and FinOps Playbooks",
-];
+const focusAreas = [
+  "Backend systems",
+  "Applied AI",
+  "Finance-oriented software",
+  "Security-adjacent work",
+] as const;
 
-const projects = [
+const atAGlance = [
   {
-    title: "Bowdoin Marketplace",
-    summary:
-      "Honors research in progress: building a student marketplace with faculty collaboration to explore how supply, demand, and pricing affect social efficiency and campus access.",
-    stack: ["Next.js", "Node", "PostgreSQL", "AWS Cognito"],
-    link: "https://github.com/adamzatar/bowdoin-marketplace",
-    image: "bowdoinMarketplace",
+    title: "Bowdoin College",
+    body: "Computer Science and Economics student with a German minor.",
   },
   {
-    title: "Vector 2FA",
-    summary:
-      "SwiftUI + Vapor prototype delivering passkey onboarding, biometric fallback, and encrypted offline vaults.",
-    stack: ["SwiftUI", "Vapor", "Security"],
-    link: "https://github.com/adamzatar/vector",
-    image: "vector",
+    title: "Backend Java training",
+    body: "Software Engineering Intern at ProgressSoft in Amman, Summer 2026.",
   },
   {
-    title: "Cutaway",
-    summary:
-      "Lightweight iOS creator tool for multi-perspective mini-episodes. On-device editing, instant preview, and export. Built for speed and privacy.",
-    stack: ["SwiftUI", "AVFoundation"],
-    link: "https://github.com/adamzatar/cutaway",
-    image: "cutaway",
+    title: "Research and campus work",
+    body: "Economics research PDFs, Bowdoin Orient web staff work, and student organization leadership.",
   },
-];
+] as const;
 
-type CertificationCard = {
-  title: string;
-  meta: string;
-  status: "complete" | "in-progress";
-  proofHref?: string;
-  image?: ImageKey;
-};
-
-const certifications: readonly CertificationCard[] = [
+const selectedWork = [
   {
-    title: "Artificial Intelligence A–Z",
-    meta: "Udemy • 2025",
-    status: "complete",
-    proofHref: "/images/AIcertificate.jpg",
-    image: "certificate",
+    title: "ClickErase",
+    status: "Working AI image editing app",
+    body: "Built a working AI image editing app where a user uploads an image, clicks an object, and the app generates a segmentation mask and removes the object with inpainting. Built in Python with Gradio and Hugging Face Spaces.",
+    href: CLICKERASE_URL,
+    cta: "Open demo",
   },
   {
-    title: "Foundation Stock Trading",
-    meta: "Udemy • 2025",
-    status: "complete",
-    proofHref: "/images/stocktradingcertificate.jpg",
-    image: "stockTradingCertificate",
+    title: "Economics research archive",
+    status: "PDFs available",
+    body: "Research papers and financial literacy reports with source PDFs available to inspect, including work on lobbying, behavioral economics, and student financial literacy programs.",
+    href: "/research",
+    cta: "Read research",
+  },
+] as const;
+
+const experience = [
+  {
+    title: "Software Engineering Intern",
+    organization: "ProgressSoft",
+    date: "Summer 2026",
+    body: "Backend-focused Java internship at a payments software company in Amman, covering Spring Framework and Spring Boot, JPA, Spring Security, Docker, test-driven development with JUnit and Mockito, and code reviews, toward the standards used by ProgressSoft development teams.",
   },
   {
-    title: "Git & GitHub Masterclass",
-    meta: "Udemy • 2025",
-    status: "complete",
-    proofHref: "/images/gitcertificate.png",
-    image: "gitCertificate",
+    title: "Gibbons Research Fellow",
+    organization: "Bowdoin College",
+    date: "Summer 2025",
+    body: "Designed a financial literacy program for students, benchmarked peer schools, and wrote two course models.",
   },
   {
-    title: "AWS Solutions Architect",
-    meta: "Amazon Web Services • In Progress",
-    status: "in-progress",
+    title: "Web Staff and Data Desk",
+    organization: "The Bowdoin Orient",
+    date: "Bowdoin",
+    body: "Web and plugin fixes, accessibility, and data work behind reported pieces.",
   },
   {
-    title: "CompTIA Security+",
-    meta: "CompTIA • In Progress",
-    status: "in-progress",
+    title: "Founder and President",
+    organization: "Bowdoin Martial Arts Club",
+    date: "Bowdoin",
+    body: "Funding, logistics, recruiting, and coordination with outside gym partners.",
   },
-  {
-    title: "Azure Fundamentals",
-    meta: "Microsoft • In Progress",
-    status: "in-progress",
-  },
-];
+] as const;
 
-
-/* ==============================
-   🎨 Style Tokens
-============================== */
-const resumeButtonClass = clsx(
-  buttonBase,
-  "px-6 py-3 text-base text-white bg-linear-to-r from-[#5269ff] via-[#6d6bff] to-[#43d7bd]",
-  "shadow-[0_20px_48px_rgba(84,108,255,0.32)] hover:-translate-y-0.5",
-  "hover:shadow-[0_26px_60px_rgba(84,108,255,0.34)]"
-);
-
-const outlineButtonClass = clsx(
-  buttonBase,
-  "px-6 py-3 text-base text-foreground bg-white/80 dark:bg-[color-mix(in_oklab,var(--surface) 75%,transparent)]",
-  "border border-[color-mix(in_oklab,var(--border) 55%,transparent)] hover:border-[var(--primary)]",
-  "hover:text-(--primary) hover:-translate-y-0.5"
-);
-
-const chipClass = clsx(
-  chipBase,
-  "text-foreground/80 hover:text-foreground hover:-translate-y-0.5",
-  "hover:shadow-[0_16px_32px_rgba(25,32,64,0.18)]"
-);
-
-const projectCardClass = clsx(
-  cardBase,
-  shadows.card,
-  "group h-full rounded-3xl bg-white/90 dark:bg-[color-mix(in_oklab,var(--surface) 80%,transparent)] p-8",
-  "transition-transform duration-500 hover:-translate-y-2 hover:shadow-[0_34px_68px_rgba(18,24,56,0.28)]"
-);
-
-const certificationCardClass = clsx(
-  cardBase,
-  shadows.soft,
-  "rounded-2xl bg-white/90 dark:bg-[color-mix(in_oklab,var(--surface) 78%,transparent)] p-6",
-  "transition-transform duration-400 hover:-translate-y-1 hover:shadow-[0_28px_52px_rgba(18,24,56,0.22)]"
-);
-
-/* ==============================
-   🌤️ Main Page Component
-============================== */
 export default function HomePageClient() {
-  useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      console.debug("[HomePageClient] mounted");
-      console.debug("[HomePageClient] focus chips:", focusChips.join(", "));
-    }
-  }, []);
-
   return (
-    <MotionConfig reducedMotion="user">
-      <main className="relative overflow-hidden text-foreground dark:text-foreground">
-        <HeroSection />
-        <SkillsSection />
-        <ProjectsSection />
-        <CertificationsSection />
-        <FinalCTASection />
-      </main>
-    </MotionConfig>
-  );
-}
-
-/* ==============================
-   🪐 Hero Section (Cloud + Rain)
-============================== */
-function HeroSection() {
-  return (
-    <section className="relative overflow-hidden">
-      {/* Gradient overlays for atmospheric depth */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_bottom,rgba(255,255,255,0.05)_0%,rgba(0,0,0,0.3)_100%)]"
-        style={{ zIndex: -25 }}
-      />
-
-      <Container className="relative z-10 grid items-center gap-16 py-28 lg:grid-cols-[1.35fr_1fr]">
-        <motion.div
-          className="space-y-8"
-          variants={staggerContainer}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.span
-            className="inline-flex w-fit items-center gap-2 rounded-full border border-[color-mix(in_oklab,var(--border) 45%,transparent)] bg-white/70 px-4 py-2 text-sm font-medium text-foreground/75 shadow-sm backdrop-blur dark:bg-[color-mix(in_oklab,var(--surface) 70%,transparent)]"
-            variants={fadeUp(0)}
-          >
-            <span className="h-2 w-2 rounded-full bg-[#43d7bd]" />
-            Systems-minded builder • Cloud • AI • Security
-          </motion.span>
-
-          <motion.h1
-            className={clsx(
-              "text-pretty text-4xl font-semibold leading-tight sm:text-5xl md:text-6xl",
-              gradients.heroText
-            )}
-            variants={fadeUp(1)}
-          >
-            Hey, I’m Adam Zaatar!  
-            I build scalable systems where cloud solutions, agentic AI, and cybersecurity converge.
-          </motion.h1>
-
-          <motion.p
-            className={clsx("max-w-2xl text-lg sm:text-xl", textStyles.muted)}
-            variants={fadeUp(2)}
-          >
-            Computer Science &amp; Economics @ Bowdoin. Studying to brandish my skills across the reliability, efficiency and the security of digital ecosystems and cloud solutions that scale sustainably. Seeking 2026 roles in Cloud, SRE, AI, or Cybersecurity.
-          </motion.p>
-
-          <motion.div
-            className="flex flex-wrap items-center gap-3"
-            variants={fadeUp(3)}
-          >
-            {focusChips.map((chip) => (
-              <span key={chip} className={chipClass}>
-                {chip}
-              </span>
-            ))}
-          </motion.div>
-
-          <motion.div
-            className="flex flex-wrap items-center gap-4 pt-2"
-            variants={fadeUp(4)}
-          >
-            <Link
-              href={RESUME_PATH}
-              className={resumeButtonClass}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              📄 View Resume
-            </Link>
-            <Link href="/projects" className={outlineButtonClass}>
-              🚀 Explore Projects
-            </Link>
-          </motion.div>
-        </motion.div>
-
-        <motion.figure
-          className="relative mx-auto h-full max-w-[420px]"
-          variants={fadeUp(1.5)}
-          initial="hidden"
-          animate="visible"
-        >
-          <div className="absolute inset-0 -z-10 blur-3xl opacity-70 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.45),transparent_40%),radial-gradient(circle_at_80%_0%,rgba(14,165,233,0.45),transparent_45%)]" />
-
-          <div className="relative rounded-[34px] bg-[linear-gradient(135deg,rgba(255,255,255,0.75),rgba(96,165,250,0.35),rgba(15,23,42,0.65))] p-[1.5px] shadow-[0_25px_60px_rgba(8,15,40,0.45),0_0_40px_rgba(59,130,246,0.35)]">
-            <div className="relative overflow-hidden rounded-[32px] bg-[color-mix(in_oklab,var(--surface) 70%,transparent)]/60 backdrop-blur-2xl">
-              <AppImage
-                image="profileHome"
-                alt="Adam Zaatar — portrait"
-                width={560}
-                height={680}
-                withShimmer
-                className="h-full w-full object-cover transition duration-700 ease-out hover:scale-[1.025]"
-                sizes="(min-width: 1280px) 420px, (min-width: 768px) 360px, 80vw"
-                priority
-              />
-
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(255,255,255,0.35),transparent_45%),radial-gradient(circle_at_80%_0%,rgba(14,165,233,0.2),transparent_50%)]" />
-
-              <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/90 backdrop-blur-md shadow-[0_5px_20px_rgba(15,23,42,0.4)]">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.9)]" />
-                Available · Summer 2026
-              </div>
-
-              <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/20 bg-black/50 p-4 text-white/90 backdrop-blur">
-                <p className="text-sm uppercase tracking-[0.4em] text-white/70">
-                  Aspiring Systems Engineer
-                </p>
-                <p className="mt-2 text-2xl font-semibold">Adam Zaatar</p>
-                <p className="text-sm text-white/70">
-                  Cloud · AI · Cybersecurity · SRE
-                </p>
-              </div>
-            </div>
-          </div>
-        </motion.figure>
-      </Container>
-    </section>
-  );
-}
-
-/* ==============================
-   🧠 Skills Section
-============================== */
-function SkillsSection() {
-  return (
-    <section className="relative border-t border-[color-mix(in_oklab,var(--border) 35%,transparent)] bg-transparent py-20">
-      <Container className="relative z-10 flex flex-col gap-10 rounded-[32px] bg-[color-mix(in_oklab,var(--surface) 65%,transparent)]/55 p-10 backdrop-blur-2xl shadow-[0_25px_80px_rgba(5,8,20,0.35)]">
-        <motion.div
-          className="max-w-3xl space-y-4"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.35 }}
-        >
-          <motion.span className="text-sm uppercase tracking-wide text-foreground/60" variants={fadeUp(0)}>
-            how I build
-          </motion.span>
-          <motion.h2 className="text-pretty text-3xl font-semibold text-foreground sm:text-4xl" variants={fadeUp(1)}>
-            Systems that stay observable, respectful of trust, and financially grounded.
-          </motion.h2>
-          <motion.p className={clsx("text-base", textStyles.muted)} variants={fadeUp(2)}>
-            I pair infrastructure strategy with day-to-day shipping: codified guardrails, automated rollouts, and feedback loops that keep teams fast without sacrificing reliability.
-          </motion.p>
-        </motion.div>
-
-        <motion.div
-          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          {capabilities.map((capability, index) => (
-            <motion.span key={capability} variants={fadeUp(index)} className={chipClass}>
-              {capability}
-            </motion.span>
-          ))}
-        </motion.div>
-      </Container>
-    </section>
-  );
-}
-
-/* ==============================
-   💼 Projects Section
-============================== */
-function ProjectsSection() {
-  return (
-    <section className="relative border-t border-[color-mix(in_oklab,var(--border) 40%,transparent)] bg-transparent py-24">
-      <Container className="relative z-10 flex flex-col gap-12 rounded-[32px] bg-[color-mix(in_oklab,var(--surface) 70%,transparent)]/55 p-10 backdrop-blur-2xl shadow-[0_30px_80px_rgba(5,8,20,0.35)]">
-        <motion.div
-          className="space-y-4"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.35 }}
-        >
-          <motion.span className="text-sm uppercase tracking-wide text-foreground/60" variants={fadeUp(0)}>
-            featured work
-          </motion.span>
-          <motion.h2 className="text-pretty text-3xl font-semibold text-foreground sm:text-4xl" variants={fadeUp(1)}>
-            Where infrastructure, security, and storytelling meet shipping.
-          </motion.h2>
-          <motion.p className={clsx("max-w-3xl text-base", textStyles.muted)} variants={fadeUp(2)}>
-            A mix of production-grade architecture, experimental prototypes, and ongoing research projects exploring how systems shape behavior.
-          </motion.p>
-        </motion.div>
-
-        <motion.div
-          className="grid gap-8 md:grid-cols-2 xl:grid-cols-3"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          {projects.map((project, index) => (
-            <motion.article
-              key={project.title}
-              variants={fadeUp(index)}
-              className={projectCardClass}
-              whileHover={{ translateY: -12 }}
-              transition={{ type: "spring", stiffness: 240, damping: 26 }}
-            >
-              <div className="mb-5 flex items-center justify-between gap-3">
-                <h3 className="text-lg font-semibold text-foreground">{project.title}</h3>
-                <span className="text-xs uppercase tracking-wide text-foreground/50">
-                  {project.stack.join(" • ")}
-                </span>
-              </div>
-              <p className={clsx("mb-6 text-sm leading-relaxed", textStyles.muted)}>
-                {project.summary}
+    <div className="bg-bg text-text">
+      <section className="border-b border-border/70">
+        <Container className="grid gap-12 py-16 sm:py-20 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.8fr)] lg:items-center">
+          <div className="space-y-7">
+            <p className="text-sm font-medium uppercase tracking-wide text-muted">
+              Adam Zaatar
+            </p>
+            <div className="space-y-5">
+              <h1 className="max-w-4xl text-4xl font-semibold tracking-normal text-text sm:text-5xl">
+                I&apos;m a Computer Science and Economics student at Bowdoin, building toward backend and systems engineering.
+              </h1>
+              <p className="max-w-3xl text-lg leading-relaxed text-muted sm:text-xl">
+                Right now I&apos;m doing a backend-focused Java internship at
+                ProgressSoft, a payments software company in Amman. Alongside
+                that, I work on applied AI, economics research, and
+                finance-oriented software.
               </p>
+              <p className="max-w-3xl text-base leading-relaxed text-muted">
+                This site is a record of what I&apos;ve actually built, studied,
+                and researched, with the proof attached where it exists.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-2" aria-label="Areas of interest">
+              {focusAreas.map((area) => (
+                <span
+                  key={area}
+                  className="rounded-full border border-border bg-surface px-3 py-1 text-sm text-muted"
+                >
+                  {area}
+                </span>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap gap-3">
               <Link
-                href={project.link}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-(--primary) transition-transform hover:translate-x-1"
+                href="/projects"
+                className="link-plain rounded-lg bg-text px-5 py-3 text-sm font-semibold text-bg transition-colors hover:bg-text/85"
+              >
+                View projects
+              </Link>
+              <Link
+                href="/research"
+                className="link-plain rounded-lg border border-border bg-surface px-5 py-3 text-sm font-semibold text-text transition-colors hover:border-text"
+              >
+                Read research
+              </Link>
+              <Link
+                href={RESUME_PATH}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="link-plain rounded-lg border border-border px-5 py-3 text-sm font-semibold text-text transition-colors hover:border-text"
               >
-                View project <span aria-hidden>→</span>
+                Resume
               </Link>
-            </motion.article>
-          ))}
-        </motion.div>
-      </Container>
-    </section>
-  );
-}
+            </div>
+          </div>
 
-/* ==============================
-   🎓 Certifications
-============================== */
-function CertificationsSection() {
-  return (
-    <section className="relative border-t border-[color-mix(in_oklab,var(--border) 38%,transparent)] bg-transparent py-24">
-      <Container className="relative z-10 flex flex-col gap-10 rounded-[32px] bg-[color-mix(in_oklab,var(--surface) 68%,transparent)]/55 p-10 backdrop-blur-2xl shadow-[0_22px_80px_rgba(5,8,20,0.35)]">
-        <motion.div
-          className="space-y-4"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.35 }}
-        >
-          <motion.span className="text-sm uppercase tracking-wide text-foreground/60" variants={fadeUp(0)}>
-            certifications
-          </motion.span>
-          <motion.h2 className="text-pretty text-3xl font-semibold text-foreground sm:text-4xl" variants={fadeUp(1)}>
-            Staying sharp across AI, finance, cloud, full-stack website and IOS development
-          </motion.h2>
-          <motion.p className={clsx("max-w-3xl text-base", textStyles.muted)} variants={fadeUp(2)}>
-            Learning paths that reinforce decision-making, policy, and delivery for systems at scale.
-          </motion.p>
-        </motion.div>
+          <figure className="mx-auto w-full max-w-sm">
+            <div className="overflow-hidden rounded-xl border border-border bg-surface">
+              <Image
+                src="/images/profile-home.jpg"
+                alt="Portrait of Adam Zaatar"
+                width={560}
+                height={680}
+                priority
+                className="h-auto w-full object-cover"
+                sizes="(min-width: 1024px) 360px, 80vw"
+              />
+            </div>
+          </figure>
+        </Container>
+      </section>
 
-        <motion.div
-          className="grid gap-6 md:grid-cols-2 xl:grid-cols-3"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          {certifications.map((cert, index) => (
-            <motion.div
-              key={cert.title}
-              variants={fadeUp(index)}
-              className={certificationCardClass}
-            >
-              {cert.image ? (
-                <div className="relative mb-4 aspect-[4/3] overflow-hidden rounded-xl border border-[color-mix(in_oklab,var(--border) 50%,transparent)]">
-                  {cert.proofHref ? (
-                    <Link
-                      href={cert.proofHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block h-full w-full"
-                      aria-label={`${cert.title} certificate preview`}
-                    >
-                      <AppImage
-                        image={cert.image}
-                        alt={`${cert.title} certificate`}
-                        fill
-                        className="object-cover"
-                        wrapperClassName="w-full h-full relative"
-                      />
-                    </Link>
-                  ) : (
-                    <AppImage
-                      image={cert.image}
-                      alt={`${cert.title} certificate`}
-                      fill
-                      className="object-cover"
-                      wrapperClassName="w-full h-full relative"
-                    />
-                  )}
-                </div>
-              ) : null}
+      <section className="border-b border-border/70 bg-surface/45">
+        <Container className="py-14 sm:py-16">
+          <div className="grid gap-6 md:grid-cols-3">
+            {atAGlance.map((item) => (
+              <article key={item.title} className="space-y-2">
+                <h2 className="text-lg font-semibold text-text">{item.title}</h2>
+                <p className="text-sm leading-relaxed text-muted">{item.body}</p>
+              </article>
+            ))}
+          </div>
+        </Container>
+      </section>
 
-              <span className="text-sm font-semibold uppercase tracking-wide text-(--primary)">
-                {cert.status === "complete" ? "Credential" : "In Progress"}
-              </span>
-              <p className="mt-1 text-xs uppercase tracking-[0.3em] text-foreground/60">
-                {cert.meta}
-              </p>
-              <h3 className="mt-2 text-base font-semibold text-foreground">
-                {cert.title}
-              </h3>
-              <div className="mt-4 flex items-center gap-3">
-                <span
-                  className={clsx(
-                    "inline-flex w-fit items-center rounded-full px-3 py-1 text-xs font-semibold",
-                    cert.status === "complete"
-                      ? "bg-emerald-500/15 text-emerald-400"
-                      : "bg-amber-400/15 text-amber-500",
-                  )}
+      <section>
+        <Container className="py-16 sm:py-20">
+          <div className="mb-8 max-w-3xl space-y-3">
+            <p className="text-sm font-medium uppercase tracking-wide text-muted">
+              Selected work
+            </p>
+            <h2 className="text-3xl font-semibold tracking-normal text-text">
+              Work with proof attached.
+            </h2>
+            <p className="text-base leading-relaxed text-muted">
+              I&apos;m keeping this section limited to work that has a demo,
+              PDF, repository, or concrete output.
+            </p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            {selectedWork.map((item) => {
+              const isExternal = item.href.startsWith("http");
+              const content = (
+                <article className="flex h-full flex-col rounded-xl border border-border bg-surface p-6 transition-colors hover:border-text/50">
+                  <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
+                    {item.status}
+                  </p>
+                  <h3 className="text-xl font-semibold text-text">{item.title}</h3>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
+                    {item.body}
+                  </p>
+                  <span className="mt-6 text-sm font-semibold text-text">
+                    {item.cta}
+                  </span>
+                </article>
+              );
+
+              return isExternal ? (
+                <a
+                  key={item.title}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-plain block"
                 >
-                  {cert.status === "complete" ? "Completed" : "In Progress"}
-                </span>
-                {cert.proofHref ? (
-                  <Link
-                    href={cert.proofHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="ml-auto inline-flex items-center text-xs font-semibold uppercase tracking-wide text-(--primary) hover:text-(--primary)/85"
-                  >
-                    View Certificate →
-                  </Link>
-                ) : null}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </Container>
-    </section>
-  );
-}
+                  {content}
+                </a>
+              ) : (
+                <Link key={item.title} href={item.href} className="link-plain block">
+                  {content}
+                </Link>
+              );
+            })}
+          </div>
+        </Container>
+      </section>
 
-/* ==============================
-   🚀 Final Call-to-Action
-============================== */
-function FinalCTASection() {
-  return (
-    <section className="relative border-t border-[color-mix(in_oklab,var(--border) 35%,transparent)] bg-transparent py-24">
-      <Container className="relative z-10 rounded-[32px] bg-[color-mix(in_oklab,var(--surface) 60%,transparent)]/55 p-10 backdrop-blur-2xl shadow-[0_30px_90px_rgba(5,8,20,0.38)]">
-        <motion.div
-          className={clsx(
-            cardBase,
-            "mx-auto max-w-4xl rounded-3xl border-[color-mix(in_oklab,var(--border) 45%,transparent)] bg-white/85 p-12 text-center shadow-[0_26px_60px_rgba(18,24,56,0.22)] backdrop-blur-xl dark:bg-[color-mix(in_oklab,var(--surface) 80%,transparent)]"
-          )}
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-        >
-          <motion.h2
-            className="text-pretty text-3xl font-semibold text-foreground sm:text-4xl"
-            variants={fadeUp(0)}
+      <section className="border-t border-border/70 bg-surface/45">
+        <Container className="py-16 sm:py-20">
+          <div className="mb-8 max-w-3xl space-y-3">
+            <p className="text-sm font-medium uppercase tracking-wide text-muted">
+              Experience
+            </p>
+            <h2 className="text-3xl font-semibold tracking-normal text-text">
+              Technical, research, and campus work.
+            </h2>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            {experience.map((item) => (
+              <article
+                key={`${item.organization}-${item.title}`}
+                className="rounded-xl border border-border bg-bg p-6"
+              >
+                <p className="text-xs font-medium uppercase tracking-wide text-muted">
+                  {item.organization} · {item.date}
+                </p>
+                <h3 className="mt-3 text-xl font-semibold text-text">
+                  {item.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted">
+                  {item.body}
+                </p>
+              </article>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="border-t border-border/70">
+        <Container className="flex flex-col gap-4 py-12 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-2xl font-semibold text-text">
+              Open to backend, systems, applied AI, and finance-oriented software roles.
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
+              I am looking for teams where I can learn from strong engineers,
+              write useful code, and take responsibility for real work.
+            </p>
+          </div>
+          <Link
+            href="/contact"
+            className="link-plain w-fit rounded-lg bg-text px-5 py-3 text-sm font-semibold text-bg transition-colors hover:bg-text/85"
           >
-            Let’s build something that lasts.
-          </motion.h2>
-          <motion.p
-            className={clsx("mt-4 text-base sm:text-lg", textStyles.muted)}
-            variants={fadeUp(1)}
-          >
-            Open to Cloud, SRE, AI, and Cybersecurity collaborations, especially with teams focused on resilient and measurable systems!
-          </motion.p>
-          <motion.div
-            className="mt-10 flex flex-wrap items-center justify-center gap-4"
-            variants={fadeUp(2)}
-          >
-            <Link
-              href="/resume/AdamZaatar_CV_2025.pdf"
-              className={resumeButtonClass}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              📄 View Resume
-            </Link>
-            <Link href="/contact" className={outlineButtonClass}>
-              📬 Contact Me
-            </Link>
-          </motion.div>
-        </motion.div>
-      </Container>
-    </section>
+            Contact
+          </Link>
+        </Container>
+      </section>
+    </div>
   );
 }
