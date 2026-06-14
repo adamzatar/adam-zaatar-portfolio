@@ -1,57 +1,9 @@
 import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
+import { featuredProjects, softwareProjects } from "@/lib/content";
 
-const featuredProjects = [
-  {
-    title: "ClickErase",
-    status: "Working AI image editing app",
-    description:
-      "A user uploads an image, clicks an object, and the app generates a segmentation mask and removes the selected object with inpainting. Built in Python with Gradio and Hugging Face Spaces.",
-    technologies: ["Python", "Gradio", "Computer vision", "Hugging Face Spaces"],
-    href: "https://huggingface.co/spaces/azaatar/clickerase",
-    cta: "Open demo",
-  },
-] as const;
-
-const projects = [
-  {
-    title: "Bowdoin Marketplace",
-    status: "In progress",
-    description:
-      "Campus marketplace and research prototype exploring student buying, selling, trust, and access. The repository exists, but the project should be treated as ongoing work.",
-    technologies: ["Next.js", "PostgreSQL", "Prisma"],
-    href: "https://github.com/adamzatar/Bowdoin-Marketplace",
-    cta: "Repository",
-  },
-  {
-    title: "Vector",
-    status: "Prototype",
-    description:
-      "SwiftUI and Vapor authentication prototype exploring passkeys, biometric fallback, and account security flows. Public code exists, but the project needs clearer documentation before it should carry a larger claim.",
-    technologies: ["SwiftUI", "Vapor", "Authentication"],
-    href: "https://github.com/adamzatar/Vector",
-    cta: "Repository",
-  },
-  {
-    title: "Cutaway",
-    status: "Prototype",
-    description:
-      "SwiftUI and AVFoundation project for experimenting with multi-angle video workflows. It is best presented as a prototype and learning project unless a demo or TestFlight link is added.",
-    technologies: ["SwiftUI", "AVFoundation"],
-    href: "https://github.com/adamzatar/Cutaway",
-    cta: "Repository",
-  },
-  {
-    title: "IntCalculator.java",
-    status: "Small Java project",
-    description:
-      "Command-line integer calculator focused on parsing input, handling operator precedence, and evaluating expressions.",
-    technologies: ["Java"],
-    href: "https://github.com/adamzatar/IntCalculator.java",
-    cta: "Repository",
-  },
-] as const;
+type Project = (typeof featuredProjects)[number] | (typeof softwareProjects)[number];
 
 export default function ProjectsPage() {
   return (
@@ -62,28 +14,27 @@ export default function ProjectsPage() {
             Projects
           </p>
           <h1 className="mt-3 text-4xl font-semibold tracking-normal text-text sm:text-5xl">
-            Software work with the current level of proof in mind.
+            Software projects and prototypes.
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
-            This page favors projects with a repository, a demo, a PDF, or a
-            concrete explanation. Clones and the portfolio itself are omitted
-            from the main list.
+            A short list of software work I can explain in detail, led by a
+            public demo and followed by smaller prototypes and Java work.
           </p>
         </div>
 
         <section className="mt-12">
           <div className="mb-5 max-w-2xl">
             <p className="text-sm font-medium uppercase tracking-wide text-muted">
-              Strongest software proof
+              Featured project
             </p>
             <h2 className="mt-2 text-2xl font-semibold text-text">
-              Working demo available.
+              ClickErase demo.
             </h2>
           </div>
 
           <div className="grid gap-5 md:grid-cols-2">
             {featuredProjects.map((project) => (
-              <ProjectCard key={project.title} project={project} />
+              <ProjectCard key={project.title} project={project} featured />
             ))}
           </div>
         </section>
@@ -94,12 +45,12 @@ export default function ProjectsPage() {
               Other software work
             </p>
             <h2 className="mt-2 text-2xl font-semibold text-text">
-              Repositories and prototypes.
+              More projects I can discuss.
             </h2>
           </div>
 
           <div className="grid gap-5 md:grid-cols-2">
-            {projects.map((project) => (
+            {softwareProjects.map((project) => (
               <ProjectCard key={project.title} project={project} />
             ))}
           </div>
@@ -115,8 +66,8 @@ export default function ProjectsPage() {
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted">
               The research page includes papers on lobbying and democracy,
-              greedflation and producer prices, and financial literacy programs
-              at peer institutions.
+              producer prices and profits, and financial literacy programs at
+              peer institutions.
             </p>
             <Link
               href="/research"
@@ -131,16 +82,24 @@ export default function ProjectsPage() {
   );
 }
 
-type Project = (typeof featuredProjects)[number] | (typeof projects)[number];
-
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({
+  project,
+  featured = false,
+}: {
+  project: Project;
+  featured?: boolean;
+}) {
   return (
-    <article className="flex h-full flex-col rounded-xl border border-border bg-surface p-6">
-      <p className="text-xs font-medium uppercase tracking-wide text-muted">
+    <article
+      className={`interactive-card flex h-full flex-col rounded-xl border border-border bg-surface hover:border-primary/45 ${
+        featured ? "p-7 sm:p-8" : "p-6"
+      }`}
+    >
+      <p className="w-fit rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-text">
         {project.status}
       </p>
-      <h3 className="mt-3 text-2xl font-semibold text-text">{project.title}</h3>
-      <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
+      <h3 className="mt-4 text-2xl font-semibold text-text">{project.title}</h3>
+      <p className="mt-4 flex-1 text-sm leading-relaxed text-muted">
         {project.description}
       </p>
       <ul className="mt-5 flex flex-wrap gap-2" aria-label="Technologies">
@@ -157,7 +116,11 @@ function ProjectCard({ project }: { project: Project }) {
         href={project.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="link-plain mt-6 w-fit text-sm font-semibold text-text underline underline-offset-4"
+        className={
+          featured
+            ? "link-plain mt-7 w-fit rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-contrast transition-colors duration-200 ease-out hover:bg-primary/90"
+            : "link-plain mt-6 w-fit text-sm font-semibold text-text underline underline-offset-4 transition-colors duration-200 ease-out hover:text-primary"
+        }
       >
         {project.cta}
       </a>

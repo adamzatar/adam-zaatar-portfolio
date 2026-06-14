@@ -1,71 +1,13 @@
-// app/research/page.tsx
 "use client";
+
 import * as React from "react";
-import { MotionConfig, type Variants } from "framer-motion";
-import { motion } from "framer-motion";
-import { FileText, X, AlertTriangle } from "lucide-react";
+import { AlertTriangle, FileText, X } from "lucide-react";
+
 import { Container } from "@/components/ui/Container";
-import { Button } from "@/components/ui/Button";
+import { researchItems } from "@/lib/content";
 
-/* --------------------------------
-   Types
---------------------------------- */
-type ResearchItem = {
-  title: string;
-  description: string;
-  /** Path under /public (e.g. /research/my paper.pdf). */
-  file: string;
-};
+type ResearchItem = (typeof researchItems)[number];
 
-/* --------------------------------
-   Data
-   (Spaces in filenames are okay; we encode the trailing file segment only.)
---------------------------------- */
-const RESEARCH: ResearchItem[] = [
-  {
-    title: "Who Rules? Lobbying’s Grip on Democracy",
-    description:
-      "Examines how corporate lobbying shapes U.S. policy, when it crosses into social irresponsibility, and when transparent advocacy can strengthen democracy.",
-    // ⬇️ Use the actual file name you copied into /public/research
-    file: "/research/Research Paper - Behavioral Economics.pdf",
-  },
-  {
-    title: "Economic Statistics Paper (ECON2557)",
-    description:
-      "Analyzed “greedflation” with OLS regressions on corporate profits and producer price indices after COVID.",
-    file: "/research/Zaatar_ECON2557_Paper.pdf",
-  },
-  {
-    title: "Second-Phase Report",
-    description:
-      "Expanded the financial literacy study into potential syllabi structures, assignments, grading breakdowns, and implementation strategies for different course models—from semester-long to intensive bootcamps.",
-    file: "/research/Second-Phase Report_ Models of the Class.pdf",
-  },
-  {
-    title: "Financial Literacy Programs at Peer Institutions",
-    description:
-      "Studied financial literacy initiatives at peer colleges to inform curriculum design at Bowdoin and local high schools.",
-    file: "/research/Financial Literacy Programs at Peer Institutions.pdf",
-  },
-];
-
-/* --------------------------------
-   Motion
---------------------------------- */
-const fadeUp = (i = 0): Variants => ({
-  hidden: { opacity: 0, y: 40, scale: 0.98 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.55, ease: "easeOut", delay: i * 0.08 },
-  },
-});
-
-/* --------------------------------
-   Helpers
---------------------------------- */
-/** Encode only the filename segment; keep path slashes intact. */
 function encodePathSafe(path: string): string {
   const lastSlash = path.lastIndexOf("/");
   if (lastSlash === -1) return encodeURIComponent(path);
@@ -74,25 +16,20 @@ function encodePathSafe(path: string): string {
   return dir + encodeURIComponent(file);
 }
 
-/* --------------------------------
-   Page
---------------------------------- */
 export default function ResearchPage() {
   const [selected, setSelected] = React.useState<ResearchItem | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [iframeError, setIframeError] = React.useState(false);
   const closeBtnRef = React.useRef<HTMLButtonElement | null>(null);
 
-  // Close with Escape
   React.useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSelected(null);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelected(null);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Focus close button on open; reset states on close
   React.useEffect(() => {
     if (selected) {
       setTimeout(() => closeBtnRef.current?.focus(), 50);
@@ -103,200 +40,148 @@ export default function ResearchPage() {
   }, [selected]);
 
   return (
-    <MotionConfig reducedMotion="user">
-      <main className="relative overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10
-                     bg-[radial-gradient(60%_40%_at_50%_-10%,color-mix(in_oklab,var(--primary)_18%,transparent),transparent_70%)]"
-        />
+    <section className="bg-bg py-16 sm:py-20">
+      <Container>
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-sm font-medium uppercase tracking-wide text-muted">
+            Research
+          </p>
+          <h1 className="mt-3 text-4xl font-semibold tracking-normal text-text sm:text-5xl">
+            Research and writing.
+          </h1>
+          <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
+            Papers and reports from economics coursework and financial literacy
+            research.
+          </p>
+        </div>
 
-        <Container className="py-20 sm:py-28 relative z-0">
-          {/* Heading */}
-          <header className="text-center max-w-4xl mx-auto">
-            <motion.h1
-              variants={fadeUp(0)}
-              initial="hidden"
-              animate="visible"
-              className="text-pretty text-4xl sm:text-5xl font-extrabold tracking-tight
-                         bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent)
-                         bg-clip-text text-transparent drop-shadow-sm"
+        <section className="mt-12 grid gap-5 sm:grid-cols-2">
+          {researchItems.map((item) => (
+            <article
+              key={item.title}
+              className="interactive-card flex h-full flex-col rounded-xl border border-border bg-surface p-6 hover:border-primary/45"
             >
-              Research
-            </motion.h1>
+              <p className="w-fit rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-text">
+                {item.status}
+              </p>
+              <h2 className="mt-3 text-2xl font-semibold text-text">
+                {item.title}
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted">
+                {item.description}
+              </p>
+              <p className="mt-5 text-xs font-medium uppercase tracking-wide text-muted">
+                Methods
+              </p>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
+                {item.methods}
+              </p>
 
-            <motion.p
-              variants={fadeUp(0.5)}
-              initial="hidden"
-              animate="visible"
-              className="mt-6 text-balance text-lg sm:text-xl text-muted text-center max-w-3xl mx-auto leading-relaxed"
-            >
-              A selection of academic projects combining{" "}
-              <span className="text-(--primary) font-semibold">economics</span>,{" "}
-              <span className="text-(--secondary) font-semibold">behavioral insights</span>, and{" "}
-              <span className="text-(--accent) font-semibold">quantitative methods</span>.
-            </motion.p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a
+                  href={encodePathSafe(item.file)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open ${item.title} PDF in a new tab`}
+                  className="link-plain inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-contrast transition-colors duration-200 ease-out hover:bg-primary/90"
+                >
+                  <FileText className="h-4 w-4" aria-hidden />
+                  Read PDF
+                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelected(item);
+                    setIframeError(false);
+                    setLoading(true);
+                  }}
+                  aria-label={`Preview ${item.title}`}
+                  className="link-plain rounded-lg border border-border bg-surface px-4 py-2 text-sm font-semibold text-text transition-colors duration-200 ease-out hover:border-primary/50"
+                >
+                  Preview
+                </button>
+              </div>
+            </article>
+          ))}
+        </section>
 
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-              className="mt-10 h-[3px] w-44 mx-auto bg-linear-to-r
-                         from-(--primary) via-(--secondary) to-(--accent)
-                         rounded-full origin-center"
-              aria-hidden
-            />
-          </header>
-
-          {/* Grid of research cards */}
-          <section className="mt-12 grid gap-8 sm:grid-cols-2">
-            {RESEARCH.map((item, index) => (
-              <motion.article
-                key={item.title}
-                variants={fadeUp(1 + index * 0.08)}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.3 }}
-                whileHover={{ y: -8, scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 220, damping: 18 }}
-                className="ui-card flex flex-col rounded-2xl p-0 overflow-hidden
-                           border border-[color-mix(in_oklab,var(--border)_70%,transparent)]
-                           shadow-[0_8px_24px_rgba(0,0,0,0.22)] hover:shadow-[0_14px_34px_rgba(0,0,0,0.3)]
-                           ring-1 ring-white/5 transition-all"
-              >
-                <div className="p-6 sm:p-7 flex flex-col flex-1">
-                  <h2
-                    className="text-xl sm:text-2xl font-bold mb-3
-                               bg-linear-to-r from-(--primary) to-(--secondary)
-                               bg-clip-text text-transparent"
-                  >
-                    {item.title}
+        {selected && (
+          <section className="mt-14" aria-labelledby="preview-title">
+            <div className="rounded-xl border border-border bg-surface p-6 sm:p-8">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h2 id="preview-title" className="text-2xl font-semibold text-text">
+                    {selected.title}
                   </h2>
-                  <p className="text-muted text-base leading-relaxed flex-1 mb-6">
-                    {item.description}
+                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                    {selected.description}
                   </p>
-
-                  <div className="mt-auto flex items-center justify-end gap-3">
-                    <Button asChild variant="primary" size="sm" className="gap-2">
-                      <a
-                        href={encodePathSafe(item.file)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`Open ${item.title} PDF in a new tab`}
-                      >
-                        <FileText className="w-4 h-4" />
-                        Read Paper
-                      </a>
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setSelected(item);
-                        setIframeError(false);
-                        setLoading(true);
-                      }}
-                      aria-label={`Preview ${item.title}`}
-                    >
-                      Preview
-                    </Button>
-                  </div>
-                </div>
-              </motion.article>
-            ))}
-          </section>
-
-          {/* Selected research preview */}
-          {selected && (
-            <motion.section
-              key={selected.file}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, ease: "easeOut" }}
-              className="mt-14"
-              aria-labelledby="preview-title"
-            >
-              <div className="relative p-6 sm:p-8 rounded-2xl bg-(--surface)/90
-                              supports-backdrop-filter:backdrop-blur-xl
-                              border border-[color-mix(in_oklab,var(--border)_70%,transparent)]
-                              shadow-[0_12px_36px_rgba(0,0,0,0.28)]">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 id="preview-title" className="text-2xl sm:text-3xl font-bold text-foreground">
-                      {selected.title}
-                    </h3>
-                    <p className="mt-2 text-muted">{selected.description}</p>
-                  </div>
-
-                  <Button
-                    ref={closeBtnRef}
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setSelected(null)}
-                    aria-label="Close preview"
-                    className="shrink-0"
-                  >
-                    <X className="w-5 h-5" />
-                  </Button>
                 </div>
 
-                {loading && !iframeError && (
-                  <div
-                    className="mt-6 w-full h-[600px] rounded-lg border
-                               border-[color-mix(in_oklab,var(--border)_70%,transparent)]
-                               bg-[color-mix(in_oklab,var(--surface)_35%,transparent)]
-                               animate-pulse relative overflow-hidden"
-                    aria-hidden
-                  >
-                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/25 to-transparent animate-[shimmer_2s_infinite]" />
-                  </div>
-                )}
+                <button
+                  ref={closeBtnRef}
+                  type="button"
+                  onClick={() => setSelected(null)}
+                  aria-label="Close preview"
+                  className="link-plain rounded-lg border border-border p-2 text-text transition-colors duration-200 ease-out hover:border-primary/50"
+                >
+                  <X className="h-5 w-5" aria-hidden />
+                </button>
+              </div>
 
-                {iframeError && (
-                  <div className="mt-6 w-full rounded-lg border border-[color-mix(in_oklab,var(--border)_70%,transparent)] p-6 bg-[color-mix(in_oklab,var(--surface)_35%,transparent)]">
-                    <div className="flex items-start gap-3">
-                      <AlertTriangle className="w-5 h-5 text-(--accent) mt-0.5" />
-                      <div className="text-sm text-muted">
-                        <p className="font-medium text-foreground mb-1">Couldn’t load the preview.</p>
-                        <p>
-                          Some browsers block inline PDF viewing.{" "}
-                          <a
-                            href={encodePathSafe(selected.file)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-(--primary) underline hover:opacity-90"
-                          >
-                            Open the paper in a new tab
-                          </a>
-                          .
-                        </p>
-                      </div>
+              {loading && !iframeError && (
+                <div
+                  className="mt-6 flex h-[600px] w-full items-center justify-center rounded-lg border border-border bg-bg text-sm text-muted"
+                  aria-hidden
+                >
+                  Loading preview...
+                </div>
+              )}
+
+              {iframeError && (
+                <div className="mt-6 rounded-lg border border-border bg-bg p-6">
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="mt-0.5 h-5 w-5 text-text" aria-hidden />
+                    <div className="text-sm text-muted">
+                      <p className="mb-1 font-medium text-text">
+                        Couldn&apos;t load the preview.
+                      </p>
+                      <p>
+                        Some browsers block inline PDF viewing.{" "}
+                        <a
+                          href={encodePathSafe(selected.file)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="link-plain font-semibold text-text underline underline-offset-4"
+                        >
+                          Open the paper in a new tab
+                        </a>
+                        .
+                      </p>
                     </div>
                   </div>
-                )}
+                </div>
+              )}
 
-                {!iframeError && (
-                  <iframe
-                    key={encodePathSafe(selected.file)}
-                    src={encodePathSafe(selected.file)}
-                    className={`mt-6 w-full h-[600px] rounded-lg border
-                                border-[color-mix(in_oklab,var(--border)_70%,transparent)]
-                                transition-opacity duration-500 ${loading ? "opacity-0" : "opacity-100"}`}
-                    title={`${selected.title} (PDF)`}
-                    onLoad={() => setLoading(false)}
-                    onError={() => {
-                      setLoading(false);
-                      setIframeError(true);
-                    }}
-                  />
-                )}
-              </div>
-            </motion.section>
-          )}
-        </Container>
-      </main>
-    </MotionConfig>
+              {!iframeError && (
+                <iframe
+                  key={encodePathSafe(selected.file)}
+                  src={encodePathSafe(selected.file)}
+                  className={`mt-6 h-[600px] w-full rounded-lg border border-border ${
+                    loading ? "hidden" : "block"
+                  }`}
+                  title={`${selected.title} PDF`}
+                  onLoad={() => setLoading(false)}
+                  onError={() => {
+                    setLoading(false);
+                    setIframeError(true);
+                  }}
+                />
+              )}
+            </div>
+          </section>
+        )}
+      </Container>
+    </section>
   );
 }

@@ -1,25 +1,10 @@
 import { cn } from "@/lib/utils";
-import {
-  ElementType,
-  ReactNode,
-  HTMLAttributes,
-  forwardRef,
-} from "react";
+import { ElementType, ReactNode, HTMLAttributes, forwardRef } from "react";
 
 interface ContainerProps extends HTMLAttributes<HTMLElement> {
-  /**
-   * Semantic HTML element type (e.g. <section>, <main>, <header>).
-   * Defaults to <div>.
-   */
   as?: ElementType;
-
-  /** Container content */
   children: ReactNode;
-
-  /** Adds vertical padding for sectional layout */
   padded?: boolean;
-
-  /** Sets max-width constraint (default: 7xl) */
   maxWidth?:
     | "sm"
     | "md"
@@ -32,9 +17,6 @@ interface ContainerProps extends HTMLAttributes<HTMLElement> {
     | "6xl"
     | "7xl"
     | "full";
-
-  /** Optional background layering */
-  layer?: "default" | "frosted" | "transparent" | "glass";
 }
 
 export const Container = forwardRef<HTMLElement, ContainerProps>(
@@ -45,12 +27,10 @@ export const Container = forwardRef<HTMLElement, ContainerProps>(
       children,
       padded = false,
       maxWidth = "7xl",
-      layer = "default",
       ...props
     },
     ref
   ) => {
-    /* Tailwind-safe static width map (since template literals don't work for max-w- classes) */
     const widthMap: Record<string, string> = {
       sm: "max-w-sm",
       md: "max-w-md",
@@ -65,16 +45,6 @@ export const Container = forwardRef<HTMLElement, ContainerProps>(
       full: "max-w-full",
     };
 
-    /* Layer visual mapping */
-    const layerStyles: Record<string, string> = {
-      default: "",
-      frosted:
-        "backdrop-blur-xl bg-[color-mix(in_oklab,var(--surface)85%,transparent)] border border-[color-mix(in_oklab,var(--border)70%,transparent)] shadow-[0_10px_30px_rgba(0,0,0,0.25)]",
-      transparent: "bg-transparent",
-      glass:
-        "backdrop-blur-2xl bg-[color-mix(in_oklab,var(--surface)70%,transparent)] border border-[color-mix(in_oklab,var(--border)55%,transparent)] shadow-[0_8px_24px_rgba(0,0,0,0.2)]",
-    };
-
     return (
       <Tag
         ref={ref}
@@ -83,8 +53,6 @@ export const Container = forwardRef<HTMLElement, ContainerProps>(
           widthMap[maxWidth],
           "px-6 sm:px-8 lg:px-12",
           padded && "py-12 sm:py-16 lg:py-20",
-          layerStyles[layer],
-          "transition-all duration-300",
           className
         )}
         {...props}
@@ -96,5 +64,3 @@ export const Container = forwardRef<HTMLElement, ContainerProps>(
 );
 
 Container.displayName = "Container";
-
-/* Uses static class mappings for Tailwind max-width classes. */

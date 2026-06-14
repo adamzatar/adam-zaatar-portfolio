@@ -57,25 +57,16 @@ export function NavLink({
     <Link
       href={href}
       className={clsx(
-        "group relative inline-flex items-center px-2 py-1 text-lg font-medium transition-colors",
+        "nav-link-float link-plain inline-flex items-center rounded-full border px-3 py-2 text-sm font-medium",
         active
-          ? "text-foreground"
-          : "text-foreground/70 hover:text-foreground focus-visible:text-foreground",
+          ? "nav-link-float-active border-primary/25 bg-primary/10 text-text"
+          : "border-transparent text-muted hover:border-border hover:bg-surface hover:text-text focus-visible:text-text",
         className
       )}
       aria-current={active ? "page" : undefined}
     >
       <span>{children}</span>
-      <span
-        aria-hidden
-        className={clsx(
-          "absolute left-0 -bottom-1 h-[2px] w-full origin-left scale-x-0 transform rounded-full bg-linear-to-r from-(--primary) via-(--secondary) to-(--accent) transition-all duration-500 ease-out",
-          active
-            ? "scale-x-100 shadow-[0_0_8px_var(--primary),0_0_16px_var(--secondary)]"
-            : "group-hover:scale-x-100 focus-visible:scale-x-100",
-          underlineClassName
-        )}
-      />
+      {underlineClassName ? <span aria-hidden className={underlineClassName} /> : null}
     </Link>
   );
 }

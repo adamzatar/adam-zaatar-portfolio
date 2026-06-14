@@ -2,34 +2,21 @@
 @import "tailwindcss/theme";
 @import "tailwindcss/utilities";
 
-/* === DESIGN TOKENS === */
+/* Design tokens */
 :root {
   color-scheme: light;
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
 
-  /* Palette — Light */
   --bg: #fff8f5;
   --surface: rgba(255, 255, 255, 0.8);
   --text: #111827;
   --foreground: 222 47% 11%;
   --muted: #374151;
   --border: #e5e7eb;
-  --primary: #9333ea;
-  --secondary: #ec4899;
-  --accent: #f97316;
-
-  --primary-h: 272deg;
-  --secondary-h: 325deg;
-  --accent-h: 24deg;
+  --primary: #4f46e5;
+  --primary-contrast: #ffffff;
   --ring: var(--primary);
-
-  /* Motion baseline */
-  --motion-fast: 180ms;
-  --motion-medium: 360ms;
-  --motion-slow: 720ms;
-
-  --light-intensity: 1;
 }
 
 .dark {
@@ -41,33 +28,24 @@
   --muted: #9ca3af;
   --border: #2d333b;
   --primary: #6366f1;
-  --secondary: #22d3ee;
-  --accent: #f472b6;
-
-  --primary-h: 235deg;
-  --secondary-h: 182deg;
-  --accent-h: 322deg;
+  --primary-contrast: #ffffff;
   --ring: var(--primary);
-  --light-intensity: 0.7;
 }
 
-/* === BASE === */
+/* Base */
 html {
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: linear-gradient(to bottom, var(--bg), var(--surface));
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100dvh;
   text-rendering: optimizeLegibility;
-  transition:
-    background-color var(--motion-medium) ease,
-    color var(--motion-medium) ease;
 }
 
 /* Headings */
@@ -81,14 +59,12 @@ h6 {
   letter-spacing: 0;
 }
 
-/* Links */
 a {
   position: relative;
-  transition: color var(--motion-fast) ease;
 }
 
 a:not(.link-plain):hover {
-  color: var(--accent);
+  color: var(--primary);
 }
 
 a.link-plain {
@@ -100,75 +76,82 @@ a.link-plain:hover {
   text-shadow: none;
 }
 
-/* ===========================================
-   UTILITY ANIMATIONS
-=========================================== */
-@keyframes shimmer {
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+/* Page entry transition – fires on every route change via app/template.tsx */
+@keyframes page-enter {
   from {
-    transform: translateX(-100%);
+    opacity: 0.92;
+    transform: translateY(4px);
   }
   to {
-    transform: translateX(100%);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* ===========================================
-   UI CARD UTILITIES
-=========================================== */
-@layer utilities {
-  .ui-card {
-    position: relative;
-    background:
-      linear-gradient(
-        135deg,
-        color-mix(in oklab, var(--primary) 12%, transparent) 0%,
-        color-mix(in oklab, var(--surface) 96%, white 6%) 55%,
-        color-mix(in oklab, var(--secondary) 10%, transparent) 100%
-      );
-    border: 1px solid color-mix(in oklab, var(--border) 65%, transparent);
-    border-radius: 1.2rem;
-    box-shadow: 0 12px 32px rgba(6, 10, 25, 0.14);
-    overflow: hidden;
-    transition:
-      transform var(--motion-fast) ease,
-      box-shadow var(--motion-medium) ease,
-      border-color var(--motion-medium) ease;
-  }
+.page-enter {
+  animation: page-enter 200ms ease-out both;
+}
 
-  .ui-card::before {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    background: linear-gradient(
-      135deg,
-      color-mix(in oklab, var(--primary) 45%, transparent) 0%,
-      color-mix(in oklab, var(--secondary) 25%, transparent) 40%,
-      transparent 65%
-    );
-    opacity: 0;
-    mix-blend-mode: screen;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
   }
+}
 
-  .ui-card::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: radial-gradient(circle at 20% -10%, rgba(255, 255, 255, 0.35), transparent 55%);
-    opacity: 0.45;
-    pointer-events: none;
+/* Interactive card – subtle lift and shadow on hover */
+.interactive-card {
+  transition:
+    color 200ms ease-out,
+    background-color 200ms ease-out,
+    border-color 200ms ease-out,
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out;
+}
+
+.interactive-card:hover,
+.interactive-card:focus-within {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.13);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive-card:hover,
+  .interactive-card:focus-within {
+    transform: none;
+    box-shadow: none;
   }
+}
 
-  .ui-card:hover {
-    transform: translateY(-8px);
-    border-color: color-mix(in oklab, var(--primary) 50%, transparent);
-    box-shadow: 0 20px 50px rgba(6, 10, 30, 0.22);
+/* Nav link float – pill links lift slightly on hover; active stays elevated */
+.nav-link-float {
+  transition:
+    color 200ms ease-out,
+    background-color 200ms ease-out,
+    border-color 200ms ease-out,
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out;
+}
+
+.nav-link-float:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.09);
+}
+
+.nav-link-float-active {
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-link-float:hover {
+    transform: none;
+    box-shadow: none;
   }
-
-  .ui-card:hover::before {
-    opacity: 0.85;
+  .nav-link-float-active {
+    box-shadow: none;
   }
 }

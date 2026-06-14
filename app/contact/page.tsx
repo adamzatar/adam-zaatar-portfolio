@@ -1,13 +1,14 @@
 import { Github, Linkedin, Mail } from "lucide-react";
 
 import { Container } from "@/components/ui/Container";
+import { EMAIL, GITHUB_URL, LINKEDIN_URL } from "@/lib/content";
 
 const contactMethods = [
   {
     icon: Mail,
     title: "Email",
-    text: "azaatar@bowdoin.edu",
-    href: "mailto:azaatar@bowdoin.edu",
+    text: EMAIL,
+    href: `mailto:${EMAIL}`,
     cta: "Send email",
     external: false,
   },
@@ -15,7 +16,7 @@ const contactMethods = [
     icon: Linkedin,
     title: "LinkedIn",
     text: "Adam Zaatar",
-    href: "https://www.linkedin.com/in/adam-zaatar-09b106304?miniProfileUrn=urn%3Ali%3Afs_miniProfile%3AACoAAE2dNPcBbnu6cGrezXKH7zFdmJefhn6vmXs&lipi=urn%3Ali%3Apage%3Ad_flagship3_search_srp_all%3B5GoLqgRFTeWosocK647j0w%3D%3D",
+    href: LINKEDIN_URL,
     cta: "View profile",
     external: true,
   },
@@ -23,7 +24,7 @@ const contactMethods = [
     icon: Github,
     title: "GitHub",
     text: "github.com/adamzatar",
-    href: "https://github.com/adamzatar",
+    href: GITHUB_URL,
     cta: "View repositories",
     external: true,
   },
@@ -38,11 +39,11 @@ export default function ContactPage() {
             Contact
           </p>
           <h1 className="mt-3 text-4xl font-semibold tracking-normal text-text sm:text-5xl">
-            Get in touch.
+            Contact Adam.
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
             I&apos;m glad to hear about internships, technical projects, research
-            ideas, or student-facing software work.
+            ideas, or software work around campus.
           </p>
         </div>
 
@@ -50,16 +51,16 @@ export default function ContactPage() {
           {contactMethods.map(({ icon: Icon, title, text, href, cta, external }) => (
             <article
               key={title}
-              className="flex h-full flex-col rounded-xl border border-border bg-surface p-6"
+              className="interactive-card flex h-full flex-col rounded-xl border border-border bg-surface p-6 hover:border-primary/45"
             >
-              <Icon className="h-6 w-6 text-text" aria-hidden />
+              <Icon className="h-6 w-6 text-primary" aria-hidden />
               <h2 className="mt-4 text-lg font-semibold text-text">{title}</h2>
               <p className="mt-2 flex-1 text-sm text-muted">{text}</p>
               <a
                 href={href}
                 target={external ? "_blank" : undefined}
                 rel={external ? "noopener noreferrer" : undefined}
-                className="link-plain mt-6 w-fit text-sm font-semibold text-text underline underline-offset-4"
+                className="link-plain mt-6 w-fit text-sm font-semibold text-text underline underline-offset-4 transition-colors duration-200 ease-out hover:text-primary"
               >
                 {cta}
               </a>

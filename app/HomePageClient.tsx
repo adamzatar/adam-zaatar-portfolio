@@ -3,74 +3,7 @@ import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
 import { RESUME_PATH } from "@/lib/constants/resume";
-
-const CLICKERASE_URL = "https://huggingface.co/spaces/azaatar/clickerase";
-
-const focusAreas = [
-  "Backend systems",
-  "Applied AI",
-  "Finance-oriented software",
-  "Security-adjacent work",
-] as const;
-
-const atAGlance = [
-  {
-    title: "Bowdoin College",
-    body: "Computer Science and Economics student with a German minor.",
-  },
-  {
-    title: "Backend Java training",
-    body: "Software Engineering Intern at ProgressSoft in Amman, Summer 2026.",
-  },
-  {
-    title: "Research and campus work",
-    body: "Economics research PDFs, Bowdoin Orient web staff work, and student organization leadership.",
-  },
-] as const;
-
-const selectedWork = [
-  {
-    title: "ClickErase",
-    status: "Working AI image editing app",
-    body: "Built a working AI image editing app where a user uploads an image, clicks an object, and the app generates a segmentation mask and removes the object with inpainting. Built in Python with Gradio and Hugging Face Spaces.",
-    href: CLICKERASE_URL,
-    cta: "Open demo",
-  },
-  {
-    title: "Economics research archive",
-    status: "PDFs available",
-    body: "Research papers and financial literacy reports with source PDFs available to inspect, including work on lobbying, behavioral economics, and student financial literacy programs.",
-    href: "/research",
-    cta: "Read research",
-  },
-] as const;
-
-const experience = [
-  {
-    title: "Software Engineering Intern",
-    organization: "ProgressSoft",
-    date: "Summer 2026",
-    body: "Backend-focused Java internship at a payments software company in Amman, covering Spring Framework and Spring Boot, JPA, Spring Security, Docker, test-driven development with JUnit and Mockito, and code reviews, toward the standards used by ProgressSoft development teams.",
-  },
-  {
-    title: "Gibbons Research Fellow",
-    organization: "Bowdoin College",
-    date: "Summer 2025",
-    body: "Designed a financial literacy program for students, benchmarked peer schools, and wrote two course models.",
-  },
-  {
-    title: "Web Staff and Data Desk",
-    organization: "The Bowdoin Orient",
-    date: "Bowdoin",
-    body: "Web and plugin fixes, accessibility, and data work behind reported pieces.",
-  },
-  {
-    title: "Founder and President",
-    organization: "Bowdoin Martial Arts Club",
-    date: "Bowdoin",
-    body: "Funding, logistics, recruiting, and coordination with outside gym partners.",
-  },
-] as const;
+import { atAGlance, experienceItems, focusAreas, selectedWork } from "@/lib/content";
 
 export default function HomePageClient() {
   return (
@@ -92,8 +25,8 @@ export default function HomePageClient() {
                 finance-oriented software.
               </p>
               <p className="max-w-3xl text-base leading-relaxed text-muted">
-                This site is a record of what I&apos;ve actually built, studied,
-                and researched, with the proof attached where it exists.
+                This site collects projects, research, and experience I can
+                discuss in detail.
               </p>
             </div>
 
@@ -111,13 +44,13 @@ export default function HomePageClient() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/projects"
-                className="link-plain rounded-lg bg-text px-5 py-3 text-sm font-semibold text-bg transition-colors hover:bg-text/85"
+                className="link-plain rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-contrast transition-colors duration-200 ease-out hover:bg-primary/90"
               >
                 View projects
               </Link>
               <Link
                 href="/research"
-                className="link-plain rounded-lg border border-border bg-surface px-5 py-3 text-sm font-semibold text-text transition-colors hover:border-text"
+                className="link-plain rounded-lg border border-border bg-surface px-5 py-3 text-sm font-semibold text-text transition-colors duration-200 ease-out hover:border-primary/50"
               >
                 Read research
               </Link>
@@ -125,7 +58,7 @@ export default function HomePageClient() {
                 href={RESUME_PATH}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="link-plain rounded-lg border border-border px-5 py-3 text-sm font-semibold text-text transition-colors hover:border-text"
+                className="link-plain rounded-lg border border-border px-5 py-3 text-sm font-semibold text-text transition-colors duration-200 ease-out hover:border-primary/50"
               >
                 Resume
               </Link>
@@ -164,15 +97,15 @@ export default function HomePageClient() {
       <section>
         <Container className="py-16 sm:py-20">
           <div className="mb-8 max-w-3xl space-y-3">
-            <p className="text-sm font-medium uppercase tracking-wide text-muted">
+            <p className="text-sm font-medium uppercase tracking-wide text-primary">
               Selected work
             </p>
             <h2 className="text-3xl font-semibold tracking-normal text-text">
-              Work with proof attached.
+              Projects and research.
             </h2>
             <p className="text-base leading-relaxed text-muted">
-              I&apos;m keeping this section limited to work that has a demo,
-              PDF, repository, or concrete output.
+              These are the pieces I can point to directly, through a demo,
+              PDF, repository, or written output.
             </p>
           </div>
 
@@ -180,15 +113,15 @@ export default function HomePageClient() {
             {selectedWork.map((item) => {
               const isExternal = item.href.startsWith("http");
               const content = (
-                <article className="flex h-full flex-col rounded-xl border border-border bg-surface p-6 transition-colors hover:border-text/50">
-                  <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
+                <article className="interactive-card flex h-full flex-col rounded-xl border border-border bg-surface p-7 hover:border-primary/45">
+                  <p className="mb-5 w-fit rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-text">
                     {item.status}
                   </p>
-                  <h3 className="text-xl font-semibold text-text">{item.title}</h3>
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
+                  <h3 className="text-2xl font-semibold text-text">{item.title}</h3>
+                  <p className="mt-4 flex-1 text-sm leading-relaxed text-muted">
                     {item.body}
                   </p>
-                  <span className="mt-6 text-sm font-semibold text-text">
+                  <span className="mt-7 w-fit rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-contrast">
                     {item.cta}
                   </span>
                 </article>
@@ -217,27 +150,27 @@ export default function HomePageClient() {
       <section className="border-t border-border/70 bg-surface/45">
         <Container className="py-16 sm:py-20">
           <div className="mb-8 max-w-3xl space-y-3">
-            <p className="text-sm font-medium uppercase tracking-wide text-muted">
+            <p className="text-sm font-medium uppercase tracking-wide text-primary">
               Experience
             </p>
             <h2 className="text-3xl font-semibold tracking-normal text-text">
-              Technical, research, and campus work.
+              Roles and campus work.
             </h2>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
-            {experience.map((item) => (
+          <div className="overflow-hidden rounded-xl border border-border bg-bg">
+            {experienceItems.map((item) => (
               <article
                 key={`${item.organization}-${item.title}`}
-                className="rounded-xl border border-border bg-bg p-6"
+                className="border-b border-border p-5 last:border-b-0 sm:p-6"
               >
                 <p className="text-xs font-medium uppercase tracking-wide text-muted">
                   {item.organization} · {item.date}
                 </p>
-                <h3 className="mt-3 text-xl font-semibold text-text">
+                <h3 className="mt-2 text-lg font-semibold text-text">
                   {item.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">
+                <p className="mt-2 text-sm leading-relaxed text-muted">
                   {item.body}
                 </p>
               </article>
@@ -259,7 +192,7 @@ export default function HomePageClient() {
           </div>
           <Link
             href="/contact"
-            className="link-plain w-fit rounded-lg bg-text px-5 py-3 text-sm font-semibold text-bg transition-colors hover:bg-text/85"
+            className="link-plain w-fit rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-contrast transition-colors duration-200 ease-out hover:bg-primary/90"
           >
             Contact
           </Link>

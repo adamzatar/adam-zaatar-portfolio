@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: "%s | Adam Zaatar",
   },
   description:
-    "Portfolio for Adam Zaatar, a Bowdoin College student focused on backend systems, applied AI, economics research, and software projects.",
+    "Portfolio for Adam Zaatar, a Bowdoin Computer Science and Economics student focused on backend systems, applied AI, economics research, Java backend training, and finance-oriented software.",
   keywords: [
     "Adam Zaatar",
     "portfolio",
@@ -34,17 +34,17 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Adam Zaatar | Computer Science and Economics at Bowdoin",
     description:
-      "Portfolio for Adam Zaatar, a Bowdoin College student focused on backend systems, applied AI, economics research, and software projects.",
+      "Portfolio for Adam Zaatar, a Bowdoin Computer Science and Economics student focused on backend systems, applied AI, economics research, Java backend training, and finance-oriented software.",
     url: siteUrl,
     siteName: "Adam Zaatar Portfolio",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "/images/profile-home.jpg",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Adam Zaatar portfolio",
+        alt: "Adam Zaatar portfolio preview",
       },
     ],
   },
@@ -52,14 +52,13 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Adam Zaatar | Computer Science and Economics at Bowdoin",
     description:
-      "Portfolio for Adam Zaatar, a Bowdoin College student focused on backend systems, applied AI, economics research, and software projects.",
+      "Portfolio for Adam Zaatar, a Bowdoin Computer Science and Economics student focused on backend systems, applied AI, economics research, Java backend training, and finance-oriented software.",
     creator: "@adamzaatar",
-    images: ["/images/profile-home.jpg"],
+    images: ["/opengraph-image"],
   },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
   },
 };
 
@@ -87,7 +86,7 @@ export default function RootLayout({
         <NavBar />
 
         <main
-          className="relative pt-20"
+          className="relative"
           role="main"
           id="main-content"
           tabIndex={-1}
