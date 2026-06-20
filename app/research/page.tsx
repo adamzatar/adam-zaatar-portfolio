@@ -22,20 +22,23 @@ export default function ResearchPage() {
   const [iframeError, setIframeError] = React.useState(false);
   const closeBtnRef = React.useRef<HTMLButtonElement | null>(null);
 
+  const closePreview = React.useCallback(() => {
+    setSelected(null);
+    setIframeError(false);
+    setLoading(false);
+  }, []);
+
   React.useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setSelected(null);
+      if (event.key === "Escape") closePreview();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [closePreview]);
 
   React.useEffect(() => {
     if (selected) {
       setTimeout(() => closeBtnRef.current?.focus(), 50);
-    } else {
-      setIframeError(false);
-      setLoading(false);
     }
   }, [selected]);
 
@@ -121,7 +124,7 @@ export default function ResearchPage() {
                 <button
                   ref={closeBtnRef}
                   type="button"
-                  onClick={() => setSelected(null)}
+                  onClick={closePreview}
                   aria-label="Close preview"
                   className="link-plain rounded-lg border border-border p-2 text-text transition-colors duration-200 ease-out hover:border-primary/50"
                 >

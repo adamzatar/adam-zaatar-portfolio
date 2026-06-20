@@ -1,52 +1,60 @@
 {
   "compilerOptions": {
     /* === Core Targets === */
-    "target": "ES2022",                         // Modern output; smaller, faster builds
-    "lib": ["dom", "dom.iterable", "esnext"],   // Modern JS + DOM types
-    "module": "esnext",                         // Required by Next.js app dir
-    "moduleResolution": "bundler",              // Ensures compatibility with Next.js bundler
-
+    "target": "ES2022", // Modern output; smaller, faster builds
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ], // Modern JS + DOM types
+    "module": "esnext", // Required by Next.js app dir
+    "moduleResolution": "bundler", // Ensures compatibility with Next.js bundler
     /* === TypeScript Strictness === */
-    "strict": true,                             // Enable all strict type-checking options
+    "strict": true, // Enable all strict type-checking options
     "noImplicitAny": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,                       // Avoid type noise from node_modules
-    "allowJs": false,                           // JS files should be migrated to TS
-    "isolatedModules": true,                    // Needed for Next.js + SWC
-    "noEmit": true,                             // Next.js handles output
-
+    "skipLibCheck": true, // Avoid type noise from node_modules
+    "allowJs": false, // JS files should be migrated to TS
+    "isolatedModules": true, // Needed for Next.js + SWC
+    "noEmit": true, // Next.js handles output
     /* === Interop & Module Options === */
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "jsx": "preserve",                          // Let Next handle JSX transform
-    "incremental": true,                        // Speeds up rebuilds with .tsbuildinfo cache
-
+    "jsx": "react-jsx", // Let Next handle JSX transform
+    "incremental": true, // Speeds up rebuilds with .tsbuildinfo cache
     /* === Aliases & Types === */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     },
-    "types": ["react", "react-dom", "node", "next"],
-
+    "types": [
+      "react",
+      "react-dom",
+      "node",
+      "next"
+    ],
     /* === Plugins === */
     "plugins": [
-      { "name": "next" }
+      {
+        "name": "next"
+      }
     ],
-
     /* === Optional Optimization Flags === */
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": false,                // Can be turned on if team ready
+    "noUnusedParameters": false, // Can be turned on if team ready
     "skipDefaultLibCheck": true
   },
-
   /* === File Inclusion / Exclusion === */
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

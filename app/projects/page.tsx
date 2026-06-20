@@ -1,9 +1,12 @@
 import Link from "next/link";
 
 import { Container } from "@/components/ui/Container";
-import { featuredProjects, softwareProjects } from "@/lib/content";
+import { featuredProjects, softwareProjects, systemDemoProjects } from "@/lib/content";
 
-type Project = (typeof featuredProjects)[number] | (typeof softwareProjects)[number];
+type Project =
+  | (typeof featuredProjects)[number]
+  | (typeof systemDemoProjects)[number]
+  | (typeof softwareProjects)[number];
 
 export default function ProjectsPage() {
   return (
@@ -35,6 +38,27 @@ export default function ProjectsPage() {
           <div className="grid gap-5 md:grid-cols-2">
             {featuredProjects.map((project) => (
               <ProjectCard key={project.title} project={project} featured />
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-14">
+          <div className="mb-5 max-w-2xl">
+            <p className="text-sm font-medium uppercase tracking-wide text-muted">
+              Systems demos
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold text-text">
+              Operating systems demos.
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              Public TypeScript visualizations of operating systems concepts from
+              coursework, built separately from the private C++ implementations.
+            </p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            {systemDemoProjects.map((project) => (
+              <ProjectCard key={project.title} project={project} />
             ))}
           </div>
         </section>
@@ -89,6 +113,24 @@ function ProjectCard({
   project: Project;
   featured?: boolean;
 }) {
+  const primaryLinkClass = featured
+    ? "link-plain w-fit rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-contrast transition-colors duration-200 ease-out hover:bg-primary/90"
+    : "link-plain w-fit text-sm font-semibold text-text underline underline-offset-4 transition-colors duration-200 ease-out hover:text-primary";
+  const primaryLink = project.href.startsWith("http") ? (
+    <a
+      href={project.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={primaryLinkClass}
+    >
+      {project.cta}
+    </a>
+  ) : (
+    <Link href={project.href} className={primaryLinkClass}>
+      {project.cta}
+    </Link>
+  );
+
   return (
     <article
       className={`interactive-card flex h-full flex-col rounded-xl border border-border bg-surface hover:border-primary/45 ${
@@ -112,18 +154,22 @@ function ProjectCard({
           </li>
         ))}
       </ul>
-      <a
-        href={project.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={
-          featured
-            ? "link-plain mt-7 w-fit rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-contrast transition-colors duration-200 ease-out hover:bg-primary/90"
-            : "link-plain mt-6 w-fit text-sm font-semibold text-text underline underline-offset-4 transition-colors duration-200 ease-out hover:text-primary"
-        }
-      >
-        {project.cta}
-      </a>
+      <div className="mt-6 flex flex-wrap items-center gap-4">
+        {primaryLink}
+        {"sourceHref" in project ? (
+          <a
+            href={project.sourceHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="link-plain text-sm font-semibold text-text underline underline-offset-4 transition-colors duration-200 ease-out hover:text-primary"
+          >
+            {project.sourceCta}
+          </a>
+        ) : null}
+      </div>
+      {"note" in project ? (
+        <p className="mt-4 text-xs leading-relaxed text-muted">{project.note}</p>
+      ) : null}
     </article>
   );
 }

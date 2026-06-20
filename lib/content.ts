@@ -2,6 +2,11 @@ export const EMAIL = "azaatar@bowdoin.edu";
 export const GITHUB_URL = "https://github.com/adamzatar";
 export const LINKEDIN_URL = "https://www.linkedin.com/in/adam-zaatar-09b106304";
 export const CLICKERASE_URL = "https://huggingface.co/spaces/azaatar/clickerase";
+export const PORTFOLIO_REPO_URL = "https://github.com/adamzatar/adam-zaatar-portfolio";
+export const THREAD_SIM_SOURCE_URL = `${PORTFOLIO_REPO_URL}/blob/main/lib/demos/threadSimulation.ts`;
+export const THREAD_UI_SOURCE_URL = `${PORTFOLIO_REPO_URL}/blob/main/components/demos/ThreadDemo.tsx`;
+export const PAGER_SIM_SOURCE_URL = `${PORTFOLIO_REPO_URL}/blob/main/lib/demos/pagerSimulation.ts`;
+export const PAGER_UI_SOURCE_URL = `${PORTFOLIO_REPO_URL}/blob/main/components/demos/PagerDemo.tsx`;
 
 export const focusAreas = [
   "Backend systems",
@@ -88,6 +93,33 @@ export const featuredProjects = [
   },
 ] as const;
 
+export const systemDemoProjects = [
+  {
+    title: "Thread Library Visualizer",
+    status: "Interactive demo",
+    description:
+      "Interactive browser demo showing user-level thread states, scheduling, blocking, locks, condition-variable behavior, join/yield, and execution traces from a separate simulator inspired by my operating systems coursework.",
+    technologies: ["TypeScript", "React", "Scheduling", "Synchronization"],
+    href: "/projects/thread-library",
+    cta: "Launch interactive demo",
+    sourceHref: THREAD_SIM_SOURCE_URL,
+    sourceCta: "View demo source",
+    note: "Original C++ implementation private due to course policy.",
+  },
+  {
+    title: "Virtual Memory Pager Visualizer",
+    status: "Interactive demo",
+    description:
+      "Interactive browser demo showing memory accesses, page faults, frame allocation, page-table updates, dirty/reference behavior, evictions, swap-backed pages, and clock-style replacement from a separate simulator inspired by my operating systems coursework.",
+    technologies: ["TypeScript", "React", "Virtual memory", "Page replacement"],
+    href: "/projects/virtual-memory-pager",
+    cta: "Launch interactive demo",
+    sourceHref: PAGER_SIM_SOURCE_URL,
+    sourceCta: "View demo source",
+    note: "Original C++ implementation private due to course policy.",
+  },
+] as const;
+
 export const softwareProjects = [
   {
     title: "Bowdoin Marketplace",
@@ -102,7 +134,7 @@ export const softwareProjects = [
     title: "Vector",
     status: "Prototype",
     description:
-      "A SwiftUI and Vapor authentication prototype. I used it to explore passkeys, biometric fallback, and account security flows. The public code is useful as a prototype, with documentation still limited.",
+      "A SwiftUI and Vapor authentication prototype. I used it to explore passkeys, biometric fallback, and account security flows.",
     technologies: ["SwiftUI", "Vapor", "Authentication"],
     href: "https://github.com/adamzatar/Vector",
     cta: "Repository",
@@ -111,7 +143,7 @@ export const softwareProjects = [
     title: "Cutaway",
     status: "Prototype",
     description:
-      "A SwiftUI and AVFoundation experiment around multi-angle video workflows. It is best read as a learning project for media handling and app structure unless a public demo is added later.",
+      "A SwiftUI and AVFoundation experiment around multi-angle video workflows. It is best read as a learning project for media handling and app structure.",
     technologies: ["SwiftUI", "AVFoundation"],
     href: "https://github.com/adamzatar/Cutaway",
     cta: "Repository",
