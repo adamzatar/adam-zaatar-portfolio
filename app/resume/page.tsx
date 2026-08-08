@@ -1,5 +1,13 @@
 import { Container } from "@/components/ui/Container";
 import { RESUME_PATH } from "@/lib/constants/resume";
+import { createPageMetadata } from "@/lib/site";
+
+export const metadata = createPageMetadata({
+  title: "Resume",
+  description:
+    "Adam Zaatar's resume, including education at Bowdoin, backend engineering experience at ProgressSoft, systems projects, applied AI, and research.",
+  path: "/resume",
+});
 
 export default function ResumePage() {
   return (
@@ -17,12 +25,8 @@ export default function ResumePage() {
             id="resume-heading"
             className="mt-3 text-4xl font-semibold tracking-normal text-text sm:text-5xl"
           >
-            Academic and technical background.
+            Education, experience, and projects.
           </h1>
-          <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
-            A PDF summary of Adam&apos;s education, experience, technical work,
-            and research.
-          </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a
@@ -31,7 +35,7 @@ export default function ResumePage() {
               rel="noopener noreferrer"
               className="link-plain rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-contrast transition-colors duration-200 ease-out hover:bg-primary/90"
             >
-              Open resume
+              View resume
             </a>
             <a
               href={RESUME_PATH}

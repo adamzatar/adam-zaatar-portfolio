@@ -21,25 +21,30 @@ export default function ResearchPage() {
   const [loading, setLoading] = React.useState(false);
   const [iframeError, setIframeError] = React.useState(false);
   const closeBtnRef = React.useRef<HTMLButtonElement | null>(null);
+  const previewTriggerRef = React.useRef<HTMLButtonElement | null>(null);
 
   const closePreview = React.useCallback(() => {
+    const trigger = previewTriggerRef.current;
     setSelected(null);
     setIframeError(false);
     setLoading(false);
+    window.requestAnimationFrame(() => trigger?.focus());
   }, []);
 
   React.useEffect(() => {
+    if (!selected) return;
+
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") closePreview();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [closePreview]);
+  }, [closePreview, selected]);
 
   React.useEffect(() => {
-    if (selected) {
-      setTimeout(() => closeBtnRef.current?.focus(), 50);
-    }
+    if (!selected) return;
+    const focusTimer = window.setTimeout(() => closeBtnRef.current?.focus(), 50);
+    return () => window.clearTimeout(focusTimer);
   }, [selected]);
 
   return (
@@ -93,7 +98,8 @@ export default function ResearchPage() {
                 </a>
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={(event) => {
+                    previewTriggerRef.current = event.currentTarget;
                     setSelected(item);
                     setIframeError(false);
                     setLoading(true);
@@ -109,14 +115,22 @@ export default function ResearchPage() {
         </section>
 
         {selected && (
-          <section className="mt-14" aria-labelledby="preview-title">
+          <div
+            className="mt-14"
+            role="dialog"
+            aria-labelledby="preview-title"
+            aria-describedby="preview-description"
+          >
             <div className="rounded-xl border border-border bg-surface p-6 sm:p-8">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h2 id="preview-title" className="text-2xl font-semibold text-text">
                     {selected.title}
                   </h2>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                  <p
+                    id="preview-description"
+                    className="mt-2 text-sm leading-relaxed text-muted"
+                  >
                     {selected.description}
                   </p>
                 </div>
@@ -135,7 +149,7 @@ export default function ResearchPage() {
               {loading && !iframeError && (
                 <div
                   className="mt-6 flex h-[600px] w-full items-center justify-center rounded-lg border border-border bg-bg text-sm text-muted"
-                  aria-hidden
+                  role="status"
                 >
                   Loading preview...
                 </div>
@@ -182,7 +196,7 @@ export default function ResearchPage() {
                 />
               )}
             </div>
-          </section>
+          </div>
         )}
       </Container>
     </section>

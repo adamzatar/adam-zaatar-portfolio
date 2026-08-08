@@ -2,6 +2,13 @@ import { Github, Linkedin, Mail } from "lucide-react";
 
 import { Container } from "@/components/ui/Container";
 import { EMAIL, GITHUB_URL, LINKEDIN_URL } from "@/lib/content";
+import { createPageMetadata } from "@/lib/site";
+
+export const metadata = createPageMetadata({
+  title: "Contact",
+  description: "Email, LinkedIn, and GitHub links for Adam Zaatar.",
+  path: "/contact",
+});
 
 const contactMethods = [
   {
@@ -39,7 +46,7 @@ export default function ContactPage() {
             Contact
           </p>
           <h1 className="mt-3 text-4xl font-semibold tracking-normal text-text sm:text-5xl">
-            Contact Adam.
+            Contact me.
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
             I&apos;m glad to hear about internships, technical projects, research
@@ -69,8 +76,8 @@ export default function ContactPage() {
         </div>
 
         <p className="mx-auto mt-10 max-w-2xl text-center text-sm leading-relaxed text-muted">
-          Email is the best first contact for anything time-sensitive or related
-          to internships, research, or project collaboration.
+          Email is the best way to reach me, especially for internships, research,
+          or project collaboration.
         </p>
       </Container>
     </section>

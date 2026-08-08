@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import HomePageClient from "@/app/HomePageClient";
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Adam Zaatar | Computer Science and Economics at Bowdoin",
-  description:
-    "Portfolio for Adam Zaatar, a Bowdoin Computer Science and Economics student focused on backend systems, applied AI, economics research, Java backend training, and finance-oriented software.",
+  title: { absolute: SITE_TITLE },
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Adam Zaatar | Computer Science and Economics at Bowdoin",
-    description:
-      "Portfolio for Adam Zaatar, a Bowdoin Computer Science and Economics student focused on backend systems, applied AI, economics research, Java backend training, and finance-oriented software.",
-    url: "https://adamzaatar.com",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
     siteName: "Adam Zaatar Portfolio",
     images: [
       {
@@ -23,9 +23,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Adam Zaatar | Computer Science and Economics at Bowdoin",
-    description:
-      "Portfolio for Adam Zaatar, a Bowdoin Computer Science and Economics student focused on backend systems, applied AI, economics research, Java backend training, and finance-oriented software.",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     images: ["/opengraph-image"],
   },
   keywords: [

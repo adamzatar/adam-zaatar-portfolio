@@ -6,18 +6,16 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import NavBar from "@/components/NavBar";
-
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://adamzaatar.com";
+import { GITHUB_URL, LINKEDIN_URL } from "@/lib/content";
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Adam Zaatar | Computer Science and Economics at Bowdoin",
+    default: SITE_TITLE,
     template: "%s | Adam Zaatar",
   },
-  description:
-    "Portfolio for Adam Zaatar, a Bowdoin Computer Science and Economics student focused on backend systems, applied AI, economics research, Java backend training, and finance-oriented software.",
+  description: SITE_DESCRIPTION,
   keywords: [
     "Adam Zaatar",
     "portfolio",
@@ -29,13 +27,12 @@ export const metadata: Metadata = {
     "economics research",
     "software engineer",
   ],
-  authors: [{ name: "Adam Zaatar", url: siteUrl }],
+  authors: [{ name: "Adam Zaatar", url: SITE_URL }],
   creator: "Adam Zaatar",
   openGraph: {
-    title: "Adam Zaatar | Computer Science and Economics at Bowdoin",
-    description:
-      "Portfolio for Adam Zaatar, a Bowdoin Computer Science and Economics student focused on backend systems, applied AI, economics research, Java backend training, and finance-oriented software.",
-    url: siteUrl,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
     siteName: "Adam Zaatar Portfolio",
     locale: "en_US",
     type: "website",
@@ -50,9 +47,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Adam Zaatar | Computer Science and Economics at Bowdoin",
-    description:
-      "Portfolio for Adam Zaatar, a Bowdoin Computer Science and Economics student focused on backend systems, applied AI, economics research, Java backend training, and finance-oriented software.",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     creator: "@adamzaatar",
     images: ["/opengraph-image"],
   },
@@ -76,13 +72,49 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": `${SITE_URL}/#person`,
+        name: "Adam Zaatar",
+        url: SITE_URL,
+        description:
+          "Computer Science and Economics student at Bowdoin College focused on backend and systems engineering.",
+        sameAs: [LINKEDIN_URL, GITHUB_URL],
+        affiliation: {
+          "@type": "CollegeOrUniversity",
+          name: "Bowdoin College",
+        },
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: "Adam Zaatar Portfolio",
+        description: SITE_DESCRIPTION,
+        publisher: { "@id": `${SITE_URL}/#person` },
+      },
+    ],
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "relative min-h-screen overflow-x-hidden bg-bg text-text antialiased",
+          "relative min-h-screen bg-bg text-text antialiased",
         )}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+          }}
+        />
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <NavBar />
 
         <main

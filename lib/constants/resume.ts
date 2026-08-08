@@ -1,1 +1,1 @@
-export const RESUME_PATH = "/resume/AdamZaatar_CV-3.pdf";
+export const RESUME_PATH = "/resume/Adam_Zaatar_Resume.pdf";

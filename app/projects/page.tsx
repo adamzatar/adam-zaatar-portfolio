@@ -1,12 +1,18 @@
 import Link from "next/link";
 
+import { FeaturedProjectCard } from "@/components/projects/FeaturedProjectCard";
 import { Container } from "@/components/ui/Container";
-import { featuredProjects, softwareProjects, systemDemoProjects } from "@/lib/content";
+import { featuredProjects, softwareProjects } from "@/lib/content";
+import { createPageMetadata } from "@/lib/site";
 
-type Project =
-  | (typeof featuredProjects)[number]
-  | (typeof systemDemoProjects)[number]
-  | (typeof softwareProjects)[number];
+export const metadata = createPageMetadata({
+  title: "Projects",
+  description:
+    "Backend, systems, applied AI, and software projects by Adam Zaatar, including EventGuard and public operating-systems visualizers.",
+  path: "/projects",
+});
+
+type SoftwareProject = (typeof softwareProjects)[number];
 
 export default function ProjectsPage() {
   return (
@@ -17,48 +23,33 @@ export default function ProjectsPage() {
             Projects
           </p>
           <h1 className="mt-3 text-4xl font-semibold tracking-normal text-text sm:text-5xl">
-            Software projects and prototypes.
+            Software and systems projects.
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
-            A short list of software work I can explain in detail, led by a
-            public demo and followed by smaller prototypes and Java work.
+            Backend work from my ProgressSoft internship, C/C++ operating-systems
+            projects with public visualizers, applied AI, and a few smaller
+            prototypes.
           </p>
         </div>
 
         <section className="mt-12">
           <div className="mb-5 max-w-2xl">
             <p className="text-sm font-medium uppercase tracking-wide text-muted">
-              Featured project
+              Main projects
             </p>
             <h2 className="mt-2 text-2xl font-semibold text-text">
-              ClickErase demo.
-            </h2>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-2">
-            {featuredProjects.map((project) => (
-              <ProjectCard key={project.title} project={project} featured />
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-14">
-          <div className="mb-5 max-w-2xl">
-            <p className="text-sm font-medium uppercase tracking-wide text-muted">
-              Systems demos
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold text-text">
-              Operating systems demos.
+              Backend, systems, and applied AI projects.
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              Public TypeScript visualizations of operating systems concepts from
-              coursework, built separately from the private C++ implementations.
+              EventGuard comes from my completed ProgressSoft internship. The
+              operating-systems visualizers are separate public explanations of
+              private C/C++ course implementations.
             </p>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
-            {systemDemoProjects.map((project) => (
-              <ProjectCard key={project.title} project={project} />
+          <div className="grid items-start gap-5 md:grid-cols-2">
+            {featuredProjects.map((project) => (
+              <FeaturedProjectCard key={project.title} project={project} />
             ))}
           </div>
         </section>
@@ -69,13 +60,13 @@ export default function ProjectsPage() {
               Other software work
             </p>
             <h2 className="mt-2 text-2xl font-semibold text-text">
-              More projects I can discuss.
+              Software prototypes and work in progress.
             </h2>
           </div>
 
           <div className="grid gap-5 md:grid-cols-2">
             {softwareProjects.map((project) => (
-              <ProjectCard key={project.title} project={project} />
+              <SoftwareProjectCard key={project.title} project={project} />
             ))}
           </div>
         </section>
@@ -106,16 +97,9 @@ export default function ProjectsPage() {
   );
 }
 
-function ProjectCard({
-  project,
-  featured = false,
-}: {
-  project: Project;
-  featured?: boolean;
-}) {
-  const primaryLinkClass = featured
-    ? "link-plain w-fit rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-contrast transition-colors duration-200 ease-out hover:bg-primary/90"
-    : "link-plain w-fit text-sm font-semibold text-text underline underline-offset-4 transition-colors duration-200 ease-out hover:text-primary";
+function SoftwareProjectCard({ project }: { project: SoftwareProject }) {
+  const primaryLinkClass =
+    "link-plain w-fit text-sm font-semibold text-text underline underline-offset-4 transition-colors duration-200 ease-out hover:text-primary";
   const primaryLink = project.href.startsWith("http") ? (
     <a
       href={project.href}
@@ -133,9 +117,7 @@ function ProjectCard({
 
   return (
     <article
-      className={`interactive-card flex h-full flex-col rounded-xl border border-border bg-surface hover:border-primary/45 ${
-        featured ? "p-7 sm:p-8" : "p-6"
-      }`}
+      className="interactive-card flex h-full flex-col rounded-xl border border-border bg-surface p-6 hover:border-primary/45"
     >
       <p className="w-fit rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-text">
         {project.status}
@@ -156,20 +138,7 @@ function ProjectCard({
       </ul>
       <div className="mt-6 flex flex-wrap items-center gap-4">
         {primaryLink}
-        {"sourceHref" in project ? (
-          <a
-            href={project.sourceHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="link-plain text-sm font-semibold text-text underline underline-offset-4 transition-colors duration-200 ease-out hover:text-primary"
-          >
-            {project.sourceCta}
-          </a>
-        ) : null}
       </div>
-      {"note" in project ? (
-        <p className="mt-4 text-xs leading-relaxed text-muted">{project.note}</p>
-      ) : null}
     </article>
   );
 }

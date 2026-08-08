@@ -1,9 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { FeaturedProjectCard } from "@/components/projects/FeaturedProjectCard";
 import { Container } from "@/components/ui/Container";
 import { RESUME_PATH } from "@/lib/constants/resume";
-import { atAGlance, experienceItems, focusAreas, selectedWork } from "@/lib/content";
+import {
+  atAGlance,
+  experienceItems,
+  featuredProjects,
+  focusAreas,
+  researchItems,
+} from "@/lib/content";
 
 export default function HomePageClient() {
   return (
@@ -16,17 +23,16 @@ export default function HomePageClient() {
             </p>
             <div className="space-y-5">
               <h1 className="max-w-4xl text-4xl font-semibold tracking-normal text-text sm:text-5xl">
-                I&apos;m a Computer Science and Economics student at Bowdoin, building toward backend and systems engineering.
+                I study Computer Science and Economics at Bowdoin, with most of my
+                technical work focused on backend and systems.
               </h1>
               <p className="max-w-3xl text-lg leading-relaxed text-muted sm:text-xl">
-                Right now I&apos;m doing a backend-focused Java internship at
-                ProgressSoft, a payments software company in Amman. Alongside
-                that, I work on applied AI, economics research, and
-                finance-oriented software.
+                I&apos;m expected to graduate in May 2027. I recently completed a
+                10-week software engineering internship at ProgressSoft in Amman.
               </p>
               <p className="max-w-3xl text-base leading-relaxed text-muted">
-                This site collects projects, research, and experience I can
-                discuss in detail.
+                My other technical work includes C/C++ operating-systems
+                projects, applied AI, and economics research.
               </p>
             </div>
 
@@ -60,7 +66,7 @@ export default function HomePageClient() {
                 rel="noopener noreferrer"
                 className="link-plain rounded-lg border border-border px-5 py-3 text-sm font-semibold text-text transition-colors duration-200 ease-out hover:border-primary/50"
               >
-                Resume
+                View resume
               </Link>
             </div>
           </div>
@@ -98,56 +104,63 @@ export default function HomePageClient() {
         <Container className="py-16 sm:py-20">
           <div className="mb-8 max-w-3xl space-y-3">
             <p className="text-sm font-medium uppercase tracking-wide text-primary">
-              Selected work
+              Projects
             </p>
             <h2 className="text-3xl font-semibold tracking-normal text-text">
-              Projects and research.
+              Backend, systems, and applied AI projects.
             </h2>
-            <p className="text-base leading-relaxed text-muted">
-              These are the pieces I can point to directly, through a demo,
-              PDF, repository, or written output.
-            </p>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
-            {selectedWork.map((item) => {
-              const isExternal = item.href.startsWith("http");
-              const content = (
-                <article className="interactive-card flex h-full flex-col rounded-xl border border-border bg-surface p-7 hover:border-primary/45">
-                  <p className="mb-5 w-fit rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-text">
-                    {item.status}
-                  </p>
-                  <h3 className="text-2xl font-semibold text-text">{item.title}</h3>
-                  <p className="mt-4 flex-1 text-sm leading-relaxed text-muted">
-                    {item.body}
-                  </p>
-                  <span className="mt-7 w-fit rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-contrast">
-                    {item.cta}
-                  </span>
-                </article>
-              );
-
-              return isExternal ? (
-                <a
-                  key={item.title}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="link-plain block"
-                >
-                  {content}
-                </a>
-              ) : (
-                <Link key={item.title} href={item.href} className="link-plain block">
-                  {content}
-                </Link>
-              );
-            })}
+          <div className="grid items-start gap-5 md:grid-cols-2">
+            {featuredProjects.map((project) => (
+              <FeaturedProjectCard key={project.title} project={project} />
+            ))}
           </div>
         </Container>
       </section>
 
       <section className="border-t border-border/70 bg-surface/45">
+        <Container className="grid gap-8 py-16 sm:py-20 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
+          <div className="max-w-xl space-y-3">
+            <p className="text-sm font-medium uppercase tracking-wide text-primary">
+              Research
+            </p>
+            <h2 className="text-3xl font-semibold tracking-normal text-text">
+              Economics research and writing.
+            </h2>
+            <p className="text-base leading-relaxed text-muted">
+              My research covers investor reactions to AI-linked layoffs,
+              public knowledge production, political economy, inflation, and
+              financial literacy. All six papers and reports are available as
+              PDFs.
+            </p>
+            <Link
+              href="/research"
+              className="link-plain inline-flex rounded-lg border border-border bg-bg px-4 py-2 text-sm font-semibold text-text transition-colors duration-200 ease-out hover:border-primary/50"
+            >
+              Read the research archive
+            </Link>
+          </div>
+
+          <div className="overflow-hidden rounded-xl border border-border bg-bg">
+            {researchItems.slice(0, 2).map((item) => (
+              <article
+                key={item.title}
+                className="border-b border-border p-5 last:border-b-0 sm:p-6"
+              >
+                <p className="text-xs font-medium uppercase tracking-wide text-muted">
+                  {item.methods}
+                </p>
+                <h3 className="mt-2 text-lg font-semibold text-text">
+                  {item.title}
+                </h3>
+              </article>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="border-t border-border/70">
         <Container className="py-16 sm:py-20">
           <div className="mb-8 max-w-3xl space-y-3">
             <p className="text-sm font-medium uppercase tracking-wide text-primary">
@@ -158,7 +171,7 @@ export default function HomePageClient() {
             </h2>
           </div>
 
-          <div className="overflow-hidden rounded-xl border border-border bg-bg">
+          <div className="overflow-hidden rounded-xl border border-border bg-surface">
             {experienceItems.map((item) => (
               <article
                 key={`${item.organization}-${item.title}`}
@@ -183,11 +196,11 @@ export default function HomePageClient() {
         <Container className="flex flex-col gap-4 py-12 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-text">
-              Open to backend, systems, applied AI, and finance-oriented software roles.
+              I&apos;m looking for 2027 software engineering roles.
             </h2>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
-              I am looking for teams where I can learn from strong engineers,
-              write useful code, and take responsibility for real work.
+              I&apos;m especially interested in backend systems, systems software,
+              and infrastructure.
             </p>
           </div>
           <Link

@@ -67,7 +67,7 @@ export default function OpenGraphImage() {
               maxWidth: 920,
             }}
           >
-            Backend systems | Applied AI | Economics research | Finance-oriented software
+            Java backend engineering, C/C++ systems, applied AI, and economics research
           </div>
         </div>
       </div>

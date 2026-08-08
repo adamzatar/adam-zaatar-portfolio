@@ -38,9 +38,9 @@ export default function PagerDemo() {
   }
 
   return (
-    <div className="rounded-xl border border-border bg-surface p-5 sm:p-6">
-      <div className="grid gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
-        <section className="space-y-5">
+    <div className="min-w-0 rounded-xl border border-border bg-surface p-5 sm:p-6">
+      <div className="grid min-w-0 gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
+        <section className="min-w-0 space-y-5">
           <div>
             <label htmlFor="pager-preset" className="text-sm font-semibold text-text">
               Preset
@@ -117,7 +117,7 @@ export default function PagerDemo() {
           </article>
         </section>
 
-        <section className="space-y-5">
+        <section className="min-w-0 space-y-5">
           <div className="grid gap-5 lg:grid-cols-2">
             <article className="rounded-xl border border-border bg-bg p-4">
               <h3 className="text-sm font-semibold text-text">Physical frames</h3>
@@ -165,26 +165,29 @@ export default function PagerDemo() {
             </article>
           </div>
 
-          <article className="overflow-hidden rounded-xl border border-border bg-bg">
+          <article className="min-w-0 overflow-hidden rounded-xl border border-border bg-bg">
             <div className="border-b border-border p-4">
               <h3 className="text-sm font-semibold text-text">Page table</h3>
             </div>
-            <div className="overflow-x-auto">
+            <div className="w-full max-w-full overflow-x-auto">
               <table className="w-full min-w-[560px] text-left text-sm">
+                <caption className="sr-only">
+                  Current virtual-memory page table state
+                </caption>
                 <thead className="text-muted">
                   <tr className="border-b border-border">
-                    <th className="px-4 py-3 font-medium">Page</th>
-                    <th className="px-4 py-3 font-medium">Resident</th>
-                    <th className="px-4 py-3 font-medium">Frame</th>
-                    <th className="px-4 py-3 font-medium">Referenced</th>
-                    <th className="px-4 py-3 font-medium">Dirty</th>
-                    <th className="px-4 py-3 font-medium">Backing</th>
+                    <th scope="col" className="px-4 py-3 font-medium">Page</th>
+                    <th scope="col" className="px-4 py-3 font-medium">Resident</th>
+                    <th scope="col" className="px-4 py-3 font-medium">Frame</th>
+                    <th scope="col" className="px-4 py-3 font-medium">Referenced</th>
+                    <th scope="col" className="px-4 py-3 font-medium">Dirty</th>
+                    <th scope="col" className="px-4 py-3 font-medium">Backing</th>
                   </tr>
                 </thead>
                 <tbody>
                   {Object.values(state.pages).map((page) => (
                     <tr key={page.id} className="border-b border-border last:border-b-0">
-                      <td className="px-4 py-3 font-medium text-text">{page.id}</td>
+                      <th scope="row" className="px-4 py-3 font-medium text-text">{page.id}</th>
                       <td className="px-4 py-3 text-muted">{page.resident ? "Yes" : "No"}</td>
                       <td className="px-4 py-3 text-muted">
                         {page.frameId === null ? "None" : `F${page.frameId}`}

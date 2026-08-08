@@ -1,58 +1,70 @@
 export const EMAIL = "azaatar@bowdoin.edu";
 export const GITHUB_URL = "https://github.com/adamzatar";
-export const LINKEDIN_URL = "https://www.linkedin.com/in/adam-zaatar-09b106304";
+export const LINKEDIN_URL = "https://www.linkedin.com/in/adamzaatar";
 export const CLICKERASE_URL = "https://huggingface.co/spaces/azaatar/clickerase";
+export const CLICKERASE_REPO_URL = "https://github.com/adamzatar/clickerase";
+export const EVENTGUARD_REPO_URL = "https://github.com/adamzatar/EventGuard";
 export const PORTFOLIO_REPO_URL = "https://github.com/adamzatar/adam-zaatar-portfolio";
 export const THREAD_SIM_SOURCE_URL = `${PORTFOLIO_REPO_URL}/blob/main/lib/demos/threadSimulation.ts`;
 export const THREAD_UI_SOURCE_URL = `${PORTFOLIO_REPO_URL}/blob/main/components/demos/ThreadDemo.tsx`;
 export const PAGER_SIM_SOURCE_URL = `${PORTFOLIO_REPO_URL}/blob/main/lib/demos/pagerSimulation.ts`;
 export const PAGER_UI_SOURCE_URL = `${PORTFOLIO_REPO_URL}/blob/main/components/demos/PagerDemo.tsx`;
 
+export type ProjectMediaData =
+  | {
+      kind: "eventguard-architecture";
+      alt: string;
+    }
+  | {
+      kind: "image";
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+    };
+
+export type FeaturedProject = {
+  title: string;
+  status: string;
+  description: string;
+  technologies: readonly string[];
+  href: string;
+  cta: string;
+  sourceHref?: string;
+  sourceCta?: string;
+  note?: string;
+  media?: ProjectMediaData;
+};
+
 export const focusAreas = [
-  "Backend systems",
+  "Backend engineering",
+  "Systems engineering",
+  "Infrastructure software",
   "Applied AI",
   "Finance-oriented software",
-  "Economics research",
 ] as const;
 
 export const atAGlance = [
   {
     title: "Bowdoin College",
-    body: "Computer Science and Economics student with a German minor.",
+    body: "B.A. candidate in Computer Science and Economics, with a German minor.",
   },
   {
-    title: "Backend Java training",
-    body: "Software Engineering Intern at ProgressSoft in Amman, Summer 2026.",
+    title: "Graduation",
+    body: "Expected May 2027.",
   },
   {
-    title: "Research and campus work",
-    body: "Economics research PDFs, Bowdoin Orient web staff work, and student organization leadership.",
-  },
-] as const;
-
-export const selectedWork = [
-  {
-    title: "ClickErase",
-    status: "Live demo",
-    body: "Built an AI image editing app where a user uploads an image, clicks an object, and the app generates a segmentation mask and removes the object with inpainting. Built in Python with Gradio and Hugging Face Spaces.",
-    href: CLICKERASE_URL,
-    cta: "Open demo",
-  },
-  {
-    title: "Economics research archive",
-    status: "PDFs available",
-    body: "Research papers and financial literacy reports with source PDFs available to inspect, including work on lobbying, behavioral economics, and student financial literacy programs.",
-    href: "/research",
-    cta: "Read research",
+    title: "Systems work",
+    body: "Built C/C++ operating-systems projects and separate public visualizers for the underlying concepts.",
   },
 ] as const;
 
 export const experienceItems = [
   {
     title: "Software Engineering Intern",
-    organization: "ProgressSoft",
-    date: "Summer 2026",
-    body: "Backend-focused Java internship at a payments software company in Amman, focused on enterprise Java, Spring Boot, persistence, security, Docker, testing, and code review.",
+    organization: "ProgressSoft Corporation",
+    date: "Jun–Aug 2026",
+    body: "Completed a 10-week software engineering internship at a payments software company in Amman. The work included Java, Spring Boot, testing, code review, and iterative refactoring.",
   },
   {
     title: "Gibbons Research Fellow",
@@ -75,50 +87,85 @@ export const experienceItems = [
   {
     title: "Learning Assistant, CSCI 1101",
     organization: "Bowdoin College",
-    date: "Fall 2025",
-    body: "Supported introductory computer science students through course support, debugging help, and office hours.",
+    date: "Fall 2026",
+    body: "Will support introductory computer science students through course support, debugging help, and office hours.",
   },
 ] as const;
 
-export const featuredProjects = [
-  // TODO: Add a ClickErase screenshot or before/after image once a stable capture exists.
-  {
-    title: "ClickErase",
-    status: "Demo available",
-    description:
-      "A click-to-remove image editing tool. I built the upload flow, click selection workflow, segmentation mask generation, and inpainting path in a Gradio app deployed on Hugging Face Spaces.",
-    technologies: ["Python", "Gradio", "Computer vision", "Hugging Face Spaces"],
-    href: CLICKERASE_URL,
-    cta: "Open demo",
+export const eventGuardProject = {
+  title: "EventGuard",
+  status: "Internship project",
+  description:
+    "A seven-module Java 21 and Spring Boot application for importing, processing, auditing, and persisting payment files, with ports-and-adapters boundaries, transactional JDBC persistence, a Spring MVC upload endpoint, and 107 passing tests.",
+  technologies: ["Java 21", "Spring Boot", "Spring MVC", "JDBC", "PostgreSQL"],
+  href: "/projects/eventguard",
+  cta: "View case study",
+  sourceHref: EVENTGUARD_REPO_URL,
+  sourceCta: "Source",
+  media: {
+    kind: "eventguard-architecture",
+    alt: "EventGuard request path from CLI and Spring MVC entry points through the application core to JDBC and PostgreSQL persistence",
   },
-] as const;
+} as const satisfies FeaturedProject;
+
+export const clickEraseProject = {
+  title: "ClickErase",
+  status: "Live application",
+  description:
+    "A Python image-editing application where a user clicks an object, MobileSAM generates a segmentation mask, and LaMa performs inpainting. The app is deployed on Hugging Face Spaces.",
+  technologies: ["Python", "MobileSAM", "LaMa", "Gradio", "Hugging Face Spaces"],
+  href: CLICKERASE_URL,
+  cta: "Open demo",
+  sourceHref: CLICKERASE_REPO_URL,
+  sourceCta: "Source",
+} as const satisfies FeaturedProject;
 
 export const systemDemoProjects = [
   {
     title: "Thread Library Visualizer",
     status: "Interactive demo",
     description:
-      "Interactive browser demo showing user-level thread states, scheduling, blocking, locks, condition-variable behavior, join/yield, and execution traces from a separate simulator inspired by my operating systems coursework.",
-    technologies: ["TypeScript", "React", "Scheduling", "Synchronization"],
+      "The original C/C++ project implements a user-level thread library with ucontext context switching, FIFO scheduling, locks, condition variables under Mesa semantics, and interrupt masking. This public TypeScript demo visualizes those concepts without exposing course source code.",
+    technologies: ["C/C++", "ucontext", "Scheduling", "Synchronization"],
     href: "/projects/thread-library",
-    cta: "Launch interactive demo",
+    cta: "Open demo",
     sourceHref: THREAD_SIM_SOURCE_URL,
-    sourceCta: "View demo source",
+    sourceCta: "Source",
     note: "Original C++ implementation private due to course policy.",
+    media: {
+      kind: "image",
+      src: "/images/projects/thread-library-visualizer.webp",
+      alt: "Public Thread Library Visualizer showing Coordinator ready, Worker B running, and Worker A blocked on a lock",
+      width: 1280,
+      height: 720,
+    },
   },
   {
     title: "Virtual Memory Pager Visualizer",
     status: "Interactive demo",
     description:
-      "Interactive browser demo showing memory accesses, page faults, frame allocation, page-table updates, dirty/reference behavior, evictions, swap-backed pages, and clock-style replacement from a separate simulator inspired by my operating systems coursework.",
-    technologies: ["TypeScript", "React", "Virtual memory", "Page replacement"],
+      "The original C/C++ pager implements demand paging, second-chance clock replacement, reference and dirty bits, swap, and disk I/O behavior. This public TypeScript demo makes the memory trace and replacement process visible.",
+    technologies: ["C/C++", "Demand paging", "Clock replacement", "Swap"],
     href: "/projects/virtual-memory-pager",
-    cta: "Launch interactive demo",
+    cta: "Open demo",
     sourceHref: PAGER_SIM_SOURCE_URL,
-    sourceCta: "View demo source",
+    sourceCta: "Source",
     note: "Original C++ implementation private due to course policy.",
+    media: {
+      kind: "image",
+      src: "/images/projects/virtual-memory-pager-visualizer.webp",
+      alt: "Public Virtual Memory Pager Visualizer showing populated frames, virtual pages, page table entries, hits, faults, and evictions after a completed trace",
+      width: 1280,
+      height: 720,
+    },
   },
-] as const;
+] as const satisfies readonly FeaturedProject[];
+
+export const featuredProjects = [
+  eventGuardProject,
+  ...systemDemoProjects,
+  clickEraseProject,
+] as const satisfies readonly FeaturedProject[];
 
 export const softwareProjects = [
   {
@@ -128,7 +175,7 @@ export const softwareProjects = [
       "A campus marketplace prototype for student buying and selling. I explored listing flows, campus trust questions, and the shape of a student-only exchange. The repository is public, but the project is still ongoing.",
     technologies: ["Next.js", "PostgreSQL", "Prisma"],
     href: "https://github.com/adamzatar/Bowdoin-Marketplace",
-    cta: "Repository",
+    cta: "Source",
   },
   {
     title: "Vector",
@@ -137,25 +184,16 @@ export const softwareProjects = [
       "A SwiftUI and Vapor authentication prototype. I used it to explore passkeys, biometric fallback, and account security flows.",
     technologies: ["SwiftUI", "Vapor", "Authentication"],
     href: "https://github.com/adamzatar/Vector",
-    cta: "Repository",
+    cta: "Source",
   },
   {
     title: "Cutaway",
     status: "Prototype",
     description:
-      "A SwiftUI and AVFoundation experiment around multi-angle video workflows. It is best read as a learning project for media handling and app structure.",
+      "A SwiftUI and AVFoundation experiment around multi-angle video workflows.",
     technologies: ["SwiftUI", "AVFoundation"],
     href: "https://github.com/adamzatar/Cutaway",
-    cta: "Repository",
-  },
-  {
-    title: "IntCalculator.java",
-    status: "Small Java project",
-    description:
-      "A command-line integer calculator focused on parsing input, handling operator precedence, and evaluating expressions. It is a small project, but it is easy to inspect and discuss.",
-    technologies: ["Java"],
-    href: "https://github.com/adamzatar/IntCalculator.java",
-    cta: "Repository",
+    cta: "Source",
   },
 ] as const;
 
@@ -165,7 +203,7 @@ export const researchItems = [
     status: "PDF available",
     methods: "Event study, cumulative abnormal returns, manual disclosure coding, public-firm layoff announcements",
     description:
-      "This paper asks whether public firms that explicitly connect layoffs to AI adoption receive different stock-market reactions than firms announcing ordinary layoffs. I built a sample of public-firm layoff announcements, manually coded strict AI-cited layoffs, and estimated cumulative abnormal returns around announcement dates. The results do not show a statistically reliable AI-layoff premium, which makes the paper useful for thinking about AI narratives, investor attention, and finance.",
+      "This paper asks whether public firms that explicitly connect layoffs to AI adoption receive different stock-market reactions than firms announcing ordinary layoffs. I built a sample of public-firm layoff announcements, manually coded strict AI-cited layoffs, and estimated cumulative abnormal returns around announcement dates. The results do not show a statistically reliable AI-layoff premium.",
     file: "/research/AI Layoffs and Investor Reactions.pdf",
   },
   {
@@ -181,7 +219,7 @@ export const researchItems = [
     status: "PDF available",
     methods: "Policy research, source analysis, political economy",
     description:
-      "This paper asks when corporate lobbying crosses from political participation into social irresponsibility. It uses policy examples and secondary sources to compare harmful lobbying with transparent advocacy. The PDF lets readers inspect the argument structure, examples, and distinctions I used to evaluate lobbying’s role in democratic decision-making.",
+      "This paper asks when corporate lobbying crosses from political participation into social irresponsibility. It uses policy examples and secondary sources to compare harmful lobbying with transparent advocacy.",
     file: "/research/Research Paper - Behavioral Economics.pdf",
   },
   {
@@ -189,7 +227,7 @@ export const researchItems = [
     status: "PDF available",
     methods: "OLS regression, producer price data, corporate profit data",
     description:
-      "This paper studies whether post-COVID price increases were connected to changes in corporate profits, using producer price indices and profit measures. I used OLS regressions to test the relationship and discuss the limits of the data. The PDF shows the model choices, results, interpretation, and caveats.",
+      "This paper studies whether post-COVID price increases were connected to changes in corporate profits, using producer price indices and profit measures. I used OLS regressions to test the relationship and discuss the limits of the data.",
     file: "/research/Zaatar_ECON2557_Paper.pdf",
   },
   {
@@ -197,7 +235,7 @@ export const researchItems = [
     status: "PDF available",
     methods: "Curriculum design, peer benchmarking, implementation planning",
     description:
-      "This report turns financial literacy research into possible course structures. It asks how a student financial literacy program could be taught at different levels of depth, from a semester-long course to a shorter bootcamp. The PDF includes syllabi, assignments, grading models, and implementation tradeoffs.",
+      "This report turns financial literacy research into possible course structures. It asks how a student financial literacy program could be taught at different levels of depth, from a semester-long course to a shorter bootcamp. It includes syllabi, assignments, grading models, and implementation tradeoffs.",
     file: "/research/Second-Phase Report_ Models of the Class.pdf",
   },
   {
@@ -205,7 +243,7 @@ export const researchItems = [
     status: "PDF available",
     methods: "Peer institution review, program comparison, curriculum research",
     description:
-      "This report looks at how peer colleges approach financial literacy and what Bowdoin could learn from them. It compares program formats, topics, and delivery models across institutions. The PDF gives readers the source material behind the later course-design work and shows how the recommendations were grounded.",
+      "This report looks at how peer colleges approach financial literacy and what Bowdoin could learn from them. It compares program formats, topics, and delivery models across institutions and compiles the source material used for the later course-design work.",
     file: "/research/Financial Literacy Programs at Peer Institutions.pdf",
   },
 ] as const;
