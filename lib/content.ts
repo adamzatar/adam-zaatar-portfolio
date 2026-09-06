@@ -1,6 +1,6 @@
 export const EMAIL = "azaatar@bowdoin.edu";
 export const GITHUB_URL = "https://github.com/adamzatar";
-export const LINKEDIN_URL = "https://www.linkedin.com/in/adamzaatar";
+export const LINKEDIN_URL = "https://www.linkedin.com/in/adam-zaatar-09b106304/";
 export const CLICKERASE_URL = "https://huggingface.co/spaces/azaatar/clickerase";
 export const CLICKERASE_REPO_URL = "https://github.com/adamzatar/clickerase";
 export const EVENTGUARD_REPO_URL = "https://github.com/adamzatar/EventGuard";
