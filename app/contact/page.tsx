@@ -49,8 +49,8 @@ export default function ContactPage() {
             Contact me.
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
-            I&apos;m glad to hear about internships, technical projects, research
-            ideas, or software work around campus.
+            Email is the best way to reach me. I&apos;m glad to hear about jobs,
+            technical projects, research ideas, or software work around campus.
           </p>
         </div>
 
@@ -75,10 +75,6 @@ export default function ContactPage() {
           ))}
         </div>
 
-        <p className="mx-auto mt-10 max-w-2xl text-center text-sm leading-relaxed text-muted">
-          Email is the best way to reach me, especially for internships, research,
-          or project collaboration.
-        </p>
       </Container>
     </section>
   );

@@ -4,9 +4,12 @@ import * as React from "react";
 import { AlertTriangle, FileText, X } from "lucide-react";
 
 import { Container } from "@/components/ui/Container";
-import { researchItems } from "@/lib/content";
-
-type ResearchItem = (typeof researchItems)[number];
+import { TagList } from "@/components/ui/Tag";
+import {
+  researchPapers,
+  researchReports,
+  type ResearchItem,
+} from "@/lib/content";
 
 function encodePathSafe(path: string): string {
   const lastSlash = path.lastIndexOf("/");
@@ -43,75 +46,102 @@ export default function ResearchPage() {
 
   React.useEffect(() => {
     if (!selected) return;
-    const focusTimer = window.setTimeout(() => closeBtnRef.current?.focus(), 50);
+    const focusTimer = window.setTimeout(
+      () => closeBtnRef.current?.focus(),
+      50,
+    );
     return () => window.clearTimeout(focusTimer);
   }, [selected]);
 
-  return (
-    <section className="bg-bg py-16 sm:py-20">
-      <Container>
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm font-medium uppercase tracking-wide text-muted">
-            Research
-          </p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-normal text-text sm:text-5xl">
-            Research and writing.
-          </h1>
-          <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
-            Papers and reports from economics coursework and financial literacy
-            research.
-          </p>
-        </div>
+  const openPreview = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    item: ResearchItem,
+  ) => {
+    previewTriggerRef.current = event.currentTarget;
+    setSelected(item);
+    setIframeError(false);
+    setLoading(true);
+  };
 
-        <section className="mt-12 grid gap-5 sm:grid-cols-2">
-          {researchItems.map((item) => (
+  return (
+    <div className="bg-bg">
+      <section className="border-b border-border/70 bg-gradient-to-b from-primary/10 to-transparent">
+        <Container className="py-14 sm:py-16">
+          <h1 className="text-4xl font-semibold tracking-normal text-text sm:text-5xl">
+            Research
+          </h1>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
+            Economics papers from coursework, and two reports from a summer of
+            financial-literacy research at Bowdoin. Every one is available as a
+            PDF.
+          </p>
+        </Container>
+      </section>
+
+      <Container className="py-14 sm:py-16">
+        <div className="grid gap-5 lg:grid-cols-2">
+          {researchPapers.map((item, index) => (
             <article
               key={item.title}
-              className="interactive-card flex h-full flex-col rounded-xl border border-border bg-surface p-6 hover:border-primary/45"
+              className={`interactive-card flex flex-col rounded-xl border border-border bg-surface p-6 hover:border-primary/45 sm:p-7 ${
+                index < 2 ? "" : "lg:p-6"
+              }`}
             >
-              <p className="w-fit rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-text">
-                {item.status}
-              </p>
-              <h2 className="mt-3 text-2xl font-semibold text-text">
+              <h2
+                className={`font-semibold text-text ${
+                  index < 2 ? "text-2xl" : "text-xl"
+                }`}
+              >
                 {item.title}
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
-                {item.description}
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted sm:text-base">
+                {item.summary}
               </p>
-              <p className="mt-5 text-xs font-medium uppercase tracking-wide text-muted">
-                Methods
-              </p>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
-                {item.methods}
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a
-                  href={encodePathSafe(item.file)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Open ${item.title} PDF in a new tab`}
-                  className="link-plain inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-contrast transition-colors duration-200 ease-out hover:bg-primary/90"
-                >
-                  <FileText className="h-4 w-4" aria-hidden />
-                  Read PDF
-                </a>
-                <button
-                  type="button"
-                  onClick={(event) => {
-                    previewTriggerRef.current = event.currentTarget;
-                    setSelected(item);
-                    setIframeError(false);
-                    setLoading(true);
-                  }}
-                  aria-label={`Preview ${item.title}`}
-                  className="link-plain rounded-lg border border-border bg-surface px-4 py-2 text-sm font-semibold text-text transition-colors duration-200 ease-out hover:border-primary/50"
-                >
-                  Preview
-                </button>
-              </div>
+              <TagList
+                items={item.methods}
+                label={`${item.title} methods`}
+                className="mt-5"
+              />
+              <PaperActions item={item} onPreview={openPreview} />
             </article>
           ))}
+        </div>
+
+        <section className="mt-14" aria-labelledby="reports">
+          <div className="max-w-2xl">
+            <h2 id="reports" className="text-2xl font-semibold text-text">
+              Financial literacy at Bowdoin
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              As a Gibbons Research Fellow in summer 2025, I looked at how other
+              colleges teach personal finance and then drafted course models for
+              Bowdoin. The two reports build on each other.
+            </p>
+          </div>
+          <div className="mt-6 overflow-hidden rounded-xl border border-border bg-surface">
+            {researchReports.map((item, index) => (
+              <article
+                key={item.title}
+                className="grid gap-4 border-b border-border p-6 last:border-b-0 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-start md:gap-6"
+              >
+                <span
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-sm font-semibold text-text"
+                  aria-hidden="true"
+                >
+                  {index + 1}
+                </span>
+                <div className="min-w-0">
+                  <h3 className="text-lg font-semibold text-text">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                    {item.summary}
+                  </p>
+                </div>
+                <PaperActions item={item} onPreview={openPreview} compact />
+              </article>
+            ))}
+          </div>
         </section>
 
         {selected && (
@@ -124,7 +154,10 @@ export default function ResearchPage() {
             <div className="rounded-xl border border-border bg-surface p-6 sm:p-8">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 id="preview-title" className="text-2xl font-semibold text-text">
+                  <h2
+                    id="preview-title"
+                    className="text-2xl font-semibold text-text"
+                  >
                     {selected.title}
                   </h2>
                   <p
@@ -158,7 +191,10 @@ export default function ResearchPage() {
               {iframeError && (
                 <div className="mt-6 rounded-lg border border-border bg-bg p-6">
                   <div className="flex items-start gap-3">
-                    <AlertTriangle className="mt-0.5 h-5 w-5 text-text" aria-hidden />
+                    <AlertTriangle
+                      className="mt-0.5 h-5 w-5 text-text"
+                      aria-hidden
+                    />
                     <div className="text-sm text-muted">
                       <p className="mb-1 font-medium text-text">
                         Couldn&apos;t load the preview.
@@ -199,6 +235,50 @@ export default function ResearchPage() {
           </div>
         )}
       </Container>
-    </section>
+    </div>
+  );
+}
+
+function PaperActions({
+  item,
+  onPreview,
+  compact = false,
+}: {
+  item: ResearchItem;
+  onPreview: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    item: ResearchItem,
+  ) => void;
+  compact?: boolean;
+}) {
+  return (
+    <div
+      className={`flex flex-wrap gap-3 ${compact ? "md:justify-end" : "mt-6"}`}
+    >
+      <a
+        href={encodePathSafe(item.file)}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Open ${item.title} PDF in a new tab`}
+        className={`link-plain inline-flex items-center gap-2 rounded-lg text-sm font-semibold transition-colors duration-200 ease-out ${
+          compact
+            ? "border border-border bg-bg px-3 py-1.5 text-text hover:border-primary/50"
+            : "bg-primary px-4 py-2 text-primary-contrast hover:bg-primary/90"
+        }`}
+      >
+        <FileText className="h-4 w-4" aria-hidden />
+        PDF
+      </a>
+      <button
+        type="button"
+        onClick={(event) => onPreview(event, item)}
+        aria-label={`Preview ${item.title}`}
+        className={`link-plain rounded-lg border border-border text-sm font-semibold text-text transition-colors duration-200 ease-out hover:border-primary/50 ${
+          compact ? "bg-bg px-3 py-1.5" : "bg-bg px-4 py-2"
+        }`}
+      >
+        Preview
+      </button>
+    </div>
   );
 }

@@ -49,7 +49,7 @@ export default function VirtualMemoryPagerPage() {
               rel="noopener noreferrer"
               className="link-plain rounded-lg border border-border bg-surface px-4 py-2 text-sm font-semibold text-text transition-colors duration-200 ease-out hover:border-primary/50"
             >
-              Source
+              Visualizer source
             </a>
             <Link
               href="/projects"
@@ -61,19 +61,18 @@ export default function VirtualMemoryPagerPage() {
         </div>
 
         <div id="pager-demo" className="mt-10 scroll-mt-8">
+          <h2 className="sr-only">Interactive memory trace</h2>
           <PagerDemo />
         </div>
 
         <section className="mt-8 rounded-xl border border-border bg-surface p-6">
           <h2 className="text-xl font-semibold text-text">
-            Original project and public demo
+            The original course project
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted">
             For the original C++ project, I implemented page-fault handling,
             frame allocation, page-table updates, eviction, and swap-backed
-            memory behavior. I built this public browser demo separately to show
-            memory traces, page faults, evictions, dirty and reference bits, and
-            clock-style replacement without publishing the course source.
+            memory behavior.
           </p>
         </section>
       </Container>

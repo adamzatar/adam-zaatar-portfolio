@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 import forms from "@tailwindcss/forms";
 import typography from "@tailwindcss/typography";
-import aspectRatio from "@tailwindcss/aspect-ratio";
 import containerQueries from "@tailwindcss/container-queries";
 
 const config: Config = {
@@ -69,7 +68,7 @@ const config: Config = {
       }),
     },
   },
-  plugins: [forms, typography, aspectRatio, containerQueries],
+  plugins: [forms, typography, containerQueries],
 };
 
 export default config;

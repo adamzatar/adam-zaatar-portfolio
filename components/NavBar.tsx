@@ -64,7 +64,7 @@ export default function NavBar() {
                         "nav-link-float link-plain rounded-full border px-3 py-2 text-sm font-medium",
                         active
                           ? "nav-link-float-active border-primary/25 bg-primary/10 text-text"
-                          : "border-transparent text-muted hover:border-border hover:bg-surface hover:text-text focus-visible:text-text"
+                          : "border-transparent text-muted hover:border-border hover:bg-surface hover:text-text focus-visible:text-text",
                       )}
                     >
                       {label}
@@ -87,7 +87,11 @@ export default function NavBar() {
             aria-controls="mobile-menu"
             aria-label="Toggle mobile menu"
           >
-            {isOpen ? <X size={24} aria-hidden /> : <Menu size={24} aria-hidden />}
+            {isOpen ? (
+              <X size={24} aria-hidden />
+            ) : (
+              <Menu size={24} aria-hidden />
+            )}
           </button>
         </nav>
 
@@ -111,7 +115,7 @@ export default function NavBar() {
                     "link-plain block rounded-xl border px-4 py-3 text-sm font-semibold transition-colors duration-200 ease-out",
                     active
                       ? "border-primary/25 bg-primary/10 text-text"
-                      : "border-transparent text-muted hover:border-border hover:bg-surface hover:text-text"
+                      : "border-transparent text-muted hover:border-border hover:bg-surface hover:text-text",
                   )}
                   onClick={() => setIsOpen(false)}
                 >
@@ -125,7 +129,7 @@ export default function NavBar() {
                     "link-plain block rounded-xl border px-4 py-3 text-sm font-semibold transition-colors duration-200 ease-out",
                     active
                       ? "border-primary/25 bg-primary/10 text-text"
-                      : "border-transparent text-muted hover:border-border hover:bg-surface hover:text-text"
+                      : "border-transparent text-muted hover:border-border hover:bg-surface hover:text-text",
                   )}
                   onClick={() => setIsOpen(false)}
                   aria-current={active ? "page" : undefined}

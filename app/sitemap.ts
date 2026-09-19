@@ -7,6 +7,8 @@ const routes = [
   "/about",
   "/projects",
   "/projects/eventguard",
+  "/projects/technical-bid-review",
+  "/projects/durable-runner",
   "/projects/thread-library",
   "/projects/virtual-memory-pager",
   "/research",

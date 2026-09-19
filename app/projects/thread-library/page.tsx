@@ -49,7 +49,7 @@ export default function ThreadLibraryPage() {
               rel="noopener noreferrer"
               className="link-plain rounded-lg border border-border bg-surface px-4 py-2 text-sm font-semibold text-text transition-colors duration-200 ease-out hover:border-primary/50"
             >
-              Source
+              Visualizer source
             </a>
             <Link
               href="/projects"
@@ -61,19 +61,18 @@ export default function ThreadLibraryPage() {
         </div>
 
         <div id="thread-demo" className="mt-10 scroll-mt-8">
+          <h2 className="sr-only">Interactive thread simulation</h2>
           <ThreadDemo />
         </div>
 
         <section className="mt-8 rounded-xl border border-border bg-surface p-6">
           <h2 className="text-xl font-semibold text-text">
-            Original project and public demo
+            The original course project
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted">
             For the original C++ project, I built a user-level threading library
-            with scheduling, locks, condition variables, join and yield behavior,
-            and interrupt-controlled execution. I built this public browser demo
-            separately to show thread states, ready queues, blocking, and
-            execution traces without publishing the course source.
+            with scheduling, locks, condition variables, join and yield
+            behavior, and interrupt-controlled execution.
           </p>
         </section>
       </Container>

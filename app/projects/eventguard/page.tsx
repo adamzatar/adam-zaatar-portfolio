@@ -1,6 +1,13 @@
 import Image from "next/image";
-import Link from "next/link";
 
+import {
+  CaseContents,
+  CaseHeader,
+  Detail,
+  Section,
+  Stat,
+  caseBodyClass as bodyClass,
+} from "@/components/case-studies/CaseStudy";
 import { Container } from "@/components/ui/Container";
 import { EVENTGUARD_REPO_URL } from "@/lib/content";
 import { createPageMetadata } from "@/lib/site";
@@ -8,241 +15,143 @@ import { createPageMetadata } from "@/lib/site";
 export const metadata = createPageMetadata({
   title: "EventGuard",
   description:
-    "A case study of EventGuard, a modular Java 21 and Spring Boot application for importing, processing, auditing, and persisting payment files.",
+    "A payment-file importer built during Adam Zaatar’s ProgressSoft internship, with rejected-row reporting, transactional persistence, and 107 passing tests.",
   path: "/projects/eventguard",
 });
 
-const fastFacts = [
-  ["Internship", "10 weeks"],
-  ["Structure", "7 Maven modules"],
-  ["Tests", "107 passing"],
-  ["Language", "Java 21"],
-  ["Application", "Spring Boot 3.5, Spring MVC"],
-  ["Persistence", "JDBC, PostgreSQL"],
-] as const;
-
-const caseStudyLinks = [
-  ["Workflow", "#eventguard-workflow"],
-  ["Architecture", "#eventguard-architecture"],
-  ["Engineering decisions", "#eventguard-decisions"],
-  ["Testing", "#eventguard-tests"],
-  ["Next improvements", "#eventguard-next"],
-  ["Development process", "#eventguard-process"],
+const contents = [
+  ["Rejected rows", "parser"],
+  ["Transactions", "transactions"],
+  ["Architecture", "architecture"],
+  ["Testing", "testing"],
 ] as const;
 
 const workflow = [
-  "CSV upload or local file",
-  "NIO file reading",
-  "CSV parsing",
-  "Application workflow",
-  "Payment processing",
-  "Repository port",
-  "JDBC and PostgreSQL",
-] as const;
-
-const modules = [
-  {
-    name: "eventguard-core",
-    detail: "Domain objects and framework-free interfaces owned by the core.",
-  },
-  {
-    name: "eventguard-csv",
-    detail: "CSV parsing adapter.",
-  },
-  {
-    name: "eventguard-file",
-    detail: "NIO file-reading adapter.",
-  },
-  {
-    name: "eventguard-application",
-    detail: "Import, processing, workflow, repository, and reporting services.",
-  },
-  {
-    name: "eventguard-jdbc",
-    detail: "JDBC persistence adapter and connection provider.",
-  },
-  {
-    name: "eventguard-runner",
-    detail: "CLI composition root.",
-  },
-  {
-    name: "eventguard-spring-boot",
-    detail: "Spring Boot REST composition root.",
-  },
-] as const;
-
-const decisions = [
-  {
-    title: "Ports and adapters",
-    body: "The core owns the domain and interfaces. Spring, file handling, CSV parsing, and JDBC stay in adapters that depend on those interfaces. The CLI and Spring Boot entry points assemble the concrete implementations.",
-  },
-  {
-    title: "Money",
-    body: "Payment amounts use BigDecimal in Java and NUMERIC in PostgreSQL. That keeps monetary values out of binary floating-point arithmetic.",
-  },
-  {
-    title: "Transaction boundary",
-    body: "The JDBC adapter disables auto-commit, inserts the parent import attempt, reads its generated key, inserts the payment rows, and commits. On failure it rolls back, and a rollback failure is preserved with addSuppressed instead of replacing the original exception. JDBC resources use try-with-resources.",
-  },
-  {
-    title: "HTTP boundary",
-    body: "A Spring MVC multipart endpoint accepts POST /api/imports. The boundary normalizes content types, falls back to CSV where appropriate, sanitizes filenames against path traversal and control characters, manages temporary files, and maps failures through @RestControllerAdvice.",
-  },
-  {
-    title: "Typed processing outcomes",
-    body: "The processing model has separate accepted and rejected result types. It keeps parser outcomes separate from business-rule rejections, including duplicate payment-ID detection. The current implementation covers part of the intended validation model.",
-  },
-  {
-    title: "Testing",
-    body: "107 tests pass across unit tests, Spring Boot tests and slices, and a JDBC integration test that runs against a real database. The unit and application tests use JUnit 5 and Mockito.",
-  },
-] as const;
-
-const nextSteps = [
-  "Add richer CSV support for quoted fields and embedded commas.",
-  "Align application validation with database constraints.",
-  "Batch JDBC inserts when processing larger files.",
-  "Add streaming ingestion for larger payment files.",
-  "Inject a Clock so timestamp behavior is deterministic in tests.",
+  ["File input", "CSV upload over HTTP, or a local file from the CLI"],
+  ["Parse", "Each row becomes a record or a rejection with a reason"],
+  ["Process", "Business rules, including duplicate payment IDs"],
+  ["Persist", "The import and its rows commit together"],
 ] as const;
 
 export default function EventGuardPage() {
   return (
-    <section className="bg-bg py-16 sm:py-20">
-      <Container>
-        <div className="max-w-4xl">
-          <p className="text-sm font-medium uppercase tracking-wide text-primary">
-            ProgressSoft internship project
+    <div className="bg-bg">
+      <CaseHeader
+        eyebrow="ProgressSoft internship, summer 2026"
+        title="EventGuard"
+        lead="A payment-file importer that keeps rejected rows inspectable and saves each import in one database transaction."
+        technologies={[
+          "Java 21",
+          "Spring Boot",
+          "Spring MVC",
+          "JDBC",
+          "PostgreSQL",
+        ]}
+        sourceHref={EVENTGUARD_REPO_URL}
+        aside={
+          <figure className="mx-auto w-full max-w-[280px] overflow-hidden rounded-xl border border-border bg-surface p-3 shadow-card lg:max-w-none">
+            <Image
+              src="/images/progresssoft/progresssoft-internship-adam-zaatar.jpg"
+              alt="Adam Zaatar outside ProgressSoft in Amman"
+              width={1200}
+              height={1500}
+              priority
+              className="h-auto w-full rounded-lg object-cover"
+              sizes="(min-width: 1024px) 300px, 280px"
+            />
+            <figcaption className="px-1 pb-1 pt-3 text-sm text-muted">
+              Outside ProgressSoft in Amman.
+            </figcaption>
+          </figure>
+        }
+      >
+        <p className={bodyClass}>
+          I built EventGuard over ten weeks at ProgressSoft, from June 1 to
+          August 6, 2026, working in feature branches with merge requests
+          reviewed by my mentor and team lead.
+        </p>
+      </CaseHeader>
+
+      <Container className="pb-16 sm:pb-20">
+        <CaseContents label="EventGuard case study contents" items={contents} />
+
+        <Section id="parser" title="What should happen to a malformed row?">
+          <p className={bodyClass}>
+            Early in the internship, a missing or malformed field in my CSV
+            parser could throw an exception and stop the whole import. My mentor
+            asked me what EventGuard was supposed to do with that row. I
+            hadn&apos;t decided yet.
           </p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-normal text-text sm:text-5xl">
-            EventGuard
-          </h1>
-          <p className="mt-5 max-w-3xl text-lg leading-relaxed text-muted sm:text-xl">
-            A modular Java backend for importing, processing, auditing, and
-            persisting payment files.
+          <p className={bodyClass}>
+            I changed the parser so rejected rows stayed in the result with the
+            reason they failed, while valid rows kept processing. Parser
+            failures stay separate from business-rule rejections such as
+            duplicate payment IDs.
           </p>
-          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
-            I developed EventGuard during my 10-week software engineering
-            internship at ProgressSoft Corporation in Amman, from June 1 to
-            August 6, 2026.
-          </p>
-
-          <div className="mt-6 flex flex-wrap gap-4">
-            <Link
-              href="/projects"
-              className="link-plain text-sm font-semibold text-text underline underline-offset-4 transition-colors duration-200 ease-out hover:text-primary"
-            >
-              Back to projects
-            </Link>
-            <a
-              href={EVENTGUARD_REPO_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link-plain text-sm font-semibold text-text underline underline-offset-4 transition-colors duration-200 ease-out hover:text-primary"
-            >
-              Source
-            </a>
-          </div>
-        </div>
-
-        <dl className="mt-8 grid grid-cols-2 gap-x-5 gap-y-4 border-y border-border py-4 sm:grid-cols-3 lg:grid-cols-6">
-          {fastFacts.map(([label, value]) => (
-            <div key={label} className="min-w-0">
-              <dt className="text-xs font-medium uppercase tracking-wide text-muted">
-                {label}
-              </dt>
-              <dd className="mt-1 text-sm font-semibold leading-snug text-text">
-                {value}
-              </dd>
-            </div>
-          ))}
-        </dl>
-
-        <nav
-          aria-label="EventGuard case study contents"
-          className="mt-8 border-y border-border bg-bg py-3 lg:sticky lg:top-3 lg:z-20 lg:flex lg:items-center lg:gap-6 lg:rounded-xl lg:border lg:px-4"
-        >
-          <p className="shrink-0 text-xs font-semibold uppercase tracking-wide text-muted">
-            On this page
-          </p>
-          <ul className="mt-2 flex gap-5 overflow-x-auto pb-1 lg:mt-0 lg:flex-1 lg:justify-between lg:overflow-visible lg:pb-0">
-            {caseStudyLinks.map(([label, href]) => (
-              <li key={href} className="shrink-0">
-                <a
-                  href={href}
-                  className="link-plain text-sm font-semibold text-text underline-offset-4 transition-colors duration-200 ease-out hover:text-primary hover:underline"
-                >
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <figure className="mt-10 max-w-md overflow-hidden rounded-xl border border-border bg-surface p-3">
-          <Image
-            src="/images/progresssoft/progresssoft-internship-adam-zaatar.jpg"
-            alt="Adam Zaatar outside ProgressSoft in Amman"
-            width={1200}
-            height={1500}
-            loading="eager"
-            className="h-auto w-full rounded-lg object-cover"
-            sizes="(min-width: 640px) 448px, calc(100vw - 56px)"
-          />
-          <figcaption className="px-1 pb-1 pt-3 text-sm text-muted">
-            Outside ProgressSoft in Amman during my 2026 internship.
-          </figcaption>
-        </figure>
-
-        <section className="mt-14 border-t border-border pt-12" aria-labelledby="eventguard-workflow">
-          <div className="max-w-3xl">
-            <p className="text-sm font-medium uppercase tracking-wide text-muted">
-              Workflow
-            </p>
-            <h2 id="eventguard-workflow" className="mt-2 scroll-mt-24 text-3xl font-semibold text-text">
-              Payment-file workflow
-            </h2>
-            <p className="mt-4 text-sm leading-relaxed text-muted">
-              EventGuard reads payment files through a CLI or multipart HTTP
-              entry point. It parses records, runs the application workflow,
-              detects duplicate payment IDs, records typed accepted or rejected
-              processing results, and persists an import attempt with its child
-              payment rows.
-            </p>
-          </div>
-
-          <ol className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {workflow.map((step, index) => (
+          <ol
+            aria-label="Payment import workflow"
+            className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {workflow.map(([step, detail], index) => (
               <li
                 key={step}
-                className="rounded-xl border border-border bg-surface p-4"
+                className={`rounded-xl border p-4 ${
+                  index === 1
+                    ? "border-primary/35 bg-primary/10"
+                    : "border-border bg-surface"
+                }`}
               >
                 <p className="text-xs font-semibold uppercase tracking-wide text-primary">
                   Step {index + 1}
                 </p>
                 <p className="mt-2 text-sm font-semibold text-text">{step}</p>
+                <p className="mt-1 text-xs leading-relaxed text-muted">
+                  {detail}
+                </p>
               </li>
             ))}
           </ol>
-        </section>
+        </Section>
 
-        <section className="mt-14 border-t border-border pt-12" aria-labelledby="eventguard-architecture">
-          <div className="max-w-3xl">
-            <p className="text-sm font-medium uppercase tracking-wide text-muted">
-              Architecture
+        <Section
+          id="transactions"
+          title="An import saves together or rolls back."
+        >
+          <p className={bodyClass}>
+            When I added PostgreSQL persistence, the import and all of its
+            payment rows needed to succeed together. I put the writes in a
+            transaction so a database failure could not leave half of an import
+            saved.
+          </p>
+          <p className={bodyClass}>
+            Payment amounts use <code>BigDecimal</code> in Java and{" "}
+            <code>NUMERIC</code> in PostgreSQL to keep money out of binary
+            floating-point arithmetic.
+          </p>
+          <Detail title="The JDBC transaction boundary">
+            <p>
+              The adapter disables auto-commit, inserts the import, reads its
+              generated key, and inserts the payment rows before committing. A
+              failure rolls back the transaction.
             </p>
-            <h2 id="eventguard-architecture" className="mt-2 scroll-mt-24 text-3xl font-semibold text-text">
-              Seven modules with inward dependencies.
-            </h2>
-            <p className="mt-4 text-sm leading-relaxed text-muted">
-              The core owns abstractions. Application and adapter code depend on
-              those abstractions, and the two entry points wire concrete
-              implementations together. A separate database folder contains the
-              schema and is not an eighth Maven module.
+            <p>
+              If rollback also fails, <code>addSuppressed</code> preserves that
+              failure without replacing the original exception. JDBC resources
+              use try-with-resources.
             </p>
-          </div>
+          </Detail>
+        </Section>
 
-          <figure className="mt-8 rounded-xl border border-border bg-surface p-5 sm:p-8">
+        <Section
+          id="architecture"
+          title="Two entry points, one import implementation"
+        >
+          <p className={bodyClass}>
+            The CLI and HTTP API assemble the same import services. Keeping
+            parsing and persistence behind core interfaces let me test the
+            import behavior without starting Spring or connecting to PostgreSQL.
+          </p>
+          <figure className="mt-8 rounded-2xl border border-border bg-surface p-5 sm:p-8">
             <figcaption className="sr-only">
               EventGuard dependency diagram showing composition roots, the
               application layer, adapters, and the core domain and ports.
@@ -257,12 +166,19 @@ export default function EventGuardPage() {
                   <p className="mt-1 text-sm text-muted">eventguard-runner</p>
                 </div>
                 <div className="rounded-xl border border-border bg-bg p-4">
-                  <p className="font-semibold text-text">Spring Boot REST API</p>
-                  <p className="mt-1 text-sm text-muted">eventguard-spring-boot</p>
+                  <p className="font-semibold text-text">
+                    Spring Boot REST API
+                  </p>
+                  <p className="mt-1 text-sm text-muted">
+                    eventguard-spring-boot
+                  </p>
                 </div>
               </div>
 
-              <div className="text-center text-sm font-semibold text-primary" aria-hidden="true">
+              <div
+                className="text-center text-sm font-semibold text-primary"
+                aria-hidden="true"
+              >
                 wires
                 <span className="mx-2 lg:mx-0 lg:block">→</span>
               </div>
@@ -282,9 +198,14 @@ export default function EventGuardPage() {
                     ["File", "eventguard-file"],
                     ["JDBC", "eventguard-jdbc"],
                   ].map(([label, module]) => (
-                    <div key={module} className="rounded-xl border border-border bg-bg p-4">
+                    <div
+                      key={module}
+                      className="rounded-xl border border-border bg-bg p-4"
+                    >
                       <p className="font-semibold text-text">{label} adapter</p>
-                      <p className="mt-1 break-words text-xs text-muted">{module}</p>
+                      <p className="mt-1 break-words text-xs text-muted">
+                        {module}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -292,102 +213,40 @@ export default function EventGuardPage() {
                   <p className="text-xs font-semibold uppercase tracking-wide text-primary">
                     Core
                   </p>
-                  <p className="mt-2 font-semibold text-text">Domain objects and ports</p>
-                  <p className="mt-1 text-sm text-muted">
-                    eventguard-core has no framework dependencies
+                  <p className="mt-2 font-semibold text-text">
+                    Domain objects and ports, with no framework dependencies
                   </p>
                 </div>
-                <p className="text-center text-xs font-medium text-muted">
-                  Application and adapters depend on abstractions owned by the core.
-                </p>
               </div>
             </div>
           </figure>
+        </Section>
 
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {modules.map((module) => (
-              <article key={module.name} className="rounded-xl border border-border bg-surface p-4">
-                <h3 className="break-words text-sm font-semibold text-text">{module.name}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{module.detail}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-14 border-t border-border pt-12" aria-labelledby="eventguard-decisions">
-          <div className="max-w-3xl">
-            <p className="text-sm font-medium uppercase tracking-wide text-muted">
-              Implementation
-            </p>
-            <h2 id="eventguard-decisions" className="mt-2 scroll-mt-24 text-3xl font-semibold text-text">
-              Engineering decisions
-            </h2>
-          </div>
-          <div className="mt-7 grid gap-5 md:grid-cols-2">
-            {decisions.map((decision) => (
-              <article
-                key={decision.title}
-                className="interactive-card rounded-xl border border-border bg-surface p-6 hover:border-primary/35"
-              >
-                <h3 className="text-xl font-semibold text-text">{decision.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">{decision.body}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-14 rounded-xl border border-border bg-surface p-6 sm:p-8" aria-labelledby="eventguard-tests">
-          <p className="text-sm font-medium uppercase tracking-wide text-muted">
-            Testing
+        <Section id="testing" title="Testing">
+          <p className={bodyClass}>
+            The suite uses JUnit 5 and Mockito, Spring Boot tests, and a JDBC
+            integration test against a real database. The recorded run has no
+            failures, errors, or skipped tests.
           </p>
-          <h2 id="eventguard-tests" className="mt-2 scroll-mt-24 text-3xl font-semibold text-text">
-            Test results
-          </h2>
-          <dl className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-5">
-            {[
-              ["107", "Tests"],
-              ["37", "Spring Boot tests"],
-              ["0", "Failures"],
-              ["0", "Errors"],
-              ["0", "Skipped"],
-            ].map(([value, label]) => (
-              <div key={label} className="rounded-xl border border-border bg-bg p-4">
-                <dd className="text-2xl font-semibold text-text">{value}</dd>
-                <dt className="mt-1 text-xs font-medium uppercase tracking-wide text-muted">
-                  {label}
-                </dt>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        <div className="mt-14 grid gap-5 lg:grid-cols-2">
-          <section className="rounded-xl border border-border bg-surface p-6 sm:p-8" aria-labelledby="eventguard-next">
-            <h2 id="eventguard-next" className="scroll-mt-24 text-2xl font-semibold text-text">
-              Next improvements
-            </h2>
-            <ul className="mt-5 space-y-3">
-              {nextSteps.map((step) => (
-                <li key={step} className="flex gap-3 text-sm leading-relaxed text-muted">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true" />
-                  <span>{step}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section className="rounded-xl border border-border bg-surface p-6 sm:p-8" aria-labelledby="eventguard-process">
-            <h2 id="eventguard-process" className="scroll-mt-24 text-2xl font-semibold text-text">
-              Development process
-            </h2>
-            <p className="mt-5 text-sm leading-relaxed text-muted">
-              I worked in feature branches and opened merge requests for regular
-              review from my mentor and team leader. I used that feedback in later
-              submissions and continued testing and refactoring the code.
+          <div className="mt-6 grid gap-5 sm:grid-cols-3">
+            <Stat value="107" label="Tests passing" />
+            <Stat value="37" label="Spring Boot tests and slices" />
+            <Stat value="1" label="JDBC integration test on real PostgreSQL" />
+          </div>
+          <Detail title="Scope and next changes">
+            <p>
+              This was an internship project, not a production payment service.
+              The current parser needs richer support for quoted fields and
+              embedded commas.
             </p>
-          </section>
-        </div>
+            <p>
+              For larger files, I would add streaming ingestion and batched JDBC
+              inserts. Setup, module details, and HTTP handling are documented
+              in the repository.
+            </p>
+          </Detail>
+        </Section>
       </Container>
-    </section>
+    </div>
   );
 }
