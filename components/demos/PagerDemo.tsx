@@ -169,7 +169,12 @@ export default function PagerDemo() {
             <div className="border-b border-border p-4">
               <h3 className="text-sm font-semibold text-text">Page table</h3>
             </div>
-            <div className="w-full max-w-full overflow-x-auto">
+            <div
+              className="w-full max-w-full overflow-x-auto"
+              role="region"
+              aria-label="Scrollable page table"
+              tabIndex={0}
+            >
               <table className="w-full min-w-[560px] text-left text-sm">
                 <caption className="sr-only">
                   Current virtual-memory page table state

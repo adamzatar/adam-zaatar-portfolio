@@ -128,7 +128,7 @@ export const eventGuardProject = {
   description:
     "I built EventGuard during my internship at ProgressSoft in Amman. It imports payment files, keeps rejected rows with the reason they failed, and saves each import and its payment rows together in PostgreSQL.",
   proof:
-    "107 passing tests, including a JDBC integration test against a real database.",
+    "107 tests, including live PostgreSQL integration tests.",
   technologies: ["Java 21", "Spring Boot", "JDBC", "PostgreSQL"],
   href: "/projects/eventguard",
   cta: "Read the case study",

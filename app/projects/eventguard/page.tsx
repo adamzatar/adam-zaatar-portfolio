@@ -231,7 +231,7 @@ export default function EventGuardPage() {
           <div className="mt-6 grid gap-5 sm:grid-cols-3">
             <Stat value="107" label="Tests passing" />
             <Stat value="37" label="Spring Boot tests and slices" />
-            <Stat value="1" label="JDBC integration test on real PostgreSQL" />
+            <Stat value="1" label="JDBC integration test class on real PostgreSQL" />
           </div>
           <Detail title="Scope and next changes">
             <p>

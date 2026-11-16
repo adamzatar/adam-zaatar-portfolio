@@ -16,11 +16,14 @@
   --muted: #374151;
   --border: #e5e7eb;
   --primary: #4f46e5;
+  --primary-fill: #4f46e5;
+  --primary-text: #4f46e5;
   --primary-contrast: #ffffff;
   --ring: var(--primary);
 }
 
-.dark {
+.dark,
+[data-theme="dark"] {
   color-scheme: dark;
   --bg: #0a0a0f;
   --surface: rgba(22, 27, 34, 0.85);
@@ -29,8 +32,41 @@
   --muted: #9ca3af;
   --border: #2d333b;
   --primary: #6366f1;
+  --primary-fill: #4f46e5;
+  --primary-text: #a5b4fc;
   --primary-contrast: #ffffff;
   --ring: var(--primary);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0a0a0f;
+    --surface: rgba(22, 27, 34, 0.85);
+    --text: #f3f4f6;
+    --foreground: 210 40% 98%;
+    --muted: #9ca3af;
+    --border: #2d333b;
+    --primary: #6366f1;
+    --primary-fill: #4f46e5;
+    --primary-text: #a5b4fc;
+    --primary-contrast: #ffffff;
+    --ring: var(--primary);
+  }
+}
+
+/* Separate accent text and button fills so both meet text contrast requirements. */
+.text-primary,
+.hover\:text-primary:hover {
+  color: var(--primary-text);
+}
+
+.bg-primary {
+  background-color: var(--primary-fill);
+}
+
+.hover\:bg-primary\/90:hover {
+  background-color: color-mix(in srgb, var(--primary-fill) 90%, transparent);
 }
 
 /* Base */
@@ -89,7 +125,7 @@ a.link-plain:hover {
   z-index: 50;
   transform: translateY(-160%);
   border-radius: 0.5rem;
-  background: var(--primary);
+  background: var(--primary-fill);
   color: var(--primary-contrast);
   padding: 0.75rem 1rem;
   font-size: 0.875rem;

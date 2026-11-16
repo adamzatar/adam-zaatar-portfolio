@@ -5,7 +5,7 @@ import { createPageMetadata } from "@/lib/site";
 export const metadata = createPageMetadata({
   title: "Resume",
   description:
-    "Adam Zaatar's resume, including education at Bowdoin, backend engineering experience at ProgressSoft, systems projects, applied AI, and research.",
+    "Adam Zaatar's one-page resume, covering Bowdoin education, ProgressSoft experience, software projects and systems coursework.",
   path: "/resume",
 });
 
