@@ -97,6 +97,11 @@ export default function ResearchPage() {
               <p className="mt-3 flex-1 text-sm leading-relaxed text-muted sm:text-base">
                 {item.summary}
               </p>
+              {item.auditNote && (
+                <p className="mt-4 border-l-2 border-primary/50 pl-4 text-sm leading-relaxed text-text">
+                  {item.auditNote}
+                </p>
+              )}
               <TagList
                 items={item.methods}
                 label={`${item.title} methods`}
@@ -113,9 +118,9 @@ export default function ResearchPage() {
               Financial literacy at Bowdoin
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              As a Gibbons Research Fellow in summer 2025, I looked at how other
-              colleges teach personal finance and then drafted course models for
-              Bowdoin. The two reports build on each other.
+              During my Summer 2025 fellowship as a Gibbons Summer Research
+              Fellow, I compared peer financial literacy programs and proposed
+              course models for Bowdoin. I revised both reports in November 2026.
             </p>
           </div>
           <div className="mt-6 overflow-hidden rounded-xl border border-border bg-surface">
@@ -134,6 +139,9 @@ export default function ResearchPage() {
                   <h3 className="text-lg font-semibold text-text">
                     {item.title}
                   </h3>
+                  <p className="mt-2 text-xs font-medium text-text">
+                    {item.revised}
+                  </p>
                   <p className="mt-2 text-sm leading-relaxed text-muted">
                     {item.summary}
                   </p>
@@ -160,12 +168,22 @@ export default function ResearchPage() {
                   >
                     {selected.title}
                   </h2>
+                  {selected.revised && (
+                    <p className="mt-2 text-xs font-medium text-text">
+                      {selected.revised}
+                    </p>
+                  )}
                   <p
                     id="preview-description"
                     className="mt-2 text-sm leading-relaxed text-muted"
                   >
                     {selected.description}
                   </p>
+                  {selected.auditNote && (
+                    <p className="mt-4 border-l-2 border-primary/50 pl-4 text-sm leading-relaxed text-text">
+                      {selected.auditNote}
+                    </p>
+                  )}
                 </div>
 
                 <button
@@ -173,7 +191,7 @@ export default function ResearchPage() {
                   type="button"
                   onClick={closePreview}
                   aria-label="Close preview"
-                  className="link-plain rounded-lg border border-border p-2 text-text transition-colors duration-200 ease-out hover:border-primary/50"
+                  className="link-plain shrink-0 rounded-lg border border-border p-2 text-text transition-colors duration-200 ease-out hover:border-primary/50"
                 >
                   <X className="h-5 w-5" aria-hidden />
                 </button>

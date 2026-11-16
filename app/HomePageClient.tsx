@@ -180,6 +180,11 @@ export default function HomePageClient() {
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   {item.summary}
                 </p>
+                {item.auditNote && (
+                  <p className="mt-4 border-l-2 border-primary/50 pl-4 text-sm leading-relaxed text-text">
+                    {item.auditNote}
+                  </p>
+                )}
               </article>
             ))}
           </div>

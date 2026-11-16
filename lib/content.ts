@@ -56,10 +56,10 @@ export const experienceItems = [
     body: "A 10-week internship at a payments software company in Amman. I wrote Java and Spring Boot code and went through regular code review with my mentor and team lead.",
   },
   {
-    title: "Gibbons Research Fellow",
+    title: "Gibbons Summer Research Fellow",
     organization: "Bowdoin College",
     date: "Summer 2025",
-    body: "Designed a financial literacy program for students, benchmarked peer schools, and wrote two course models.",
+    body: "During my Summer 2025 fellowship, I compared peer financial literacy programs and proposed course models for Bowdoin. I revised both reports in November 2026.",
   },
   {
     title: "Web Staff and Data Desk",
@@ -76,8 +76,8 @@ export const experienceItems = [
   {
     title: "Learning Assistant, CSCI 1101",
     organization: "Bowdoin College",
-    date: "Fall 2026",
-    body: "Support introductory computer science students with debugging help and office hours.",
+    date: "Fall 2026 to present",
+    body: "I help introductory computer science students in labs and office hours find and fix bugs in their own code.",
   },
 ] as const;
 
@@ -237,11 +237,13 @@ export type ResearchItem = {
   summary: string;
   /** Longer description used in the PDF preview panel. */
   description: string;
+  revised?: string;
+  auditNote?: string;
   methods: readonly string[];
   file: string;
 };
 
-export const researchItems = [
+export const researchItems: readonly ResearchItem[] = [
   {
     title:
       "AI Layoffs and Investor Reactions: Early Evidence from Public-Firm Layoff Announcements",
@@ -250,6 +252,8 @@ export const researchItems = [
       "Using public-firm layoff announcements and an event-study design, I tested whether investors reacted differently when companies explicitly tied layoffs to AI. I did not find a statistically reliable AI-layoff premium.",
     description:
       "This paper asks whether public firms that explicitly connect layoffs to AI adoption receive different stock-market reactions than firms announcing ordinary layoffs. I built a sample of public-firm layoff announcements, manually coded strict AI-cited layoffs, and estimated cumulative abnormal returns around announcement dates. The results do not show a statistically reliable AI-layoff premium.",
+    auditNote:
+      "November 2026 audit: I reproduced every table from the stored data and the conclusion holds. I also found six problems that need correcting, including Figure 1 (a plotting step matched one company to another security's quotes), clusters described as industry-month that are calendar months, and a wild bootstrap in Table 4 that did not impose the null. Ten of the 18 AI-cited layoffs were announced alongside earnings, against 19% of other layoffs; restricting to standalone announcements leaves the result unchanged. A corrected version is in progress.",
     methods: [
       "Event study",
       "Cumulative abnormal returns",
@@ -293,26 +297,28 @@ export const researchItems = [
     file: "/research/Research Paper - Behavioral Economics.pdf",
   },
   {
-    title: "Financial Literacy Programs at Peer Institutions",
+    title: "Financial Literacy Programs at Peer Institutions (Revised)",
     kind: "report",
+    revised: "Revised November 2026",
     summary:
-      "A survey of how peer colleges teach financial literacy, comparing formats, topics, and delivery, and collecting the sources the course models were built on.",
+      "A desk review of five liberal arts colleges and five university reference cases, checked in November 2026. I recommend a CXD-run online track for Bowdoin, live sessions timed to real deadlines, and evaluation that counts actions rather than satisfaction.",
     description:
-      "This report looks at how peer colleges approach financial literacy and what Bowdoin could learn from them. It compares program formats, topics, and delivery models across institutions and compiles the source material used for the later course-design work.",
+      "Revised on 15 November 2026, this desk review covers Williams, Wellesley, Middlebury, Smith and Oberlin, with Yale, Stanford, Harvard, Dartmouth and TCU as university reference cases. I kept only programs confirmable on a school's own site or student newspaper. Offerings fall into four formats: self-paced online courses, short workshop series, peer coaching and one-credit courses. The research section uses peer-reviewed papers only: financial education reliably raises knowledge, with smaller and possibly fading effects on behavior, so teaching close to real decisions is the best-supported design. I recommend a modest start for Bowdoin: an online track run by Career Exploration and Development (CXD), a few live sessions timed to real deadlines, and evaluation that counts actions rather than satisfaction.",
     methods: ["Peer benchmarking"],
     file: "/research/Financial Literacy Programs at Peer Institutions.pdf",
   },
   {
-    title: "Second-Phase Report: Models of the Class",
+    title: "Second-Phase Report: Models of the Class (Revised)",
     kind: "report",
+    revised: "Revised November 2026",
     summary:
-      "Turns that research into course models for Bowdoin, from a semester-long class to a short bootcamp, with syllabi, assignments, grading, and the tradeoffs of each.",
+      "Compares six ways Bowdoin could teach personal finance, addressing Professor Nelson's questions about funding, earlier attempts, bottlenecks and evaluation. I recommend a CXD-run online track plus three short live sessions, with a half-credit course dependent on later demand.",
     description:
-      "This report turns financial literacy research into possible course structures. It asks how a student financial literacy program could be taught at different levels of depth, from a semester-long course to a shorter bootcamp. It includes syllabi, assignments, grading models, and implementation tradeoffs.",
+      "Revised on 15 November 2026, this report compares a full-credit course, a half-credit course, a January bootcamp, an online track, a workshop series and senior-spring sessions. It is organized around four questions Professor Nelson raised: funding, earlier attempts, bottlenecks and how to know whether it worked. I rank the models on cost, who must approve and staff them, reach, and whether their timing fits the research. I recommend starting with a CXD-run online track plus three short live sessions timed to real deadlines, with a half-credit course as a later step dependent on demand. The revision adds a module for international students that I did not find in any peer program's public materials.",
     methods: ["Curriculum design"],
     file: "/research/Second-Phase Report_ Models of the Class.pdf",
   },
-] as const satisfies readonly ResearchItem[];
+];
 
 export const researchPapers = researchItems.filter(
   (item) => item.kind === "paper",
