@@ -1,11 +1,11 @@
 import { Container } from "@/components/ui/Container";
-import { RESUME_PATH } from "@/lib/constants/resume";
+import { ACADEMIC_CV_PATH, RESUME_PATH } from "@/lib/constants/resume";
 import { createPageMetadata } from "@/lib/site";
 
 export const metadata = createPageMetadata({
   title: "Resume",
   description:
-    "Adam Zaatar's resume, including education at Bowdoin, backend engineering experience at ProgressSoft, systems projects, applied AI, and research.",
+    "Adam Zaatar's one-page resume and academic CV, covering Bowdoin education, ProgressSoft experience, systems coursework, software projects and research.",
   path: "/resume",
 });
 
@@ -43,6 +43,14 @@ export default function ResumePage() {
               className="link-plain rounded-lg border border-border bg-surface px-5 py-3 text-sm font-semibold text-text transition-colors duration-200 ease-out hover:border-primary/50"
             >
               Download PDF
+            </a>
+            <a
+              href={ACADEMIC_CV_PATH}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-plain rounded-lg border border-border bg-surface px-5 py-3 text-sm font-semibold text-text transition-colors duration-200 ease-out hover:border-primary/50"
+            >
+              Academic CV
             </a>
           </div>
         </div>

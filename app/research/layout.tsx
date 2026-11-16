@@ -3,7 +3,7 @@ import { createPageMetadata } from "@/lib/site";
 export const metadata = createPageMetadata({
   title: "Research",
   description:
-    "Economics research and writing by Adam Zaatar, including event studies, digital economics, political economy, inflation, and financial literacy.",
+    "Economics papers by Adam Zaatar, a November 2026 AI-layoffs audit note, and two Gibbons financial literacy reports revised in November 2026, with PDF previews.",
   path: "/research",
 });
 

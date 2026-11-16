@@ -25,6 +25,10 @@
 *.pem
 
 # debug
+*.log
+errors_logs/
+errors.tar.gz
+out.css
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

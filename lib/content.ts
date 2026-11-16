@@ -33,6 +33,7 @@ export type ProjectMediaData =
     };
 
 export type FeaturedProject = {
+  id?: string;
   title: string;
   status?: string;
   /** One sentence for the home page preview. */
@@ -45,6 +46,7 @@ export type FeaturedProject = {
   cta: string;
   sourceHref?: string;
   sourceCta?: string;
+  relatedLink?: { href: string; label: string };
   media?: ProjectMediaData;
 };
 
@@ -56,10 +58,10 @@ export const experienceItems = [
     body: "A 10-week internship at a payments software company in Amman. I wrote Java and Spring Boot code and went through regular code review with my mentor and team lead.",
   },
   {
-    title: "Gibbons Research Fellow",
+    title: "Gibbons Summer Research Fellow",
     organization: "Bowdoin College",
     date: "Summer 2025",
-    body: "Designed a financial literacy program for students, benchmarked peer schools, and wrote two course models.",
+    body: "During my Summer 2025 fellowship, I compared peer financial literacy programs and proposed course models for Bowdoin. I revised both reports in November 2026.",
   },
   {
     title: "Web Staff and Data Desk",
@@ -76,8 +78,8 @@ export const experienceItems = [
   {
     title: "Learning Assistant, CSCI 1101",
     organization: "Bowdoin College",
-    date: "Fall 2026",
-    body: "Support introductory computer science students with debugging help and office hours.",
+    date: "Fall 2026 to present",
+    body: "I help introductory computer science students in labs and office hours find and fix bugs in their own code.",
   },
 ] as const;
 
@@ -126,7 +128,7 @@ export const eventGuardProject = {
   description:
     "I built EventGuard during my internship at ProgressSoft in Amman. It imports payment files, keeps rejected rows with the reason they failed, and saves each import and its payment rows together in PostgreSQL.",
   proof:
-    "107 passing tests, including a JDBC integration test against a real database.",
+    "107 tests, including live PostgreSQL integration tests.",
   technologies: ["Java 21", "Spring Boot", "JDBC", "PostgreSQL"],
   href: "/projects/eventguard",
   cta: "Read the case study",
@@ -143,25 +145,40 @@ export const eventGuardProject = {
 } as const satisfies FeaturedProject;
 
 export const clickEraseProject = {
+  id: "clickerase",
   title: "ClickErase",
   status: "Live demo",
   tagline: "Click an object in a photo and it disappears.",
   description:
-    "Click an object in a photo and ClickErase removes it. MobileSAM generates the mask and LaMa fills in the background. It runs on Hugging Face Spaces.",
+    "Click an object in a photo and ClickErase removes it. MobileSAM generates the mask and LaMa fills in the background. It runs on Hugging Face Spaces. Final project for Deep Learning for Computer Vision (CSCI 3485), Spring 2026; solo.",
   technologies: ["Python", "MobileSAM", "LaMa", "Gradio"],
   href: CLICKERASE_URL,
   cta: "Open demo",
   sourceHref: CLICKERASE_REPO_URL,
   sourceCta: "Source",
+  relatedLink: {
+    href: "/projects#computer-vision-labs",
+    label: "Computer vision course labs",
+  },
 } as const satisfies FeaturedProject;
+
+export const operatingSystemsCourse = {
+  label:
+    "Operating Systems (CSCI 3310), Spring 2026, Professor Sean Barker",
+  threadDescription:
+    "Our group built a C++ user-level thread library on Linux using getcontext, makecontext and swapcontext, with FIFO ready, lock and condition queues. I wrote the Mesa-style condition variables. Our group used interrupt disable and enable for atomicity, returned -1 on errors instead of crashing, and ran our SSTF disk scheduler on the library.",
+  pagerDescription:
+    "Our group built an external C++ pager on Linux that manages page tables, faults, swap and physical frames for multiple processes. I wrote the demand paging with global second-chance (clock) replacement. Our group tracked reference and dirty bits in software through protection faults and deferred zero-fills and disk writes until unavoidable.",
+  note: "Group project. A teammate wrote the test suites. Source is private under course policy.",
+} as const;
 
 export const systemDemoProjects = [
   {
     title: "Thread Library Visualizer",
     tagline: "Scheduling and lock contention, stepped through in the browser.",
     description:
-      "A C++ user-level thread library with FIFO scheduling, locks, and Mesa-style condition variables. The public visualizer steps through scheduling and lock contention in the browser.",
-    technologies: ["C/C++", "ucontext", "TypeScript"],
+      "I wrote the Mesa-style condition variables in our group's C++ thread library on Linux. Our group built the FIFO scheduling and locks; a teammate wrote the test suites. This separate public visualizer steps through scheduling and lock contention in the browser.",
+    technologies: ["C++", "Linux", "ucontext", "TypeScript"],
     href: "/projects/thread-library",
     cta: "Open demo",
     sourceHref: THREAD_SIM_SOURCE_URL,
@@ -178,8 +195,8 @@ export const systemDemoProjects = [
     title: "Virtual Memory Pager Visualizer",
     tagline: "Page faults, evictions, and page-table changes on a live trace.",
     description:
-      "A C++ pager with demand paging and second-chance clock replacement. The public visualizer runs a memory trace and shows each fault, eviction, and page-table change.",
-    technologies: ["C/C++", "TypeScript"],
+      "I wrote the demand paging with second-chance replacement in our group's C++ virtual memory pager on Linux. A teammate wrote the test suites. This separate public visualizer runs a memory trace and shows each fault, eviction and page-table change.",
+    technologies: ["C++", "Linux", "TypeScript"],
     href: "/projects/virtual-memory-pager",
     cta: "Open demo",
     sourceHref: PAGER_SIM_SOURCE_URL,
@@ -193,6 +210,65 @@ export const systemDemoProjects = [
     },
   },
 ] as const satisfies readonly FeaturedProject[];
+
+export type CourseProject = {
+  id: string;
+  title: string;
+  courseLabel: string;
+  description: string;
+  technologies: readonly string[];
+  note: string;
+  relatedLink?: { href: string; label: string };
+};
+
+const distributedSystemsLabel =
+  "Distributed Systems (CSCI 3325), Fall 2026 (in progress), Professor Sean Barker";
+const distributedSystemsNote =
+  "Group project, followed by an oral review. Source is private under course policy.";
+
+export const courseProjects: readonly CourseProject[] = [
+  {
+    id: "web-server",
+    title: "Web server",
+    courseLabel: distributedSystemsLabel,
+    description:
+      "Our group built an HTTP/1.0 and HTTP/1.1 GET server in C using Linux sockets. It handles concurrent clients, returns 200/400/403/404 status codes and Date, Content-Length and Content-Type headers, and supports persistent HTTP/1.1 connections with a timeout that adapts to load. Requests containing .. receive 403. Our experiments compared buffer sizes for large-file transfers and the concurrent design's throughput and latency against a one-client-at-a-time baseline with 1 to 50 clients.",
+    technologies: ["C", "Linux", "Sockets", "HTTP"],
+    note: distributedSystemsNote,
+  },
+  {
+    id: "online-bookstore",
+    title: "Online bookstore",
+    courseLabel: distributedSystemsLabel,
+    description:
+      "Our group built front-end, catalog and order servers in Java, communicating over gRPC with Protocol Buffers, with Java and Python clients. Inventory stays correct during concurrent purchases and periodic restocking, including when buyers compete for the last copy. Our group deployed the system across four machines and measured response time as concurrent clients increased.",
+    technologies: ["Java", "Python", "gRPC", "Protocol Buffers"],
+    note: distributedSystemsNote,
+  },
+  {
+    id: "mapreduce",
+    title: "MapReduce",
+    courseLabel: distributedSystemsLabel,
+    description:
+      "Our group configured a Hadoop 3 cluster on Amazon-hosted machines and wrote Java MapReduce jobs. We built an inverted index over Project Gutenberg texts and a two-stage job joining impression and click logs to calculate click-through rates per referrer and ad.",
+    technologies: ["Java", "Hadoop 3", "MapReduce", "AWS"],
+    note: distributedSystemsNote,
+  },
+  {
+    id: "computer-vision-labs",
+    title: "Computer vision labs",
+    courseLabel:
+      "Deep Learning for Computer Vision (CSCI 3485), Spring 2026, Professor Jeová Farias",
+    description:
+      "I completed seven PyTorch labs, each an experiment with a written report: perceptron, multilayer perceptron and optimization, CNNs, transfer learning, object detection, U-Net and autoencoders for denoising and segmentation, and conditional GANs. ClickErase was my solo final project for the course.",
+    technologies: ["Python", "PyTorch"],
+    note: "Lab source is private under course policy.",
+    relatedLink: {
+      href: "/projects#clickerase",
+      label: "ClickErase final project",
+    },
+  },
+];
 
 export const mainProjects = [
   technicalBidReviewProject,
@@ -237,11 +313,13 @@ export type ResearchItem = {
   summary: string;
   /** Longer description used in the PDF preview panel. */
   description: string;
+  revised?: string;
+  auditNote?: string;
   methods: readonly string[];
   file: string;
 };
 
-export const researchItems = [
+export const researchItems: readonly ResearchItem[] = [
   {
     title:
       "AI Layoffs and Investor Reactions: Early Evidence from Public-Firm Layoff Announcements",
@@ -250,6 +328,8 @@ export const researchItems = [
       "Using public-firm layoff announcements and an event-study design, I tested whether investors reacted differently when companies explicitly tied layoffs to AI. I did not find a statistically reliable AI-layoff premium.",
     description:
       "This paper asks whether public firms that explicitly connect layoffs to AI adoption receive different stock-market reactions than firms announcing ordinary layoffs. I built a sample of public-firm layoff announcements, manually coded strict AI-cited layoffs, and estimated cumulative abnormal returns around announcement dates. The results do not show a statistically reliable AI-layoff premium.",
+    auditNote:
+      "November 2026 audit: I reproduced every table from the stored data and the conclusion holds. I also found six problems that need correcting, including Figure 1 (a plotting step matched one company to another security's quotes), clusters described as industry-month that are calendar months, and a wild bootstrap in Table 4 that did not impose the null. Ten of the 18 AI-cited layoffs were announced alongside earnings, against 19% of other layoffs; restricting to standalone announcements leaves the result unchanged. A corrected version is in progress.",
     methods: [
       "Event study",
       "Cumulative abnormal returns",
@@ -293,26 +373,28 @@ export const researchItems = [
     file: "/research/Research Paper - Behavioral Economics.pdf",
   },
   {
-    title: "Financial Literacy Programs at Peer Institutions",
+    title: "Financial Literacy Programs at Peer Institutions (Revised)",
     kind: "report",
+    revised: "Revised November 2026",
     summary:
-      "A survey of how peer colleges teach financial literacy, comparing formats, topics, and delivery, and collecting the sources the course models were built on.",
+      "A desk review of five liberal arts colleges and five university reference cases, checked in November 2026. I recommend a CXD-run online track for Bowdoin, live sessions timed to real deadlines, and evaluation that counts actions rather than satisfaction.",
     description:
-      "This report looks at how peer colleges approach financial literacy and what Bowdoin could learn from them. It compares program formats, topics, and delivery models across institutions and compiles the source material used for the later course-design work.",
+      "Revised on 15 November 2026, this desk review covers Williams, Wellesley, Middlebury, Smith and Oberlin, with Yale, Stanford, Harvard, Dartmouth and TCU as university reference cases. I kept only programs confirmable on a school's own site or student newspaper. Offerings fall into four formats: self-paced online courses, short workshop series, peer coaching and one-credit courses. The research section uses peer-reviewed papers only: financial education reliably raises knowledge, with smaller and possibly fading effects on behavior, so teaching close to real decisions is the best-supported design. I recommend a modest start for Bowdoin: an online track run by Career Exploration and Development (CXD), a few live sessions timed to real deadlines, and evaluation that counts actions rather than satisfaction.",
     methods: ["Peer benchmarking"],
     file: "/research/Financial Literacy Programs at Peer Institutions.pdf",
   },
   {
-    title: "Second-Phase Report: Models of the Class",
+    title: "Second-Phase Report: Models of the Class (Revised)",
     kind: "report",
+    revised: "Revised November 2026",
     summary:
-      "Turns that research into course models for Bowdoin, from a semester-long class to a short bootcamp, with syllabi, assignments, grading, and the tradeoffs of each.",
+      "Compares six ways Bowdoin could teach personal finance, addressing Professor Nelson's questions about funding, earlier attempts, bottlenecks and evaluation. I recommend a CXD-run online track plus three short live sessions, with a half-credit course dependent on later demand.",
     description:
-      "This report turns financial literacy research into possible course structures. It asks how a student financial literacy program could be taught at different levels of depth, from a semester-long course to a shorter bootcamp. It includes syllabi, assignments, grading models, and implementation tradeoffs.",
+      "Revised on 15 November 2026, this report compares a full-credit course, a half-credit course, a January bootcamp, an online track, a workshop series and senior-spring sessions. It is organized around four questions Professor Nelson raised: funding, earlier attempts, bottlenecks and how to know whether it worked. I rank the models on cost, who must approve and staff them, reach, and whether their timing fits the research. I recommend starting with a CXD-run online track plus three short live sessions timed to real deadlines, with a half-credit course as a later step dependent on demand. The revision adds a module for international students that I did not find in any peer program's public materials.",
     methods: ["Curriculum design"],
     file: "/research/Second-Phase Report_ Models of the Class.pdf",
   },
-] as const satisfies readonly ResearchItem[];
+];
 
 export const researchPapers = researchItems.filter(
   (item) => item.kind === "paper",

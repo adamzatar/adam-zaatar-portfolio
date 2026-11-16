@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import ThreadDemo from "@/components/demos/ThreadDemo";
 import { Container } from "@/components/ui/Container";
-import { THREAD_SIM_SOURCE_URL } from "@/lib/content";
+import { operatingSystemsCourse, THREAD_SIM_SOURCE_URL } from "@/lib/content";
 import { createPageMetadata } from "@/lib/site";
 
 export const metadata = createPageMetadata({
@@ -31,9 +31,9 @@ export default function ThreadLibraryPage() {
             execution traces.
           </p>
           <p className="mt-4 text-sm leading-relaxed text-muted">
-            The original C++ source is private because this was an operating
-            systems course project. I built this TypeScript demo separately to
-            explain the scheduler without publishing the course solution.
+            Our group&apos;s original C++ source is private under course policy.
+            I built this public TypeScript visualizer separately to explain the
+            scheduler without publishing the course solution.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
@@ -70,9 +70,13 @@ export default function ThreadLibraryPage() {
             The original course project
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted">
-            For the original C++ project, I built a user-level threading library
-            with scheduling, locks, condition variables, join and yield
-            behavior, and interrupt-controlled execution.
+            {operatingSystemsCourse.label}.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted">
+            {operatingSystemsCourse.threadDescription}
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted">
+            {operatingSystemsCourse.note}
           </p>
         </section>
       </Container>

@@ -26,7 +26,7 @@ export default function AboutPage() {
             <p className="mt-6 text-lg leading-relaxed text-text sm:text-xl">
               I&apos;m a senior at Bowdoin College studying Computer Science and
               Economics, with a minor in German. I grew up in Amman, Jordan,
-              before coming to Maine for college, and I graduate in May 2027.
+              before coming to Maine for college. I expect to graduate in May 2027.
             </p>
           </div>
           <figure className="mx-auto w-full max-w-[260px] overflow-hidden rounded-xl border border-border bg-surface px-5 pt-5 shadow-card lg:max-w-none">
@@ -52,7 +52,7 @@ export default function AboutPage() {
             and database coordination.
           </p>
           <p>
-            Last summer I spent ten weeks at ProgressSoft in Amman, where I
+            From June to August 2026, I interned at ProgressSoft in Amman, where I
             built{" "}
             <Link href="/projects/eventguard" className={textLink}>
               EventGuard
@@ -70,8 +70,9 @@ export default function AboutPage() {
               economics papers
             </Link>{" "}
             too, mostly empirical ones. On campus I work on web and data
-            projects for The Bowdoin Orient and help teach intro computer
-            science as a Learning Assistant.
+            projects for The Bowdoin Orient. Since Fall 2026, I&apos;ve been a
+            Learning Assistant for Intro CS (CSCI 1101), helping students in labs
+            and office hours find and fix bugs in their own code.
           </p>
 
           <div className="flex flex-wrap gap-5 border-t border-border pt-6 text-sm">
