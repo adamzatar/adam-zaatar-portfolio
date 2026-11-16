@@ -32,8 +32,8 @@ export default function HomePageClient() {
                 backend and systems work.
               </p>
               <p className="max-w-2xl text-base leading-relaxed text-muted">
-                I graduate in May 2027, and spent last summer at ProgressSoft in
-                Amman working in Java and Spring Boot.
+                I expect to graduate in May 2027. From June to August 2026, I
+                interned at ProgressSoft in Amman, working in Java and Spring Boot.
               </p>
             </div>
 
@@ -109,12 +109,20 @@ export default function HomePageClient() {
               Systems coursework
             </p>
             <h2 className="text-3xl font-semibold tracking-normal text-text">
-              A thread library and a virtual memory pager, in C++.
+              Operating systems and distributed systems.
             </h2>
             <p className="text-base leading-relaxed text-muted">
-              The course code stays private, so I built browser visualizers that
-              step through the scheduling and page-replacement behavior.
+              In Operating Systems (CSCI 3310, Spring 2026), I wrote the
+              Mesa-style condition variables in our group&apos;s thread library
+              and demand paging with second-chance replacement in our pager.
+              In Distributed Systems (CSCI 3325, Fall 2026, in progress), our
+              group built a web server, a gRPC bookstore and MapReduce jobs.
+              The course code stays private; these separate public visualizers
+              explain scheduling and page replacement.
             </p>
+            <Link href="/projects#course-projects" className={textLink}>
+              Course projects
+            </Link>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">

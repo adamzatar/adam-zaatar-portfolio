@@ -6,7 +6,9 @@ import { Container } from "@/components/ui/Container";
 import { TagList } from "@/components/ui/Tag";
 import {
   clickEraseProject,
+  courseProjects,
   mainProjects,
+  operatingSystemsCourse,
   softwareProjects,
   systemDemoProjects,
   type FeaturedProject,
@@ -16,7 +18,7 @@ import { createPageMetadata } from "@/lib/site";
 export const metadata = createPageMetadata({
   title: "Projects",
   description:
-    "Backend, systems, applied AI, and software projects by Adam Zaatar, including Durable Runner, Technical Bid Review, EventGuard, and public operating-systems visualizers.",
+    "Backend and AI projects by Adam Zaatar, public operating systems visualizers, and course projects in distributed systems and computer vision at Bowdoin.",
   path: "/projects",
 });
 
@@ -26,6 +28,7 @@ const textLinkClass =
   "link-plain text-sm font-semibold text-text underline underline-offset-4 transition-colors duration-200 ease-out hover:text-primary";
 
 type OtherProject = {
+  id?: string;
   title: string;
   status?: string;
   description: string;
@@ -34,6 +37,7 @@ type OtherProject = {
   cta: string;
   sourceHref?: string;
   sourceCta?: string;
+  relatedLink?: { href: string; label: string };
 };
 
 const otherProjects: readonly OtherProject[] = [
@@ -51,8 +55,8 @@ export default function ProjectsPage() {
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
             Two backend systems I&apos;m building now, the project from my
-            ProgressSoft internship, and operating-systems coursework with
-            public visualizers.
+            ProgressSoft internship, public operating systems visualizers, and
+            course projects in distributed systems and computer vision.
           </p>
         </Container>
       </section>
@@ -74,18 +78,54 @@ export default function ProjectsPage() {
         <Container className="py-14 sm:py-16">
           <div className="mb-6 max-w-2xl">
             <h2 className="text-2xl font-semibold text-text sm:text-3xl">
-              Systems coursework
+              Operating systems visualizers
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              The C/C++ implementations are private under course policy, so I
-              built separate TypeScript visualizers for the scheduling and
-              memory behavior.
+              {operatingSystemsCourse.label}. Our group&apos;s C++ implementations
+              are private under course policy. I built these separate public
+              TypeScript visualizers for the scheduling and memory behavior.
             </p>
           </div>
 
           <div className="grid items-stretch gap-5 md:grid-cols-2">
             {systemDemoProjects.map((project) => (
               <FeaturedProjectCard key={project.title} project={project} />
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section aria-labelledby="course-projects">
+        <Container className="py-14 sm:py-16">
+          <h2 id="course-projects" className="text-2xl font-semibold text-text sm:text-3xl">
+            Course projects
+          </h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {courseProjects.map((project) => (
+              <article
+                key={project.id}
+                id={project.id}
+                className="flex scroll-mt-8 flex-col rounded-xl border border-border bg-surface p-5 sm:p-6"
+              >
+                <h3 className="text-lg font-semibold text-text">{project.title}</h3>
+                <p className="mt-2 text-xs font-medium leading-relaxed text-text">
+                  {project.courseLabel}
+                </p>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
+                  {project.description}
+                </p>
+                <TagList
+                  items={project.technologies}
+                  label={`${project.title} technologies`}
+                  className="mt-4"
+                />
+                <p className="mt-4 text-xs leading-relaxed text-muted">{project.note}</p>
+                {project.relatedLink && (
+                  <Link href={project.relatedLink.href} className={`mt-4 ${textLinkClass}`}>
+                    {project.relatedLink.label}
+                  </Link>
+                )}
+              </article>
             ))}
           </div>
         </Container>
@@ -192,7 +232,7 @@ function FeaturedProjectSection({
 
 function OtherProjectCard({ project }: { project: OtherProject }) {
   return (
-    <article className="interactive-card flex h-full flex-col rounded-xl border border-border bg-surface p-5 hover:border-primary/45 sm:p-6">
+    <article id={project.id} className="interactive-card flex h-full scroll-mt-8 flex-col rounded-xl border border-border bg-surface p-5 hover:border-primary/45 sm:p-6">
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <h3 className="text-lg font-semibold text-text">{project.title}</h3>
         {project.status ? (
@@ -207,6 +247,11 @@ function OtherProjectCard({ project }: { project: OtherProject }) {
       <p className="mt-4 text-xs text-muted">
         {project.technologies.join(", ")}
       </p>
+      {project.relatedLink && (
+        <Link href={project.relatedLink.href} className={`mt-4 ${textLinkClass}`}>
+          {project.relatedLink.label}
+        </Link>
+      )}
       <div className="mt-4 flex flex-wrap items-center gap-4">
         <a
           href={project.href}

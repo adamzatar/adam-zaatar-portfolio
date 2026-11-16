@@ -6,7 +6,7 @@ export const SITE_TITLE =
   "Adam Zaatar | Computer Science and Economics at Bowdoin";
 
 export const SITE_DESCRIPTION =
-  "Adam Zaatar is a Computer Science and Economics senior at Bowdoin, graduating May 2027. Backend and systems projects, a Java internship at ProgressSoft, C/C++ operating systems coursework, and economics research.";
+  "Adam Zaatar studies Computer Science and Economics at Bowdoin, with backend and AI projects, operating systems and distributed systems coursework, and economics research.";
 
 export function createPageMetadata({
   title,

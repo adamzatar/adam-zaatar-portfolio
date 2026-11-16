@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import PagerDemo from "@/components/demos/PagerDemo";
 import { Container } from "@/components/ui/Container";
-import { PAGER_SIM_SOURCE_URL } from "@/lib/content";
+import { operatingSystemsCourse, PAGER_SIM_SOURCE_URL } from "@/lib/content";
 import { createPageMetadata } from "@/lib/site";
 
 export const metadata = createPageMetadata({
@@ -31,9 +31,9 @@ export default function VirtualMemoryPagerPage() {
             replacement model.
           </p>
           <p className="mt-4 text-sm leading-relaxed text-muted">
-            The original C++ source is private because this was an operating
-            systems course project. I built this TypeScript demo separately to
-            explain the pager without publishing the course solution.
+            Our group&apos;s original C++ source is private under course policy.
+            I built this public TypeScript visualizer separately to explain the
+            pager without publishing the course solution.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
@@ -70,9 +70,13 @@ export default function VirtualMemoryPagerPage() {
             The original course project
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted">
-            For the original C++ project, I implemented page-fault handling,
-            frame allocation, page-table updates, eviction, and swap-backed
-            memory behavior.
+            {operatingSystemsCourse.label}.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted">
+            {operatingSystemsCourse.pagerDescription}
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted">
+            {operatingSystemsCourse.note}
           </p>
         </section>
       </Container>

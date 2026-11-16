@@ -33,6 +33,7 @@ export type ProjectMediaData =
     };
 
 export type FeaturedProject = {
+  id?: string;
   title: string;
   status?: string;
   /** One sentence for the home page preview. */
@@ -45,6 +46,7 @@ export type FeaturedProject = {
   cta: string;
   sourceHref?: string;
   sourceCta?: string;
+  relatedLink?: { href: string; label: string };
   media?: ProjectMediaData;
 };
 
@@ -143,25 +145,40 @@ export const eventGuardProject = {
 } as const satisfies FeaturedProject;
 
 export const clickEraseProject = {
+  id: "clickerase",
   title: "ClickErase",
   status: "Live demo",
   tagline: "Click an object in a photo and it disappears.",
   description:
-    "Click an object in a photo and ClickErase removes it. MobileSAM generates the mask and LaMa fills in the background. It runs on Hugging Face Spaces.",
+    "Click an object in a photo and ClickErase removes it. MobileSAM generates the mask and LaMa fills in the background. It runs on Hugging Face Spaces. Final project for Deep Learning for Computer Vision (CSCI 3485), Spring 2026; solo.",
   technologies: ["Python", "MobileSAM", "LaMa", "Gradio"],
   href: CLICKERASE_URL,
   cta: "Open demo",
   sourceHref: CLICKERASE_REPO_URL,
   sourceCta: "Source",
+  relatedLink: {
+    href: "/projects#computer-vision-labs",
+    label: "Computer vision course labs",
+  },
 } as const satisfies FeaturedProject;
+
+export const operatingSystemsCourse = {
+  label:
+    "Operating Systems (CSCI 3310), Spring 2026, Professor Sean Barker",
+  threadDescription:
+    "Our group built a C++ user-level thread library on Linux using getcontext, makecontext and swapcontext, with FIFO ready, lock and condition queues. I wrote the Mesa-style condition variables. Our group used interrupt disable and enable for atomicity, returned -1 on errors instead of crashing, and ran our SSTF disk scheduler on the library.",
+  pagerDescription:
+    "Our group built an external C++ pager on Linux that manages page tables, faults, swap and physical frames for multiple processes. I wrote the demand paging with global second-chance (clock) replacement. Our group tracked reference and dirty bits in software through protection faults and deferred zero-fills and disk writes until unavoidable.",
+  note: "Group project. A teammate wrote the test suites. Source is private under course policy.",
+} as const;
 
 export const systemDemoProjects = [
   {
     title: "Thread Library Visualizer",
     tagline: "Scheduling and lock contention, stepped through in the browser.",
     description:
-      "A C++ user-level thread library with FIFO scheduling, locks, and Mesa-style condition variables. The public visualizer steps through scheduling and lock contention in the browser.",
-    technologies: ["C/C++", "ucontext", "TypeScript"],
+      "I wrote the Mesa-style condition variables in our group's C++ thread library on Linux. Our group built the FIFO scheduling and locks; a teammate wrote the test suites. This separate public visualizer steps through scheduling and lock contention in the browser.",
+    technologies: ["C++", "Linux", "ucontext", "TypeScript"],
     href: "/projects/thread-library",
     cta: "Open demo",
     sourceHref: THREAD_SIM_SOURCE_URL,
@@ -178,8 +195,8 @@ export const systemDemoProjects = [
     title: "Virtual Memory Pager Visualizer",
     tagline: "Page faults, evictions, and page-table changes on a live trace.",
     description:
-      "A C++ pager with demand paging and second-chance clock replacement. The public visualizer runs a memory trace and shows each fault, eviction, and page-table change.",
-    technologies: ["C/C++", "TypeScript"],
+      "I wrote the demand paging with second-chance replacement in our group's C++ virtual memory pager on Linux. A teammate wrote the test suites. This separate public visualizer runs a memory trace and shows each fault, eviction and page-table change.",
+    technologies: ["C++", "Linux", "TypeScript"],
     href: "/projects/virtual-memory-pager",
     cta: "Open demo",
     sourceHref: PAGER_SIM_SOURCE_URL,
@@ -193,6 +210,65 @@ export const systemDemoProjects = [
     },
   },
 ] as const satisfies readonly FeaturedProject[];
+
+export type CourseProject = {
+  id: string;
+  title: string;
+  courseLabel: string;
+  description: string;
+  technologies: readonly string[];
+  note: string;
+  relatedLink?: { href: string; label: string };
+};
+
+const distributedSystemsLabel =
+  "Distributed Systems (CSCI 3325), Fall 2026 (in progress), Professor Sean Barker";
+const distributedSystemsNote =
+  "Group project, followed by an oral review. Source is private under course policy.";
+
+export const courseProjects: readonly CourseProject[] = [
+  {
+    id: "web-server",
+    title: "Web server",
+    courseLabel: distributedSystemsLabel,
+    description:
+      "Our group built an HTTP/1.0 and HTTP/1.1 GET server in C using Linux sockets. It handles concurrent clients, returns 200/400/403/404 status codes and Date, Content-Length and Content-Type headers, and supports persistent HTTP/1.1 connections with a timeout that adapts to load. Requests containing .. receive 403. Our experiments compared buffer sizes for large-file transfers and the concurrent design's throughput and latency against a one-client-at-a-time baseline with 1 to 50 clients.",
+    technologies: ["C", "Linux", "Sockets", "HTTP"],
+    note: distributedSystemsNote,
+  },
+  {
+    id: "online-bookstore",
+    title: "Online bookstore",
+    courseLabel: distributedSystemsLabel,
+    description:
+      "Our group built front-end, catalog and order servers in Java, communicating over gRPC with Protocol Buffers, with Java and Python clients. Inventory stays correct during concurrent purchases and periodic restocking, including when buyers compete for the last copy. Our group deployed the system across four machines and measured response time as concurrent clients increased.",
+    technologies: ["Java", "Python", "gRPC", "Protocol Buffers"],
+    note: distributedSystemsNote,
+  },
+  {
+    id: "mapreduce",
+    title: "MapReduce",
+    courseLabel: distributedSystemsLabel,
+    description:
+      "Our group configured a Hadoop 3 cluster on Amazon-hosted machines and wrote Java MapReduce jobs. We built an inverted index over Project Gutenberg texts and a two-stage job joining impression and click logs to calculate click-through rates per referrer and ad.",
+    technologies: ["Java", "Hadoop 3", "MapReduce", "AWS"],
+    note: distributedSystemsNote,
+  },
+  {
+    id: "computer-vision-labs",
+    title: "Computer vision labs",
+    courseLabel:
+      "Deep Learning for Computer Vision (CSCI 3485), Spring 2026, Professor Jeová Farias",
+    description:
+      "I completed seven PyTorch labs, each an experiment with a written report: perceptron, multilayer perceptron and optimization, CNNs, transfer learning, object detection, U-Net and autoencoders for denoising and segmentation, and conditional GANs. ClickErase was my solo final project for the course.",
+    technologies: ["Python", "PyTorch"],
+    note: "Lab source is private under course policy.",
+    relatedLink: {
+      href: "/projects#clickerase",
+      label: "ClickErase final project",
+    },
+  },
+];
 
 export const mainProjects = [
   technicalBidReviewProject,
